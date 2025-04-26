@@ -4,6 +4,7 @@
   "description": "A MCP server for connecting LLMs to Genesys Cloud's Platform API",
   "main": "dist/index.js",
   "type": "module",
+  "license": "ISC",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
@@ -12,10 +13,12 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.10.1",
+    "@modelcontextprotocol/sdk": "^1.10.2",
+    "purecloud-platform-client-v2": "^219.0.0",
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "vitest": "^3.1.2",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.25.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
@@ -35,6 +38,18 @@
     "typescript-eslint": "^8.30.1"
   },
   "engines": {
-    "node": ">=18.17.0"
-  }
+    "node": ">=18.20.0"
+  },
+  "files": [
+    "dist/**/*.js",
+    "!dist/**/*.test.*",
+    "LICENSE",
+    "README.md",
+    "package.json"
+  ],
+  "keywords": [
+    "mcp",
+    "modelcontextprotocol",
+    "genesys cloud"
+  ]
 }
