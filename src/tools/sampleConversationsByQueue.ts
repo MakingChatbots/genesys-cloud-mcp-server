@@ -133,7 +133,7 @@ export const sampleConversationsByQueue: ToolFactory<
 
         const results =
           await analyticsApi.getAnalyticsConversationsDetailsJobResults(jobId);
-        const conversationIds = (results.conversations || [])
+        const conversationIds = (results.conversations ?? [])
           .map((c) => c.conversationId)
           .filter(Boolean);
 
@@ -147,7 +147,7 @@ export const sampleConversationsByQueue: ToolFactory<
                 sampledIds.length === 0
                   ? "No conversations found in queue during specified period."
                   : [
-                      `Sample of ${sampledIds.length} conversations (out of ${conversationIds.length}) in the queue during that period.`,
+                      `Sample of ${String(sampledIds.length)} conversations (out of ${String(conversationIds.length)}) in the queue during that period.`,
                       "",
                       "Conversation IDs:",
                       ...sampledIds,
@@ -172,18 +172,18 @@ export const sampleConversationsByQueue: ToolFactory<
         "00000000-0000-0000-0000-000000000006",
       ];
 
-      return {
+      return Promise.resolve({
         content: [
           {
             type: "text",
             text: [
-              `Sample of ${sampledIds.length} conversations (out of 20) in the queue during that period.`,
+              `Sample of ${String(sampledIds.length)} conversations (out of 20) in the queue during that period.`,
               "",
               "Conversation IDs:",
               ...sampledIds,
             ].join("\n"),
           },
         ],
-      };
+      });
     },
   });

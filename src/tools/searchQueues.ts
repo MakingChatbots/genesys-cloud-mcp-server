@@ -28,10 +28,10 @@ function formatQueues(
 ) {
   const paginationDetails = [
     "--- Pagination Info ---",
-    `Page Number: ${pagination.pageNumber ?? "N/A"}`,
-    `Page Size: ${pagination.pageSize ?? "N/A"}`,
-    `Total Pages: ${pagination.pageCount ?? "N/A"}`,
-    `Total Matching Queues: ${pagination.total ?? "N/A"}`,
+    `Page Number: ${pagination.pageNumber ? String(pagination.pageNumber) : "N/A"}`,
+    `Page Size: ${pagination.pageSize ? String(pagination.pageSize) : "N/A"}`,
+    `Total Pages: ${pagination.pageCount ? String(pagination.pageCount) : "N/A"}`,
+    `Total Matching Queues: ${pagination.total ? String(pagination.total) : "N/A"}`,
   ].join("\n");
 
   const queueItems = queues.flatMap((q) => [
@@ -39,7 +39,7 @@ function formatQueues(
     `  • ID: ${q.id}`,
     ...(q.description ? [`  • Description: ${q.description}`] : []),
     ...(q.memberCount !== undefined
-      ? [`  • Member Count: ${q.memberCount}`]
+      ? [`  • Member Count: ${String(q.memberCount)}`]
       : []),
   ]);
 

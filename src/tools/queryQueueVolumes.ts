@@ -131,13 +131,13 @@ export const queryQueueVolumes: ToolFactory<
 
         const results =
           await analyticsApi.getAnalyticsConversationsDetailsJobResults(jobId);
-        const conversations = results.conversations || [];
+        const conversations = results.conversations ?? [];
 
         const queueConversationCount = new Map<string, number>();
         for (const convo of conversations) {
           for (const queueId of queueIds) {
             if (isQueueUsedInConvo(queueId, convo)) {
-              const count = queueConversationCount.get(queueId) || 0;
+              const count = queueConversationCount.get(queueId) ?? 0;
               queueConversationCount.set(queueId, count + 1);
             }
           }
@@ -146,8 +146,8 @@ export const queryQueueVolumes: ToolFactory<
         const queueBreakdown: string = [
           "Queue volume breakdown for that period:",
           ...queueIds.map((id) => {
-            const totalConversations = queueConversationCount.get(id) || 0;
-            return `Queue ID: ${id} - Total conversations: ${totalConversations}`;
+            const totalConversations = queueConversationCount.get(id) ?? 0;
+            return `Queue ID: ${id} - Total conversations: ${String(totalConversations)}`;
           }),
         ].join("\n");
 
@@ -168,7 +168,7 @@ export const queryQueueVolumes: ToolFactory<
       }
     },
     mockCall: async ({ queueIds }) => {
-      return {
+      return Promise.resolve({
         content: [
           {
             type: "text",
@@ -176,11 +176,11 @@ export const queryQueueVolumes: ToolFactory<
               "Queue volume breakdown for that period:",
               ...queueIds.map(
                 (id, index) =>
-                  `Queue ID: ${id} - Total conversations: ${index + 1}`,
+                  `Queue ID: ${id} - Total conversations: ${String(index + 1)}`,
               ),
             ].join("\n"),
           },
         ],
-      };
+      });
     },
   });
