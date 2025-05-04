@@ -15,7 +15,6 @@ used and the permissions your OAuth Client needs to use them.
 | Query Queue Volumes           | `analytics:conversationDetail:view` | [`POST /api/v2/analytics/conversations/details/jobs`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#post-api-v2-analytics-conversations-details-jobs)<br/>[`GET /api/v2/analytics/conversations/details/jobs/{jobId}`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId-)<br/>[`GET /api/v2/analytics/conversations/details/jobs/{jobId}/results`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId--results) |
 | Sample Conversations By Queue | `analytics:conversationDetail:view` | [`POST /api/v2/analytics/conversations/details/jobs`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#post-api-v2-analytics-conversations-details-jobs)<br/>[`GET /api/v2/analytics/conversations/details/jobs/{jobId}`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId-)<br/>[`GET /api/v2/analytics/conversations/details/jobs/{jobId}/results`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId--results) |
 
-
 ## Authentication
 
 This currently only a supports stdio Server. To configure authentication you'll need to:
@@ -26,7 +25,6 @@ This currently only a supports stdio Server. To configure authentication you'll 
    - `GENESYSCLOUD_REGION`
    - `GENESYSCLOUD_OAUTHCLIENT_ID`
    - `GENESYSCLOUD_OAUTHCLIENT_SECRET`
-
 
 ## Getting Started
 

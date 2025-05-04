@@ -9,6 +9,9 @@
     "type": "git",
     "url": "git+https://github.com/MakingChatbots/genesys-cloud-mcp-server.git"
   },
+  "bugs": {
+    "url": "https://github.com/MakingChatbots/genesys-cloud-mcp-server/issues"
+  },
   "homepage": "https://makingchatbots.com",
   "author": {
     "name": "Lucas Woodward"
@@ -16,9 +19,18 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
-    "build": "rm -rf ./dist/ && tsc",
+    "clean": "rm -rf dist/*",
+    "build:esm": "tsc",
+    "build": "npm run clean && npm run build:esm",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prettier:check": "prettier --check src/**/*.ts *.md tests/**/*.ts --no-error-on-unmatched-pattern",
+    "prettier:fix": "prettier --write src/**/*.ts *.md tests/**/*.ts --ignore-unknown --no-error-on-unmatched-pattern",
+    "lint:check": "eslint --cache --ext .ts ./src",
+    "lint:fix": "eslint --cache --fix --ext .ts ./src",
+    "check": "npm run lint:check && npm run prettier:check",
+    "fix": "npm run lint:fix && npm run prettier:fix",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.0",
@@ -35,10 +47,20 @@
     "eslint": "^9.25.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-import-resolver-typescript": "^4.3.4",
+    "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.1",
     "vitest": "^3.1.2"
+  },
+  "lint-staged": {
+    "src/*.ts": [
+      "eslint --cache --fix",
+      "prettier --ignore-unknown --write"
+    ],
+    "*.md": [
+      "prettier --ignore-unknown --write"
+    ]
   },
   "engines": {
     "node": ">=18.20.0"
