@@ -30,6 +30,7 @@
     "lint:fix": "eslint --cache --fix --ext .ts ./src",
     "check": "npm run lint:check && npm run prettier:check",
     "fix": "npm run lint:fix && npm run prettier:fix",
+    "test": "npx vitest --config ./vitest.config.ts",
     "prepublishOnly": "npm run test && npm run build"
   },
   "dependencies": {
