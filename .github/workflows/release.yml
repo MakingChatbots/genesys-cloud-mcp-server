@@ -36,6 +36,7 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           dry-run: false
           provenance: true
+          access: public
 
       - name: Post-publish
         if: steps.publish.outputs.type != 'none'
