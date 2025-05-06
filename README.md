@@ -11,7 +11,7 @@ An overview of the tools that this MPC server makes available. Read more about e
 in the [tools doc](/docs/tools.md).
 
 | Tool                                                                          | Description                                                         |
-|-------------------------------------------------------------------------------|---------------------------------------------------------------------|
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------- |
 | [Search Queues](/docs/tools.md#search-queues)                                 | Searches for queues by their name (supports wildcards)              |
 | [Query Queue Volumes](/docs/tools.md#query-queue-volumes)                     | Determines conversation volumes and member count by Queue IDs       |
 | [Sample Conversations By Queue](/docs/tools.md#sample-conversations-by-queue) | Extracts a representative sample of Conversation IDs for a Queue ID |
