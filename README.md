@@ -1,5 +1,6 @@
 # Genesys Cloud MCP Server
 
+[![npm](https://img.shields.io/npm/v/@makingchatbots/genesys-cloud-mcp-server)](https://www.npmjs.com/package/@makingchatbots/genesys-cloud-mcp-server)
 [![Follow me on LinkedIn for updates](https://img.shields.io/badge/Follow%20for%20updates-LinkedIn-blue)](https://www.linkedin.com/in/lucas-woodward-the-dev/)
 
 A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
