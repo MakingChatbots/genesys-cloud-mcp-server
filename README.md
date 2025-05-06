@@ -5,10 +5,10 @@
 
 A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 
-## Tools
+## Tools Overview
 
-Below are the tools this MPC server makes available. Alongside each tool are the Genesys Cloud endpoints
-used and the permissions your OAuth Client needs to use them.
+An overview of the tools that this MPC server makes available. Read more about each specific tool
+in the [tools doc](/docs/tools.md).
 
 | Tool                                                                          | Description                                                         |
 |-------------------------------------------------------------------------------|---------------------------------------------------------------------|
