@@ -6,6 +6,7 @@ import { searchQueues } from "./tools/searchQueues.js";
 import { loadConfig } from "./loadConfig.js";
 import { sampleConversationsByQueue } from "./tools/sampleConversationsByQueue.js";
 import { queryQueueVolumes } from "./tools/queryQueueVolumes.js";
+import { voiceCallQuality } from "./tools/voiceCallQuality.js";
 
 const configResult = loadConfig(process.env);
 if (!configResult.success) {
@@ -63,6 +64,21 @@ server.tool(
     ? queryQueueVolumesTool.mockCall
     : withAuth(
         queryQueueVolumesTool.call,
+        config.genesysCloud,
+        platformClient.ApiClient.instance,
+      ),
+);
+const voiceCallQualityTool = voiceCallQuality({
+  analyticsApi: new platformClient.AnalyticsApi(),
+});
+server.tool(
+  voiceCallQualityTool.schema.name,
+  voiceCallQualityTool.schema.description,
+  voiceCallQualityTool.schema.paramsSchema.shape,
+  config.mockingEnabled
+    ? voiceCallQualityTool.mockCall
+    : withAuth(
+        voiceCallQualityTool.call,
         config.genesysCloud,
         platformClient.ApiClient.instance,
       ),

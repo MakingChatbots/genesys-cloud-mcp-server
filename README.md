@@ -10,11 +10,12 @@ A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 An overview of the tools that this MPC server makes available. Read more about each specific tool
 in the [tools doc](/docs/tools.md).
 
-| Tool                                                                          | Description                                                         |
-| ----------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| [Search Queues](/docs/tools.md#search-queues)                                 | Searches for queues by their name (supports wildcards)              |
-| [Query Queue Volumes](/docs/tools.md#query-queue-volumes)                     | Determines conversation volumes and member count by Queue IDs       |
-| [Sample Conversations By Queue](/docs/tools.md#sample-conversations-by-queue) | Extracts a representative sample of Conversation IDs for a Queue ID |
+| Tool                                                                          | Description                                                              |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| [Search Queues](/docs/tools.md#search-queues)                                 | Searches for queues by their name (supports wildcards)                   |
+| [Query Queue Volumes](/docs/tools.md#query-queue-volumes)                     | Retrieves conversation volumes and member count by Queue IDs             |
+| [Sample Conversations By Queue](/docs/tools.md#sample-conversations-by-queue) | Retrieves a representative sample of Conversation IDs for a Queue ID     |
+| [Voice Call Quality](/docs/tools.md#voice-call-quality)                       | Retrieves voice call quality metrics for one or more conversations by ID |
 
 ## Authentication
 

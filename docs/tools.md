@@ -24,7 +24,7 @@ or listing available queues.
 Required permission:
 * `routing:queue:view`
 
-Platform API endpoints used:
+Platform API endpoint used:
 * [`GET /api/v2/routing/queues`](https://developer.genesys.cloud/routing/routing/#get-api-v2-routing-queues)
 
 ## Query Queue Volumes
@@ -76,3 +76,26 @@ Platform API endpoints used:
 * [`POST /api/v2/analytics/conversations/details/jobs`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#post-api-v2-analytics-conversations-details-jobs)
 * [`GET /api/v2/analytics/conversations/details/jobs/{jobId}`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId-)
 * [`GET /api/v2/analytics/conversations/details/jobs/{jobId}/results`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId--results)
+
+## Voice Call Quality
+
+Retrieves voice call quality metrics for one or more conversations by ID. This tool specifically focuses
+on voice interactions and returns the minimum Mean Opinion Score (MOS) observed in each conversation, helping
+identify degraded or poor-quality voice calls.
+
+Read more [about MOS scores and how they're determined](https://developer.genesys.cloud/analyticsdatamanagement/analytics/detail/call-quality).
+
+[Source file](/src/tools/voiceCallQuality.ts).
+
+### Inputs
+
+* `conversationIds`
+  * A list of up to 100 conversation IDs to evaluate voice call quality for.
+
+### Security
+
+Required Permissions:
+* `analytics:conversationDetail:view`
+
+Platform API endpoint used:
+* [`GET /api/v2/analytics/conversations/details`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details)

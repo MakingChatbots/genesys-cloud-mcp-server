@@ -1,6 +1,6 @@
 {
   "name": "@makingchatbots/genesys-cloud-mcp-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A MCP server for connecting LLMs to Genesys Cloud's Platform API",
   "exports": "./dist/index.js",
   "type": "module",
@@ -50,6 +50,7 @@
     "eslint-import-resolver-typescript": "^4.3.4",
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
+    "tsx": "^4.19.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.1",
     "vitest": "^3.1.3"
