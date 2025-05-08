@@ -34,7 +34,7 @@
     "prepublishOnly": "npm run test && npm run build"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.11.0",
+    "@modelcontextprotocol/sdk": "^1.11.1",
     "purecloud-platform-client-v2": "^220.0.0",
     "zod": "^3.24.4"
   },
