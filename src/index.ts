@@ -7,6 +7,7 @@ import { loadConfig } from "./loadConfig.js";
 import { sampleConversationsByQueue } from "./tools/sampleConversationsByQueue.js";
 import { queryQueueVolumes } from "./tools/queryQueueVolumes.js";
 import { voiceCallQuality } from "./tools/voiceCallQuality.js";
+import { conversationSentiment } from "./tools/conversationSentiment.js";
 
 const configResult = loadConfig(process.env);
 if (!configResult.success) {
@@ -68,6 +69,7 @@ server.tool(
         platformClient.ApiClient.instance,
       ),
 );
+
 const voiceCallQualityTool = voiceCallQuality({
   analyticsApi: new platformClient.AnalyticsApi(),
 });
@@ -79,6 +81,22 @@ server.tool(
     ? voiceCallQualityTool.mockCall
     : withAuth(
         voiceCallQualityTool.call,
+        config.genesysCloud,
+        platformClient.ApiClient.instance,
+      ),
+);
+
+const conversationSentimentTool = conversationSentiment({
+  speechTextAnalyticsApi: new platformClient.SpeechTextAnalyticsApi(),
+});
+server.tool(
+  conversationSentimentTool.schema.name,
+  conversationSentimentTool.schema.description,
+  conversationSentimentTool.schema.paramsSchema.shape,
+  config.mockingEnabled
+    ? conversationSentimentTool.mockCall
+    : withAuth(
+        conversationSentimentTool.call,
         config.genesysCloud,
         platformClient.ApiClient.instance,
       ),

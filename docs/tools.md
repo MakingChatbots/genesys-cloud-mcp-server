@@ -69,7 +69,7 @@ representative sample of conversation IDs. Useful for reporting, investigation, 
 
 ### Security
 
-Required Permissions:
+Required Permission:
 * `analytics:conversationDetail:view`
 
 Platform API endpoints used:
@@ -94,8 +94,30 @@ Read more [about MOS scores and how they're determined](https://developer.genesy
 
 ### Security
 
-Required Permissions:
+Required Permission:
 * `analytics:conversationDetail:view`
 
 Platform API endpoint used:
 * [`GET /api/v2/analytics/conversations/details`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details)
+
+## Conversation Sentiment
+
+Retrieves sentiment analysis scores for one or more conversations. Sentiment is evaluated based on customer phrases,
+categorized as positive, neutral, or negative. The result includes both a numeric sentiment score (-100 to 100)
+and an interpreted sentiment label.
+
+[Source file](/src/tools/conversationSentiment.ts).
+
+### Inputs
+
+* `conversationIds`
+  * A list of up to 100 conversation IDs to retrieve sentiment for.
+
+### Security
+
+Required Permissions:
+* `speechAndTextAnalytics:data:view`
+* `recording:recording:view`
+
+Platform API endpoint used:
+* [GET /api/v2/speechandtextanalytics/conversations/{conversationId}](https://developer.genesys.cloud/analyticsdatamanagement/speechtextanalytics/#get-api-v2-speechandtextanalytics-conversations--conversationId-)
