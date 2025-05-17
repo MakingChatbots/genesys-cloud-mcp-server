@@ -12,20 +12,22 @@ or listing available queues.
 
 ### Inputs
 
-* `name`
-  * The name (or partial name) of the routing queue(s) to search for. Wildcards ('*') are supported for pattern matching (e.g., 'Support*', '*Emergency', '*Sales*'). Use '*' alone to retrieve all queues.
-* `pageNumber`
-  * The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets.
-* `pageSize`
-  * The maximum number of queues to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 500.
+- `name`
+  - The name (or partial name) of the routing queue(s) to search for. Wildcards ('\*') are supported for pattern matching (e.g., 'Support\*', '\*Emergency', '\*Sales\*'). Use '\*' alone to retrieve all queues.
+- `pageNumber`
+  - The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets.
+- `pageSize`
+  - The maximum number of queues to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 500.
 
 ### Security
 
 Required permission:
-* `routing:queue:view`
+
+- `routing:queue:view`
 
 Platform API endpoint used:
-* [`GET /api/v2/routing/queues`](https://developer.genesys.cloud/routing/routing/#get-api-v2-routing-queues)
+
+- [`GET /api/v2/routing/queues`](https://developer.genesys.cloud/routing/routing/#get-api-v2-routing-queues)
 
 ## Query Queue Volumes
 
@@ -36,22 +38,24 @@ dates. Useful for comparing workload across queues.
 
 ### Inputs
 
-* `queueIds`
-  * The IDs of the queues to filter conversations by. Max 300.
-* `startDate`
-  * The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z').
-* `endDate`
-  * The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z').
+- `queueIds`
+  - The IDs of the queues to filter conversations by. Max 300.
+- `startDate`
+  - The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z').
+- `endDate`
+  - The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z').
 
 ### Security
 
 Required permission:
-* `analytics:conversationDetail:view`
+
+- `analytics:conversationDetail:view`
 
 Platform API endpoints used:
-* [`POST /api/v2/analytics/conversations/details/jobs`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#post-api-v2-analytics-conversations-details-jobs)
-* [`GET /api/v2/analytics/conversations/details/jobs/{jobId}`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId-)
-* [`GET /api/v2/analytics/conversations/details/jobs/{jobId}/results`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId--results)
+
+- [`POST /api/v2/analytics/conversations/details/jobs`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#post-api-v2-analytics-conversations-details-jobs)
+- [`GET /api/v2/analytics/conversations/details/jobs/{jobId}`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId-)
+- [`GET /api/v2/analytics/conversations/details/jobs/{jobId}/results`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId--results)
 
 ## Sample Conversations By Queue
 
@@ -60,22 +64,24 @@ representative sample of conversation IDs. Useful for reporting, investigation, 
 
 ### Inputs
 
-* `queueId`
-  * The ID of the queue to filter conversations by.
-* `startDate`
-  * The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z').
-* `endDate`
-  * The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z').
+- `queueId`
+  - The ID of the queue to filter conversations by.
+- `startDate`
+  - The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z').
+- `endDate`
+  - The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z').
 
 ### Security
 
 Required Permission:
-* `analytics:conversationDetail:view`
+
+- `analytics:conversationDetail:view`
 
 Platform API endpoints used:
-* [`POST /api/v2/analytics/conversations/details/jobs`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#post-api-v2-analytics-conversations-details-jobs)
-* [`GET /api/v2/analytics/conversations/details/jobs/{jobId}`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId-)
-* [`GET /api/v2/analytics/conversations/details/jobs/{jobId}/results`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId--results)
+
+- [`POST /api/v2/analytics/conversations/details/jobs`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#post-api-v2-analytics-conversations-details-jobs)
+- [`GET /api/v2/analytics/conversations/details/jobs/{jobId}`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId-)
+- [`GET /api/v2/analytics/conversations/details/jobs/{jobId}/results`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId--results)
 
 ## Voice Call Quality
 
@@ -89,16 +95,18 @@ Read more [about MOS scores and how they're determined](https://developer.genesy
 
 ### Inputs
 
-* `conversationIds`
-  * A list of up to 100 conversation IDs to evaluate voice call quality for.
+- `conversationIds`
+  - A list of up to 100 conversation IDs to evaluate voice call quality for.
 
 ### Security
 
 Required Permission:
-* `analytics:conversationDetail:view`
+
+- `analytics:conversationDetail:view`
 
 Platform API endpoint used:
-* [`GET /api/v2/analytics/conversations/details`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details)
+
+- [`GET /api/v2/analytics/conversations/details`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details)
 
 ## Conversation Sentiment
 
@@ -110,14 +118,16 @@ and an interpreted sentiment label.
 
 ### Inputs
 
-* `conversationIds`
-  * A list of up to 100 conversation IDs to retrieve sentiment for.
+- `conversationIds`
+  - A list of up to 100 conversation IDs to retrieve sentiment for.
 
 ### Security
 
 Required Permissions:
-* `speechAndTextAnalytics:data:view`
-* `recording:recording:view`
+
+- `speechAndTextAnalytics:data:view`
+- `recording:recording:view`
 
 Platform API endpoint used:
-* [GET /api/v2/speechandtextanalytics/conversations/{conversationId}](https://developer.genesys.cloud/analyticsdatamanagement/speechtextanalytics/#get-api-v2-speechandtextanalytics-conversations--conversationId-)
+
+- [GET /api/v2/speechandtextanalytics/conversations/{conversationId}](https://developer.genesys.cloud/analyticsdatamanagement/speechtextanalytics/#get-api-v2-speechandtextanalytics-conversations--conversationId-)
