@@ -6,6 +6,11 @@ on:
     paths:
       - package.json
 
+permissions:
+  contents: write
+  pull-requests: read
+  id-token: write
+
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
