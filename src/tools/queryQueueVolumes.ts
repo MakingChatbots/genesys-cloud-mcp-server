@@ -66,10 +66,6 @@ export const queryQueueVolumes: ToolFactory<
       paramsSchema,
     },
     call: async ({ queueIds, startDate, endDate }) => {
-      if (queueIds.length === 0) {
-        return errorResult("No queue IDs provided");
-      }
-
       const from = new Date(startDate);
       const to = new Date(endDate);
 
