@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
-import { Models, type AnalyticsApi } from "purecloud-platform-client-v2";
+import type { Models, AnalyticsApi } from "purecloud-platform-client-v2";
 import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 
 export interface ToolDependencies {

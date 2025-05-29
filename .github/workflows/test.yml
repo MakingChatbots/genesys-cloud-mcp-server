@@ -12,6 +12,21 @@ permissions:
   contents: read
 
 jobs:
+  test-starting-node:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+      - run: npm install
+      - run: npm run build
+      - run: npm run start
+        env:
+          GENESYSCLOUD_REGION: dummy
+          GENESYSCLOUD_OAUTHCLIENT_ID: dummy
+          GENESYSCLOUD_OAUTHCLIENT_SECRET: dummy
   test-node:
     runs-on: ubuntu-latest
     name: Test

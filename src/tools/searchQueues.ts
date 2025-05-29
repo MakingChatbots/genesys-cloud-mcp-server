@@ -1,6 +1,5 @@
 import { z } from "zod";
-import type { Models } from "purecloud-platform-client-v2";
-import { type RoutingApi } from "purecloud-platform-client-v2";
+import type { Models, RoutingApi } from "purecloud-platform-client-v2";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
 

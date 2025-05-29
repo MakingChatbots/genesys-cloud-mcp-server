@@ -1,6 +1,6 @@
 {
   "name": "@makingchatbots/genesys-cloud-mcp-server",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A MCP server for connecting LLMs to Genesys Cloud's Platform API",
   "exports": "./dist/index.js",
   "type": "module",

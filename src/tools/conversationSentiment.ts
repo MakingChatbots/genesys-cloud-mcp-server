@@ -1,12 +1,11 @@
 import { z } from "zod";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
-import {
+import type {
+  SpeechTextAnalyticsApi,
   Models,
-  type SpeechTextAnalyticsApi,
 } from "purecloud-platform-client-v2";
 import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import ConversationMetrics = Models.ConversationMetrics;
 
 export interface ToolDependencies {
   readonly speechTextAnalyticsApi: Pick<
@@ -63,7 +62,7 @@ export const conversationSentiment: ToolFactory<
       paramsSchema,
     },
     call: async ({ conversationIds }) => {
-      const conversations: ConversationMetrics[] = [];
+      const conversations: Models.ConversationMetrics[] = [];
       try {
         conversations.push(
           ...(await Promise.all(
