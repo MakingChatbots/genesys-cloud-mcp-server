@@ -74,7 +74,7 @@ describe("Server Runs", () => {
     const toolCallResult = result as CallToolResult;
 
     if (!toolCallResult.content) {
-      expect.fail("Tool call expected to contain content ");
+      expect.fail("Tool call expected to contain content");
     }
 
     const text = toolCallResult.content[0].text;
