@@ -14,7 +14,7 @@ permissions:
 jobs:
   test-starting-node:
     runs-on: ubuntu-latest
-    name: Test
+    name: Test Starting Server
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
