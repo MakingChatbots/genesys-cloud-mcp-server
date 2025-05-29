@@ -22,17 +22,7 @@ jobs:
           node-version-file: ".nvmrc"
       - run: npm install
       - run: npm run build
-      - run: |
-          npm run start 2>&1 | tee server.log &
-          SERVER_PID=$!
-
-          echo "Waiting for server log output..."
-          timeout 10s bash -c '
-            until grep -q "Started..." server.log; do sleep 0.5; done
-          '
-
-          echo "Killing server..."
-          kill $SERVER_PID
+      - run: npm run start
         env:
           GENESYSCLOUD_REGION: dummy
           GENESYSCLOUD_OAUTHCLIENT_ID: dummy
