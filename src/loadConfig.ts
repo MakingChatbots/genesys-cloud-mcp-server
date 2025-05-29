@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-export interface MockingConfig {
-  readonly mockingEnabled: true;
-}
-
-export interface RealConfig {
-  readonly mockingEnabled: false;
+export interface Config {
   readonly genesysCloud: {
     readonly region: string;
     readonly oAuthClientId: string;
@@ -15,7 +10,7 @@ export interface RealConfig {
 
 export interface SuccessResult {
   success: true;
-  config: MockingConfig | RealConfig;
+  config: Config;
 }
 
 export interface ErrorResult {
@@ -24,13 +19,6 @@ export interface ErrorResult {
 }
 
 export type Result = SuccessResult | ErrorResult;
-
-const mockingConfigSchema = z.object({
-  MOCKING_ENABLED: z
-    .string()
-    .transform((val) => val.toLowerCase() === "true")
-    .default("false"),
-});
 
 const genesysAuthConfigSchema = z.object({
   GENESYSCLOUD_REGION: z.string({
@@ -46,18 +34,6 @@ const genesysAuthConfigSchema = z.object({
 });
 
 export function loadConfig(env: NodeJS.ProcessEnv): Result {
-  const mockingConfig = mockingConfigSchema.safeParse(env);
-  const mockingEnabled = Boolean(mockingConfig.data?.MOCKING_ENABLED);
-
-  if (mockingEnabled) {
-    return {
-      success: true,
-      config: {
-        mockingEnabled,
-      },
-    };
-  }
-
   const genesysAuthConfig = genesysAuthConfigSchema.safeParse(env);
   if (!genesysAuthConfig.success) {
     const failureReason = [
@@ -74,7 +50,6 @@ export function loadConfig(env: NodeJS.ProcessEnv): Result {
   return {
     success: true,
     config: {
-      mockingEnabled,
       genesysCloud: {
         region: genesysAuthConfig.data.GENESYSCLOUD_REGION,
         oAuthClientId: genesysAuthConfig.data.GENESYSCLOUD_OAUTHCLIENT_ID,

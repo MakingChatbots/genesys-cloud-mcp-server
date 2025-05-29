@@ -14,7 +14,6 @@ export type ToolCall<Schema extends z.Schema> = (
 export interface ToolDefinition<Schema extends z.Schema = z.Schema> {
   schema: ToolSchema<Schema>;
   call: ToolCall<Schema>;
-  mockCall: (params: z.output<Schema>) => Promise<CallToolResult>;
 }
 
 export type ToolFactory<Deps, Schema extends z.Schema> = (

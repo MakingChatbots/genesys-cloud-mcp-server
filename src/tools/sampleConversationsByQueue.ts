@@ -6,15 +6,22 @@ import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { sampleEvenly } from "./utils/sampleEvenly.js";
 import { waitFor } from "./utils/waitFor.js";
 
-interface Dependencies {
-  readonly analyticsApi: AnalyticsApi;
+export interface ToolDependencies {
+  readonly analyticsApi: Pick<
+    AnalyticsApi,
+    | "postAnalyticsConversationsDetailsJobs"
+    | "getAnalyticsConversationsDetailsJob"
+    | "getAnalyticsConversationsDetailsJobResults"
+  >;
 }
 
 const paramsSchema = z.object({
   queueId: z
     .string()
     .uuid()
-    .describe("The ID of the queue to filter conversations by."),
+    .describe(
+      "The UUID ID of the queue to filter conversations by. (e.g., 00000000-0000-0000-0000-000000000000)",
+    ),
   startDate: z
     .string()
     .describe(
@@ -42,7 +49,7 @@ function errorResult(errorMessage: string): CallToolResult {
 }
 
 export const sampleConversationsByQueue: ToolFactory<
-  Dependencies,
+  ToolDependencies,
   typeof paramsSchema
 > = ({ analyticsApi }) =>
   createTool({
@@ -162,28 +169,5 @@ export const sampleConversationsByQueue: ToolFactory<
 
         return errorResult(message);
       }
-    },
-    mockCall: async ({}) => {
-      const sampledIds = [
-        "00000000-0000-0000-0000-000000000002",
-        "00000000-0000-0000-0000-000000000003",
-        "00000000-0000-0000-0000-000000000004",
-        "00000000-0000-0000-0000-000000000005",
-        "00000000-0000-0000-0000-000000000006",
-      ];
-
-      return Promise.resolve({
-        content: [
-          {
-            type: "text",
-            text: [
-              `Sample of ${String(sampledIds.length)} conversations (out of 20) in the queue during that period.`,
-              "",
-              "Conversation IDs:",
-              ...sampledIds,
-            ].join("\n"),
-          },
-        ],
-      });
     },
   });

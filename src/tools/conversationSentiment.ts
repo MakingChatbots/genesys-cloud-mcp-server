@@ -1,11 +1,18 @@
 import { z } from "zod";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
-import { type SpeechTextAnalyticsApi } from "purecloud-platform-client-v2";
+import {
+  Models,
+  type SpeechTextAnalyticsApi,
+} from "purecloud-platform-client-v2";
 import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import ConversationMetrics = Models.ConversationMetrics;
 
-interface Dependencies {
-  readonly speechTextAnalyticsApi: SpeechTextAnalyticsApi;
+export interface ToolDependencies {
+  readonly speechTextAnalyticsApi: Pick<
+    SpeechTextAnalyticsApi,
+    "getSpeechandtextanalyticsConversation"
+  >;
 }
 
 const paramsSchema = z.object({
@@ -15,14 +22,12 @@ const paramsSchema = z.object({
         .string()
         .uuid()
         .describe(
-          "A unique ID for a Genesys Cloud conversation. Must be a valid UUID.",
+          "A UUID ID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
         ),
     )
     .min(1)
     .max(100)
-    .describe(
-      "A list of up to 100 conversation IDs to retrieve sentiment for.",
-    ),
+    .describe("A list of up to 100 conversation IDs to retrieve sentiment for"),
 });
 
 function errorResult(errorMessage: string): CallToolResult {
@@ -47,7 +52,7 @@ function interpretSentiment(score?: number): string {
 }
 
 export const conversationSentiment: ToolFactory<
-  Dependencies,
+  ToolDependencies,
   typeof paramsSchema
 > = ({ speechTextAnalyticsApi }) =>
   createTool({
@@ -58,41 +63,15 @@ export const conversationSentiment: ToolFactory<
       paramsSchema,
     },
     call: async ({ conversationIds }) => {
+      const conversations: ConversationMetrics[] = [];
       try {
-        const conversations = await Promise.all(
-          conversationIds.map((id) =>
-            speechTextAnalyticsApi.getSpeechandtextanalyticsConversation(id),
-          ),
+        conversations.push(
+          ...(await Promise.all(
+            conversationIds.map((id) =>
+              speechTextAnalyticsApi.getSpeechandtextanalyticsConversation(id),
+            ),
+          )),
         );
-
-        const output: string[] = [];
-
-        for (const convo of conversations) {
-          const id = convo.conversation?.id;
-          const score = convo.sentimentScore;
-
-          if (id === undefined || score === undefined) continue;
-          const scaledScore = Math.round(score * 100);
-
-          output.push(
-            `• Conversation ID: ${id}\n  • Sentiment Score: ${String(scaledScore)} (${interpretSentiment(scaledScore)})`,
-          );
-        }
-
-        return {
-          content: [
-            {
-              type: "text",
-              text:
-                output.length > 0
-                  ? [
-                      `Sentiment results for ${String(output.length)} conversation(s):`,
-                      ...output,
-                    ].join("\n\n")
-                  : "No sentiment data found for the given conversation IDs.",
-            },
-          ],
-        };
       } catch (error: unknown) {
         const message = isUnauthorisedError(error)
           ? "Failed to retrieve sentiment analysis: Unauthorised access. Please check API credentials or permissions."
@@ -100,21 +79,34 @@ export const conversationSentiment: ToolFactory<
 
         return errorResult(message);
       }
-    },
-    mockCall: async ({ conversationIds }) => {
-      return Promise.resolve({
+
+      const output: string[] = [];
+
+      for (const convo of conversations) {
+        const id = convo.conversation?.id;
+        const score = convo.sentimentScore;
+
+        if (id === undefined || score === undefined) continue;
+        const scaledScore = Math.round(score * 100);
+
+        output.push(
+          `• Conversation ID: ${id}\n  • Sentiment Score: ${String(scaledScore)} (${interpretSentiment(scaledScore)})`,
+        );
+      }
+
+      return {
         content: [
           {
             type: "text",
-            text: [
-              `Sentiment results for ${String(conversationIds.length)} conversation(s):`,
-              ...conversationIds.map((id, index) => {
-                const score = [-80, 0, 25, 55, 85][index % 5];
-                return `• Conversation ID: ${id}\n  • Sentiment Score: ${String(score)} (${interpretSentiment(score)})`;
-              }),
-            ].join("\n\n"),
+            text:
+              output.length > 0
+                ? [
+                    `Sentiment results for ${String(output.length)} conversation(s):`,
+                    ...output,
+                  ].join("\n\n")
+                : "No sentiment data found for the given conversation IDs.",
           },
         ],
-      });
+      };
     },
   });

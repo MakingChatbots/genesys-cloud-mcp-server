@@ -6,26 +6,37 @@ import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { isQueueUsedInConvo } from "./utils/genesys/isQueueUsedInConvo.js";
 import { waitFor } from "./utils/waitFor.js";
 
-interface Dependencies {
-  readonly analyticsApi: AnalyticsApi;
+export interface ToolDependencies {
+  readonly analyticsApi: Pick<
+    AnalyticsApi,
+    | "postAnalyticsConversationsDetailsJobs"
+    | "getAnalyticsConversationsDetailsJob"
+    | "getAnalyticsConversationsDetailsJobResults"
+  >;
 }
 
 const paramsSchema = z.object({
-  queueIds: z.array(
-    z
-      .string()
-      .uuid()
-      .describe("The IDs of the queues to filter conversations by. Max 300"),
-  ),
+  queueIds: z
+    .array(
+      z
+        .string()
+        .uuid()
+        .describe(
+          "A UUID ID for a queue. (e.g., 00000000-0000-0000-0000-000000000000)",
+        ),
+    )
+    .min(1)
+    .max(300)
+    .describe("List of up to 300 queue IDs to filter conversations by"),
   startDate: z
     .string()
     .describe(
-      "The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z').",
+      "The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z')",
     ),
   endDate: z
     .string()
     .describe(
-      "The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z').",
+      "The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z')",
     ),
 });
 
@@ -44,7 +55,7 @@ function errorResult(errorMessage: string): CallToolResult {
 }
 
 export const queryQueueVolumes: ToolFactory<
-  Dependencies,
+  ToolDependencies,
   typeof paramsSchema
 > = ({ analyticsApi }) =>
   createTool({
@@ -55,6 +66,10 @@ export const queryQueueVolumes: ToolFactory<
       paramsSchema,
     },
     call: async ({ queueIds, startDate, endDate }) => {
+      if (queueIds.length === 0) {
+        return errorResult("No queue IDs provided");
+      }
+
       const from = new Date(startDate);
       const to = new Date(endDate);
 
@@ -166,21 +181,5 @@ export const queryQueueVolumes: ToolFactory<
 
         return errorResult(message);
       }
-    },
-    mockCall: async ({ queueIds }) => {
-      return Promise.resolve({
-        content: [
-          {
-            type: "text",
-            text: [
-              "Queue volume breakdown for that period:",
-              ...queueIds.map(
-                (id, index) =>
-                  `Queue ID: ${id} - Total conversations: ${String(index + 1)}`,
-              ),
-            ].join("\n"),
-          },
-        ],
-      });
     },
   });

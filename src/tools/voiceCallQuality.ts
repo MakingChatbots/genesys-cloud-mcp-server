@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
-import { type AnalyticsApi } from "purecloud-platform-client-v2";
+import { Models, type AnalyticsApi } from "purecloud-platform-client-v2";
 import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 
-interface Dependencies {
-  readonly analyticsApi: AnalyticsApi;
+export interface ToolDependencies {
+  readonly analyticsApi: Pick<AnalyticsApi, "getAnalyticsConversationsDetails">;
 }
 
 const paramsSchema = z.object({
@@ -15,13 +15,13 @@ const paramsSchema = z.object({
         .string()
         .uuid()
         .describe(
-          "A unique ID for a Genesys Cloud conversation. Must be a valid UUID.",
+          "A UUID ID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
         ),
     )
     .min(1)
     .max(100)
     .describe(
-      "A list of up to 100 conversation IDs to evaluate voice call quality for.",
+      "A list of up to 100 conversation IDs to evaluate voice call quality for",
     ),
 });
 
@@ -38,7 +38,7 @@ function errorResult(errorMessage: string): CallToolResult {
 }
 
 export const voiceCallQuality: ToolFactory<
-  Dependencies,
+  ToolDependencies,
   typeof paramsSchema
 > = ({ analyticsApi }) =>
   createTool({
@@ -49,57 +49,12 @@ export const voiceCallQuality: ToolFactory<
       paramsSchema,
     },
     call: async ({ conversationIds }) => {
+      let conversationDetails: Models.AnalyticsConversationWithoutAttributesMultiGetResponse;
       try {
-        const conversationDetails =
+        conversationDetails =
           await analyticsApi.getAnalyticsConversationsDetails({
             id: conversationIds,
           });
-
-        const output: string[] = [
-          "Call Quality Report for voice conversations.",
-          "",
-          "MOS Quality Legend:",
-          "  Poor:       MOS < 3.5",
-          "  Acceptable: 3.5 ≤ MOS < 4.3",
-          "  Excellent:  MOS ≥ 4.3",
-          "",
-        ];
-
-        for (const convo of conversationDetails.conversations ?? []) {
-          if (!convo.conversationId || !convo.mediaStatsMinConversationMos) {
-            continue;
-          }
-
-          const mos = convo.mediaStatsMinConversationMos;
-          let qualityLabel = "Unknown";
-
-          if (mos < 3.5) {
-            qualityLabel = "Poor";
-          } else if (mos < 4.3) {
-            qualityLabel = "Acceptable";
-          } else {
-            qualityLabel = "Excellent";
-          }
-
-          output.push(
-            `• Conversation ID: ${convo.conversationId}\n  • Minimum MOS: ${mos.toFixed(2)} (${qualityLabel})`,
-          );
-        }
-
-        return {
-          content: [
-            {
-              type: "text",
-              text:
-                output.length > 0
-                  ? [
-                      `Call Quality Report for ${String(conversationIds.length)} conversation(s):`,
-                      ...output,
-                    ].join("\n\n")
-                  : "No valid call quality data found for the given conversation IDs.",
-            },
-          ],
-        };
       } catch (error: unknown) {
         const message = isUnauthorisedError(error)
           ? "Failed to query conversations call quality: Unauthorised access. Please check API credentials or permissions."
@@ -107,21 +62,51 @@ export const voiceCallQuality: ToolFactory<
 
         return errorResult(message);
       }
-    },
-    mockCall: async ({ conversationIds }) => {
-      return Promise.resolve({
+
+      const output: string[] = [
+        "Call Quality Report for voice conversations.",
+        "",
+        "MOS Quality Legend:",
+        "  Poor:       MOS < 3.5",
+        "  Acceptable: 3.5 ≤ MOS < 4.3",
+        "  Excellent:  MOS ≥ 4.3",
+        "",
+      ];
+
+      for (const convo of conversationDetails.conversations ?? []) {
+        if (!convo.conversationId || !convo.mediaStatsMinConversationMos) {
+          continue;
+        }
+
+        const mos = convo.mediaStatsMinConversationMos;
+        let qualityLabel = "Unknown";
+
+        if (mos < 3.5) {
+          qualityLabel = "Poor";
+        } else if (mos < 4.3) {
+          qualityLabel = "Acceptable";
+        } else {
+          qualityLabel = "Excellent";
+        }
+
+        output.push(
+          `• Conversation ID: ${convo.conversationId}\n  • Minimum MOS: ${mos.toFixed(2)} (${qualityLabel})`,
+        );
+      }
+
+      return {
         content: [
           {
             type: "text",
-            text: [
-              `Call Quality Report for ${String(conversationIds.length)} conversation(s):`,
-              ...conversationIds.map(
-                (id, index) =>
-                  `• Conversation ID: ${id}\n  • Minimum MOS: ${(3 + index * 0.5).toFixed(2)}`,
-              ),
-            ].join("\n\n"),
+            text:
+              output.length > 0
+                ? [
+                    `Call Quality Report for ${String(conversationIds.length)} conversation(s):`,
+                    ...output,
+                  ].join("\n\n")
+                : "No valid call quality data found for the given conversation IDs.",
           },
         ],
-      });
+      };
     },
   });

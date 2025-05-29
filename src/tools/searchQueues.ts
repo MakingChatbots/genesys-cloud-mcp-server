@@ -12,8 +12,8 @@ function hasIdAndName(
   return queue.id !== undefined && queue.name !== undefined;
 }
 
-interface Dependencies {
-  readonly routingApi: RoutingApi;
+export interface ToolDependencies {
+  readonly routingApi: Pick<RoutingApi, "getRoutingQueues">;
 }
 
 function formatQueues(
@@ -53,8 +53,9 @@ function formatQueues(
 const paramsSchema = z.object({
   name: z
     .string()
+    .min(1)
     .describe(
-      "The name (or partial name) of the routing queue(s) to search for. Wildcards ('*') are supported for pattern matching (e.g., 'Support*', '*Emergency', '*Sales*'). Use '*' alone to retrieve all queues.",
+      "The name (or partial name) of the routing queue(s) to search for. Wildcards ('*') are supported for pattern matching (e.g., 'Support*', '*Emergency', '*Sales*'). Use '*' alone to retrieve all queues",
     ),
   pageNumber: z
     .number()
@@ -62,7 +63,7 @@ const paramsSchema = z.object({
     .positive()
     .optional()
     .describe(
-      "The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets.",
+      "The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets",
     ),
   pageSize: z
     .number()
@@ -71,13 +72,14 @@ const paramsSchema = z.object({
     .max(500)
     .optional()
     .describe(
-      "The maximum number of queues to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 500.",
+      "The maximum number of queues to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 500",
     ),
 });
 
-export const searchQueues: ToolFactory<Dependencies, typeof paramsSchema> = ({
-  routingApi,
-}) =>
+export const searchQueues: ToolFactory<
+  ToolDependencies,
+  typeof paramsSchema
+> = ({ routingApi }) =>
   createTool({
     schema: {
       name: "search_queues",
@@ -86,46 +88,13 @@ export const searchQueues: ToolFactory<Dependencies, typeof paramsSchema> = ({
       paramsSchema,
     },
     call: async ({ name, pageNumber = 1, pageSize = 100 }) => {
-      const validatedPageNumber = pageNumber >= 1 ? pageNumber : 1;
-      const validatedPageSize = pageSize >= 1 ? pageSize : 100;
-
+      let result: Models.QueueEntityListing;
       try {
-        const result = await routingApi.getRoutingQueues({
+        result = await routingApi.getRoutingQueues({
           name,
-          pageSize: validatedPageSize,
-          pageNumber: validatedPageNumber,
+          pageSize: pageSize,
+          pageNumber: pageNumber,
         });
-        const entities = result.entities ?? [];
-
-        if (entities.length === 0) {
-          return {
-            content: [
-              {
-                type: "text",
-                text:
-                  name === "*"
-                    ? "No routing queues found in the system."
-                    : `No routing queues found matching the name pattern "${name}".`,
-              },
-            ],
-          };
-        }
-
-        const foundQueues = entities.filter(hasIdAndName);
-
-        return {
-          content: [
-            {
-              type: "text",
-              text: formatQueues(name, foundQueues, {
-                pageNumber: result.pageNumber,
-                pageSize: result.pageSize,
-                pageCount: result.pageCount,
-                total: result.total,
-              }),
-            },
-          ],
-        };
       } catch (error: unknown) {
         const message = isUnauthorisedError(error)
           ? "Failed to search queues: Unauthorised access. Please check API credentials or permissions."
@@ -141,35 +110,36 @@ export const searchQueues: ToolFactory<Dependencies, typeof paramsSchema> = ({
           ],
         };
       }
-    },
-    mockCall: ({ name }) => {
-      return Promise.resolve({
+      const entities = result.entities ?? [];
+
+      if (entities.length === 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text:
+                name === "*"
+                  ? "No routing queues found in the system."
+                  : `No routing queues found matching the name pattern "${name}".`,
+            },
+          ],
+        };
+      }
+
+      const foundQueues = entities.filter(hasIdAndName);
+
+      return {
         content: [
           {
             type: "text",
-            text: formatQueues(
-              name,
-              [
-                {
-                  name: `${name}_one`,
-                  id: "00000000-0000-0000-0000-000000000001",
-                  description: `${name} queue description`,
-                  memberCount: 30,
-                },
-                {
-                  name: `${name}_two`,
-                  id: "00000000-0000-0000-0000-000000000002",
-                  memberCount: 20,
-                },
-                {
-                  name: `${name}_three`,
-                  id: "00000000-0000-0000-0000-000000000003",
-                },
-              ],
-              {},
-            ),
+            text: formatQueues(name, foundQueues, {
+              pageNumber: result.pageNumber,
+              pageSize: result.pageSize,
+              pageCount: result.pageCount,
+              total: result.total,
+            }),
           },
         ],
-      });
+      };
     },
   });
