@@ -21,7 +21,7 @@
     "start": "tsx src/index.ts",
     "start:inspector": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js",
     "clean": "rm -rf dist/*",
-    "build:esm": "tsc",
+    "build:esm": "tsc -p tsconfig.build.json",
     "build": "npm run clean && npm run build:esm",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
