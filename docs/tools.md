@@ -131,3 +131,32 @@ Required Permissions:
 Platform API endpoint used:
 
 - [GET /api/v2/speechandtextanalytics/conversations/{conversationId}](https://developer.genesys.cloud/analyticsdatamanagement/speechtextanalytics/#get-api-v2-speechandtextanalytics-conversations--conversationId-)
+
+## Conversation Topics
+
+Retrieves Speech and Text Analytics topics detected for a specific conversation. Topics
+represent business-level intents (e.g. cancellation, billing enquiry) inferred from recognised
+phrases in the customer-agent interaction.
+
+Read more [about programs, topics, and phrases](https://help.mypurecloud.com/articles/about-programs-topics-and-phrases/).
+
+[Source file](/src/tools/conversationTopics.ts).
+
+### Input
+
+- `conversationId`
+  - A UUID ID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)
+
+### Security
+
+Required Permissions:
+
+- `speechAndTextAnalytics:topic:view`
+- `analytics:conversationDetail:view`
+- `analytics:speechAndTextAnalyticsAggregates:view`
+
+Platform API endpoints used:
+
+- [GET /api/v2/speechandtextanalytics/topics](https://developer.genesys.cloud/analyticsdatamanagement/speechtextanalytics/#get-api-v2-speechandtextanalytics-topics)
+- [GET /api/v2/analytics/conversations/{conversationId}/details](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations--conversationId--details)
+- [POST /api/v2/analytics/transcripts/aggregates/query](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#post-api-v2-analytics-transcripts-aggregates-query)

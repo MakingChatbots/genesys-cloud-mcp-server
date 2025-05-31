@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
-import type { Models, AnalyticsApi } from "purecloud-platform-client-v2";
-import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import type { AnalyticsApi, Models } from "purecloud-platform-client-v2";
+import { errorResult } from "./utils/errorResult.js";
 
 export interface ToolDependencies {
   readonly analyticsApi: Pick<AnalyticsApi, "getAnalyticsConversationsDetails">;
@@ -24,18 +24,6 @@ const paramsSchema = z.object({
       "A list of up to 100 conversation IDs to evaluate voice call quality for",
     ),
 });
-
-function errorResult(errorMessage: string): CallToolResult {
-  return {
-    isError: true,
-    content: [
-      {
-        type: "text",
-        text: errorMessage,
-      },
-    ],
-  };
-}
 
 export const voiceCallQuality: ToolFactory<
   ToolDependencies,

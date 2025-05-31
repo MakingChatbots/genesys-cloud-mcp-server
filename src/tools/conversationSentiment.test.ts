@@ -8,6 +8,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { randomUUID } from "node:crypto";
+import { McpError } from "@modelcontextprotocol/sdk/types.js";
 
 describe("Conversation Sentiment Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -80,13 +81,12 @@ describe("Conversation Sentiment Tool", () => {
           conversationIds: [],
         },
       }),
-    ).rejects.toMatchObject({
-      name: "McpError",
-      code: -32602,
-      message: expect.stringContaining(
-        "Array must contain at least 1 element(s)",
-      ) as string,
-    });
+    ).rejects.toSatisfy(
+      (error: McpError) =>
+        error.name === "McpError" &&
+        error.message.includes("conversationId") &&
+        error.message.includes("Array must contain at least 1 element(s)"),
+    );
   });
 
   test("errors when conversation ID not UUID", async () => {
@@ -97,11 +97,12 @@ describe("Conversation Sentiment Tool", () => {
           conversationIds: ["invalid-uuid"],
         },
       }),
-    ).rejects.toMatchObject({
-      name: "McpError",
-      code: -32602,
-      message: expect.stringContaining("Invalid uuid") as string,
-    });
+    ).rejects.toSatisfy(
+      (error: McpError) =>
+        error.name === "McpError" &&
+        error.message.includes("conversationIds") &&
+        error.message.includes("Invalid uuid"),
+    );
   });
 
   test("error from Genesys Cloud's Platform SDK returned", async () => {

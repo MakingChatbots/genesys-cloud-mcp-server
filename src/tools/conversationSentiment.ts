@@ -5,7 +5,7 @@ import type {
   SpeechTextAnalyticsApi,
   Models,
 } from "purecloud-platform-client-v2";
-import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import { errorResult } from "./utils/errorResult.js";
 
 export interface ToolDependencies {
   readonly speechTextAnalyticsApi: Pick<
@@ -28,18 +28,6 @@ const paramsSchema = z.object({
     .max(100)
     .describe("A list of up to 100 conversation IDs to retrieve sentiment for"),
 });
-
-function errorResult(errorMessage: string): CallToolResult {
-  return {
-    isError: true,
-    content: [
-      {
-        type: "text",
-        text: errorMessage,
-      },
-    ],
-  };
-}
 
 function interpretSentiment(score?: number): string {
   if (score === undefined) return "Unknown";

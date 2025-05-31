@@ -8,6 +8,7 @@ import { sampleConversationsByQueue } from "./tools/sampleConversationsByQueue.j
 import { queryQueueVolumes } from "./tools/queryQueueVolumes.js";
 import { voiceCallQuality } from "./tools/voiceCallQuality.js";
 import { conversationSentiment } from "./tools/conversationSentiment.js";
+import { conversationTopics } from "./tools/conversationTopics.js";
 
 const configResult = loadConfig(process.env);
 if (!configResult.success) {
@@ -85,6 +86,21 @@ server.tool(
   conversationSentimentTool.schema.paramsSchema.shape,
   withAuth(
     conversationSentimentTool.call,
+    config.genesysCloud,
+    platformClient.ApiClient.instance,
+  ),
+);
+
+const conversationTopicsTool = conversationTopics({
+  speechTextAnalyticsApi,
+  analyticsApi,
+});
+server.tool(
+  conversationTopicsTool.schema.name,
+  conversationTopicsTool.schema.description,
+  conversationTopicsTool.schema.paramsSchema.shape,
+  withAuth(
+    conversationTopicsTool.call,
     config.genesysCloud,
     platformClient.ApiClient.instance,
   ),

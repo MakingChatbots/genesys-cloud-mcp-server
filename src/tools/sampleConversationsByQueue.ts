@@ -2,9 +2,9 @@ import { z } from "zod";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { type AnalyticsApi } from "purecloud-platform-client-v2";
-import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { sampleEvenly } from "./utils/sampleEvenly.js";
 import { waitFor } from "./utils/waitFor.js";
+import { errorResult } from "./utils/errorResult.js";
 
 export interface ToolDependencies {
   readonly analyticsApi: Pick<
@@ -35,18 +35,6 @@ const paramsSchema = z.object({
 });
 
 const MAX_ATTEMPTS = 10;
-
-function errorResult(errorMessage: string): CallToolResult {
-  return {
-    isError: true,
-    content: [
-      {
-        type: "text",
-        text: errorMessage,
-      },
-    ],
-  };
-}
 
 export const sampleConversationsByQueue: ToolFactory<
   ToolDependencies,
