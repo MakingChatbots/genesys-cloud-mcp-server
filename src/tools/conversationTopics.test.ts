@@ -127,10 +127,8 @@ describe("Conversation Topics Tool", () => {
           text: `
 Conversation ID: ${conversationId}
 Detected Topics:
- • Test Topic 1
-   • Test Topic 1 Desc
- • Test Topic 2
-   • Test Topic 2 Desc
+ • Test Topic 1: Test Topic 1 Desc
+ • Test Topic 2: Test Topic 2 Desc
 `.trim(),
         },
       ],

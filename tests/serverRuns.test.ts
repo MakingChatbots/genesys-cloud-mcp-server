@@ -39,6 +39,7 @@ describe("Server Runs", () => {
       "query_queue_volumes",
       "voice_call_quality",
       "conversation_sentiment",
+      "conversation_topics",
     ]);
   });
 
