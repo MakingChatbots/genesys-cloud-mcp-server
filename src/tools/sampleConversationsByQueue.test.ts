@@ -63,12 +63,12 @@ describe("Query Queue Volumes Tool", () => {
           startDate: {
             type: "string",
             description:
-              "The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z').",
+              "The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z')",
           },
           endDate: {
             type: "string",
             description:
-              "The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z').",
+              "The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z')",
           },
         },
         required: ["queueId", "startDate", "endDate"],
