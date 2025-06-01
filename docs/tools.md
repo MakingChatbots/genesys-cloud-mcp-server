@@ -1,6 +1,8 @@
 # Tools
 
-## Search Queues (`search_queues`)
+## Search Queues
+
+**Tool name:** `search_queues`
 
 Searches for routing queues based on their name, allowing for wildcard searches. Returns a paginated
 list of matching queues, including their Name, ID, Description (if available), and Member Count
@@ -29,7 +31,9 @@ Platform API endpoint used:
 
 - [`GET /api/v2/routing/queues`](https://developer.genesys.cloud/routing/routing/#get-api-v2-routing-queues)
 
-## Query Queue Volumes (`query_queue_volumes`)
+## Query Queue Volumes
+
+**Tool name:** `query_queue_volumes`
 
 Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.
 
@@ -56,7 +60,9 @@ Platform API endpoints used:
 - [`GET /api/v2/analytics/conversations/details/jobs/{jobId}`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId-)
 - [`GET /api/v2/analytics/conversations/details/jobs/{jobId}/results`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId--results)
 
-## Sample Conversations By Queue (`sample_conversations_by_queue`)
+## Sample Conversations By Queue
+
+**Tool name:** `sample_conversations_by_queue`
 
 Retrieves conversation analytics for a specific queue between two dates, returning a representative sample of conversation IDs. Useful for reporting, investigation, or summarisation.
 
@@ -81,7 +87,9 @@ Platform API endpoints used:
 - [`GET /api/v2/analytics/conversations/details/jobs/{jobId}`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId-)
 - [`GET /api/v2/analytics/conversations/details/jobs/{jobId}/results`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details-jobs--jobId--results)
 
-## Voice Call Quality (`voice_call_quality`)
+## Voice Call Quality
+
+**Tool name:** `voice_call_quality`
 
 Retrieves voice call quality metrics for one or more conversations by ID. This tool specifically focuses on voice interactions and returns the minimum Mean Opinion Score (MOS) observed in each conversation, helping identify degraded or poor-quality voice calls.
 
@@ -104,7 +112,9 @@ Platform API endpoint used:
 
 - [`GET /api/v2/analytics/conversations/details`](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations-details)
 
-## Conversation Sentiment (`conversation_sentiment`)
+## Conversation Sentiment
+
+**Tool name:** `conversation_sentiment`
 
 Retrieves sentiment analysis scores for one or more conversations. Sentiment is evaluated based on customer phrases, categorized as positive, neutral, or negative. The result includes both a numeric sentiment score (-100 to 100) and an interpreted sentiment label.
 
@@ -126,7 +136,9 @@ Platform API endpoint used:
 
 - [GET /api/v2/speechandtextanalytics/conversations/{conversationId}](https://developer.genesys.cloud/analyticsdatamanagement/speechtextanalytics/#get-api-v2-speechandtextanalytics-conversations--conversationId-)
 
-## Conversation Topics (`conversation_topics`)
+## Conversation Topics
+
+**Tool name:** `conversation_topics`
 
 Retrieves Speech and Text Analytics topics detected for a specific conversation. Topics represent business-level intents (e.g. cancellation, billing enquiry) inferred from recognised phrases in the customer-agent interaction.
 
