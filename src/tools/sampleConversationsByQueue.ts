@@ -25,12 +25,12 @@ const paramsSchema = z.object({
   startDate: z
     .string()
     .describe(
-      "The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z').",
+      "The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z')",
     ),
   endDate: z
     .string()
     .describe(
-      "The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z').",
+      "The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z')",
     ),
 });
 
