@@ -170,6 +170,7 @@ describe("Search Queues Tool", () => {
 Found the following queues matching "test-queue":
 • Name: test-queue
   • ID: ${queueId}
+
 --- Pagination Info ---
 Page Number: N/A
 Page Size: N/A

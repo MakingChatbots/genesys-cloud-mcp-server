@@ -9,6 +9,7 @@ import { queryQueueVolumes } from "./tools/queryQueueVolumes.js";
 import { voiceCallQuality } from "./tools/voiceCallQuality.js";
 import { conversationSentiment } from "./tools/conversationSentiment.js";
 import { conversationTopics } from "./tools/conversationTopics.js";
+import { searchVoiceConversations } from "./tools/searchVoiceConversations.js";
 
 const configResult = loadConfig(process.env);
 if (!configResult.success) {
@@ -101,6 +102,20 @@ server.tool(
   conversationTopicsTool.schema.paramsSchema.shape,
   withAuth(
     conversationTopicsTool.call,
+    config.genesysCloud,
+    platformClient.ApiClient.instance,
+  ),
+);
+
+const searchVoiceConversationsTool = searchVoiceConversations({
+  analyticsApi,
+});
+server.tool(
+  searchVoiceConversationsTool.schema.name,
+  searchVoiceConversationsTool.schema.description,
+  searchVoiceConversationsTool.schema.paramsSchema.shape,
+  withAuth(
+    searchVoiceConversationsTool.call,
     config.genesysCloud,
     platformClient.ApiClient.instance,
   ),

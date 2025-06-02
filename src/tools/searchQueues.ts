@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { Models, RoutingApi } from "purecloud-platform-client-v2";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
+import { paginationSection } from "./utils/paginationSection.js";
 
 type PartRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
@@ -25,14 +26,6 @@ function formatQueues(
     total?: number;
   },
 ) {
-  const paginationDetails = [
-    "--- Pagination Info ---",
-    `Page Number: ${pagination.pageNumber ? String(pagination.pageNumber) : "N/A"}`,
-    `Page Size: ${pagination.pageSize ? String(pagination.pageSize) : "N/A"}`,
-    `Total Pages: ${pagination.pageCount ? String(pagination.pageCount) : "N/A"}`,
-    `Total Matching Queues: ${pagination.total ? String(pagination.total) : "N/A"}`,
-  ].join("\n");
-
   const queueItems = queues.flatMap((q) => [
     `• Name: ${q.name}`,
     `  • ID: ${q.id}`,
@@ -45,7 +38,8 @@ function formatQueues(
   return [
     `Found the following queues matching "${inputQueueName}":`,
     ...queueItems,
-    paginationDetails,
+    "",
+    ...paginationSection("Total Matching Queues", pagination),
   ].join("\n");
 }
 

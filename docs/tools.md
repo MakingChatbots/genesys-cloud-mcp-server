@@ -164,3 +164,34 @@ Platform API endpoints used:
 - [GET /api/v2/speechandtextanalytics/topics](https://developer.genesys.cloud/analyticsdatamanagement/speechtextanalytics/#get-api-v2-speechandtextanalytics-topics)
 - [GET /api/v2/analytics/conversations/{conversationId}/details](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#get-api-v2-analytics-conversations--conversationId--details)
 - [POST /api/v2/analytics/transcripts/aggregates/query](https://developer.genesys.cloud/analyticsdatamanagement/analytics/analytics-apis#post-api-v2-analytics-transcripts-aggregates-query)
+
+## Search Voice Conversations
+
+**Tool name:** `search_voice_conversations`
+
+Searches for voice conversations within a specified time window, optionally filtering by phone number. Returns a paginated list of conversation metadata for use in further analysis or tool calls.
+
+[Source file](/src/tools/searchVoiceConversations.ts).
+
+### Input
+
+- `phoneNumber`
+  - Optional. Filters results to only include conversations involving this phone number (e.g., '+440000000000')
+- `pageNumber`
+  - The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets
+- `pageSize`
+  - The maximum number of conversations to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 500
+- `startDate`
+  - The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z')
+- `endDate`
+  - The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z')
+
+### Security
+
+Required Permissions:
+
+- `analytics:conversationDetail:view`
+
+Platform API endpoints used:
+
+- [POST /api/v2/analytics/conversations/details/query](https://developer.genesys.cloud/devapps/api-explorer-standalone#post-api-v2-analytics-conversations-details-query)

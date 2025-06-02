@@ -40,6 +40,7 @@ describe("Server Runs", () => {
       "voice_call_quality",
       "conversation_sentiment",
       "conversation_topics",
+      "search_voice_conversations",
     ]);
   });
 
