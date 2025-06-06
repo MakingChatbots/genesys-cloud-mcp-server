@@ -23,7 +23,7 @@ in the [tools doc](/docs/tools.md).
 
 ## Authentication
 
-This currently only a supports stdio Server. To configure authentication you'll need to:
+This currently only supports a stdio server. To configure authentication you'll need to:
 
 1. Create an OAuth Client in Genesys Cloud
 2. Assign the permissions to it for the tools you want to be used
