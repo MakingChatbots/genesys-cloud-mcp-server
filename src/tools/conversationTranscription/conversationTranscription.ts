@@ -75,36 +75,27 @@ function isNonHuman(participant: Participant | undefined) {
   );
 }
 
-function isInternalParticipant(participant: Participant) {
-  if (participant.participantPurpose) {
-    return (
-      participant.participantPurpose.toLowerCase() === "user" ||
-      participant.participantPurpose.toLowerCase() === "agent" ||
-      isNonHuman(participant)
-    );
-  } else if (
-    participant.participantPurpose &&
-    participant.participantPurpose.toLowerCase() === "internal"
-  ) {
-    return !!participant.userId;
+function isInternalParticipant(participant: Participant): boolean {
+  const purpose = participant.participantPurpose?.toLowerCase();
+  if (!purpose) {
+    return false;
   }
-  return false;
+
+  return (
+    purpose === "user" ||
+    purpose === "agent" ||
+    purpose === "internal" ||
+    isNonHuman(participant)
+  );
 }
 
-function isExternalParticipant(participant: Participant) {
-  if (participant.participantPurpose) {
-    return (
-      participant.participantPurpose.toLowerCase() === "external" ||
-      participant.participantPurpose.toLowerCase() === "customer" ||
-      !isNonHuman(participant)
-    );
-  } else if (
-    participant.participantPurpose &&
-    participant.participantPurpose.toLowerCase() === "external"
-  ) {
-    return true;
+function isExternalParticipant(participant: Participant): boolean {
+  const purpose = participant.participantPurpose?.toLowerCase();
+  if (!purpose) {
+    return false;
   }
-  return false;
+
+  return purpose === "external" || purpose === "customer";
 }
 
 const paramsSchema = z.object({
