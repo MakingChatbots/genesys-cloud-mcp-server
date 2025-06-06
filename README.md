@@ -7,7 +7,7 @@ A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 
 ## Tools Overview
 
-An overview of the tools that this MPC server makes available. Read more about each specific tool
+An overview of the tools that this MCP server makes available. Read more about each specific tool
 in the [tools doc](/docs/tools.md).
 
 | Tool                                                                          | Description                                                              |
