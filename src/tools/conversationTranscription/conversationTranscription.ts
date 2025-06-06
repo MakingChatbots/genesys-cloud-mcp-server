@@ -155,8 +155,8 @@ export const conversationTranscription: ToolFactory<
       // 2. Download recordings
       const transcriptionsForRecordings: TranscriptResponseFormat[] = [];
 
-      for (const recodingSessionId of recordingSessionIds) {
-        if (!recodingSessionId) {
+      for (const recordingSessionId of recordingSessionIds) {
+        if (!recordingSessionId) {
           continue;
         }
         let transcriptUrl: Models.TranscriptUrl | null = null;
@@ -164,7 +164,7 @@ export const conversationTranscription: ToolFactory<
           transcriptUrl =
             await speechTextAnalyticsApi.getSpeechandtextanalyticsConversationCommunicationTranscripturl(
               conversationId,
-              recodingSessionId,
+              recordingSessionId,
             );
         } catch (error) {
           const message = isUnauthorisedError(error)
