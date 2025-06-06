@@ -19,7 +19,7 @@ or listing available queues.
 - `pageNumber`
   - The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets
 - `pageSize`
-  - The maximum number of queues to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 100
+  - The maximum number of queues to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 500
 
 ### Security
 
@@ -180,7 +180,7 @@ Searches for voice conversations within a specified time window, optionally filt
 - `pageNumber`
   - The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets
 - `pageSize`
-  - The maximum number of conversations to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 500
+  - The maximum number of conversations to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 100
 - `startDate`
   - The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z')
 - `endDate`
