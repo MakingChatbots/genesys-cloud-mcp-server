@@ -22,7 +22,7 @@ const testCases: {
     ],
   },
   {
-    name: "",
+    name: "Missing total hits",
     input: {
       pageSize: 100,
       pageNumber: 1,
@@ -36,7 +36,7 @@ const testCases: {
     ],
   },
   {
-    name: "",
+    name: "Divisible hit count",
     input: {
       pageSize: 100,
       pageNumber: 1,
