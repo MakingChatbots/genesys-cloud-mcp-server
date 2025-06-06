@@ -1,6 +1,6 @@
 {
   "name": "@makingchatbots/genesys-cloud-mcp-server",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A Model Context Protocol (MCP) server exposing Genesys Cloud tools for LLMs, including sentiment analysis, conversation search, topic detection and more.",
   "exports": "./dist/index.js",
   "type": "module",
