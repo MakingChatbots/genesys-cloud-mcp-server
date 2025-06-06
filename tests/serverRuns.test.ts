@@ -1,10 +1,15 @@
-import { afterEach, describe, expect, test } from "vitest";
+import { afterEach, beforeAll, describe, expect, test } from "vitest";
 import { join } from "path";
+import { execSync } from "node:child_process";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 describe("Server Runs", () => {
   let client: Client | null = null;
+
+  beforeAll(() => {
+    execSync("npm run build", { stdio: "inherit" });
+  });
 
   afterEach(async () => {
     if (client) await client.close();
