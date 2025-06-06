@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { conversationTopics, ToolDependencies } from "./conversationTopics.js";
 import { MockedObjectDeep } from "@vitest/spy";
+import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { randomUUID } from "node:crypto";
 import { McpError } from "@modelcontextprotocol/sdk/types.js";
+import { conversationTopics, ToolDependencies } from "./conversationTopics.js";
 
 describe("Conversation Topics Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -54,7 +54,7 @@ describe("Conversation Topics Tool", () => {
         properties: {
           conversationId: {
             description:
-              "A UUID ID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
+              "A UUID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
             format: "uuid",
             type: "string",
           },

@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { MockedObjectDeep } from "@vitest/spy";
-import {
-  searchVoiceConversations,
-  ToolDependencies,
-} from "./searchVoiceConversations.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { randomUUID } from "node:crypto";
+import {
+  searchVoiceConversations,
+  ToolDependencies,
+} from "./searchVoiceConversations.js";
 
 describe("Search Voice Conversations Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;

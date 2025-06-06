@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
+import { MockedObjectDeep } from "@vitest/spy";
+import { randomUUID } from "node:crypto";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { McpError } from "@modelcontextprotocol/sdk/types.js";
 import {
   conversationSentiment,
   ToolDependencies,
 } from "./conversationSentiment.js";
-import { MockedObjectDeep } from "@vitest/spy";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { randomUUID } from "node:crypto";
-import { McpError } from "@modelcontextprotocol/sdk/types.js";
 
 describe("Conversation Sentiment Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -57,7 +57,7 @@ describe("Conversation Sentiment Tool", () => {
               type: "string",
               format: "uuid",
               description:
-                "A UUID ID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
+                "A UUID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
             },
             minItems: 1,
             maxItems: 100,
@@ -107,7 +107,7 @@ describe("Conversation Sentiment Tool", () => {
 
   test("error from Genesys Cloud's Platform SDK returned", async () => {
     toolDeps.speechTextAnalyticsApi.getSpeechandtextanalyticsConversation.mockRejectedValue(
-      new Error("Test Error Message"),
+      { code: "not.authorized", status: 403 },
     );
 
     const result = await client.callTool({
@@ -122,7 +122,40 @@ describe("Conversation Sentiment Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to retrieve sentiment analysis: Test Error Message",
+          text: "Failed to retrieve sentiment analysis: Unauthorised access. Please check API credentials or permissions.",
+        },
+      ],
+    });
+  });
+
+  test("conversations not found are included in results", async () => {
+    const conversationId = randomUUID();
+    toolDeps.speechTextAnalyticsApi.getSpeechandtextanalyticsConversation.mockRejectedValue(
+      {
+        code: "resource.not.found",
+        messageParams: {
+          id: conversationId,
+        },
+      },
+    );
+
+    const result = await client.callTool({
+      name: toolName,
+      arguments: {
+        conversationIds: [conversationId],
+      },
+    });
+
+    expect(result).toStrictEqual({
+      content: [
+        {
+          type: "text",
+          text: `
+Sentiment results for 1 conversation(s):
+
+• Conversation ID: ${conversationId}
+  • Error: Conversation not found
+`.trim(),
         },
       ],
     });

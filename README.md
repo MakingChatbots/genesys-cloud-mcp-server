@@ -19,6 +19,7 @@ in the [tools doc](/docs/tools.md).
 | [Conversation Sentiment](/docs/tools.md#conversation-sentiment)               | Retrieves the sentiment for one or more conversations by ID              |
 | [Conversation Topics](/docs/tools.md#conversation-topics)                     | Retrieves the topics for a conversation by ID                            |
 | [Search Voice Conversation](/docs/tools.md#search-voice-conversations)        | Searches voice conversations by optional criteria                        |
+| [Conversation Transcript](/docs/tools.md#conversation-transcript)             | Retrieves conversation transcript                                        |
 
 ## Authentication
 

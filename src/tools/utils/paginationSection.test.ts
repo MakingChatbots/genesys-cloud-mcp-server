@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { PaginationArgs, paginationSection } from "./paginationSection";
+import { PaginationArgs, paginationSection } from "./paginationSection.js";
 
 const testCases: {
   name: string;
@@ -48,6 +48,21 @@ const testCases: {
       "Page Size: 100",
       "Total Pages: 2",
       "Total Conversations returned: 200",
+    ],
+  },
+  {
+    name: "Non-divisible hit count",
+    input: {
+      pageSize: 100,
+      pageNumber: 1,
+      totalHits: 201,
+    },
+    expected: [
+      "--- Pagination Info ---",
+      "Page Number: 1",
+      "Page Size: 100",
+      "Total Pages: 3",
+      "Total Conversations returned: 201",
     ],
   },
 ];

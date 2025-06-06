@@ -1,15 +1,16 @@
+import platformClient from "purecloud-platform-client-v2";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import platformClient from "purecloud-platform-client-v2";
 import { withAuth } from "./withAuth.js";
-import { searchQueues } from "./tools/searchQueues.js";
 import { loadConfig } from "./loadConfig.js";
-import { sampleConversationsByQueue } from "./tools/sampleConversationsByQueue.js";
-import { queryQueueVolumes } from "./tools/queryQueueVolumes.js";
+import { searchQueues } from "./tools/searchQueues.js";
+import { sampleConversationsByQueue } from "./tools/sampleConversationsByQueue/sampleConversationsByQueue.js";
+import { queryQueueVolumes } from "./tools/queryQueueVolumes/queryQueueVolumes.js";
 import { voiceCallQuality } from "./tools/voiceCallQuality.js";
-import { conversationSentiment } from "./tools/conversationSentiment.js";
-import { conversationTopics } from "./tools/conversationTopics.js";
+import { conversationSentiment } from "./tools/conversationSentiment/conversationSentiment.js";
+import { conversationTopics } from "./tools/conversationTopics/conversationTopics.js";
 import { searchVoiceConversations } from "./tools/searchVoiceConversations.js";
+import { conversationTranscription } from "./tools/conversationTranscription/conversationTranscription.js";
 
 const configResult = loadConfig(process.env);
 if (!configResult.success) {
@@ -27,6 +28,7 @@ const server: McpServer = new McpServer({
 const routingApi = new platformClient.RoutingApi();
 const analyticsApi = new platformClient.AnalyticsApi();
 const speechTextAnalyticsApi = new platformClient.SpeechTextAnalyticsApi();
+const recordingApi = new platformClient.RecordingApi();
 
 const searchQueuesTool = searchQueues({ routingApi });
 server.tool(
@@ -116,6 +118,22 @@ server.tool(
   searchVoiceConversationsTool.schema.paramsSchema.shape,
   withAuth(
     searchVoiceConversationsTool.call,
+    config.genesysCloud,
+    platformClient.ApiClient.instance,
+  ),
+);
+
+const conversationTranscriptTool = conversationTranscription({
+  recordingApi,
+  speechTextAnalyticsApi,
+  fetchUrl: fetch,
+});
+server.tool(
+  conversationTranscriptTool.schema.name,
+  conversationTranscriptTool.schema.description,
+  conversationTranscriptTool.schema.paramsSchema.shape,
+  withAuth(
+    conversationTranscriptTool.call,
     config.genesysCloud,
     platformClient.ApiClient.instance,
   ),

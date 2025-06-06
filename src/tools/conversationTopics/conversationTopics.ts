@@ -4,10 +4,10 @@ import type {
   Models,
   SpeechTextAnalyticsApi,
 } from "purecloud-platform-client-v2";
-import { createTool, type ToolFactory } from "./utils/createTool.js";
-import { errorResult } from "./utils/errorResult.js";
-import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
-import { chunks } from "./utils/chunks.js";
+import { createTool, type ToolFactory } from "../utils/createTool.js";
+import { errorResult } from "../utils/errorResult.js";
+import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
+import { chunks } from "./chunks.js";
 
 export interface ToolDependencies {
   readonly speechTextAnalyticsApi: Pick<
@@ -28,7 +28,7 @@ const paramsSchema = z.object({
     .string()
     .uuid()
     .describe(
-      "A UUID ID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
+      "A UUID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
     ),
 });
 

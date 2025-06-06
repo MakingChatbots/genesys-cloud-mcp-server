@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { MockedObjectDeep } from "@vitest/spy";
+import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpError } from "@modelcontextprotocol/sdk/types.js";
 import { searchQueues, ToolDependencies } from "./searchQueues.js";
-import { randomUUID } from "node:crypto";
 
 describe("Search Queues Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;

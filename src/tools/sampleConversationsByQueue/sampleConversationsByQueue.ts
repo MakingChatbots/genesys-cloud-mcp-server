@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { createTool, type ToolFactory } from "./utils/createTool.js";
-import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { type AnalyticsApi } from "purecloud-platform-client-v2";
-import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { isQueueUsedInConvo } from "./utils/genesys/isQueueUsedInConvo.js";
-import { waitFor } from "./utils/waitFor.js";
+import { createTool, type ToolFactory } from "../utils/createTool.js";
+import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
+import { sampleEvenly } from "./sampleEvenly.js";
+import { waitFor } from "../utils/waitFor.js";
+import { errorResult } from "../utils/errorResult.js";
 
 export interface ToolDependencies {
   readonly analyticsApi: Pick<
@@ -15,19 +15,15 @@ export interface ToolDependencies {
   >;
 }
 
+const MAX_ATTEMPTS = 10;
+
 const paramsSchema = z.object({
-  queueIds: z
-    .array(
-      z
-        .string()
-        .uuid()
-        .describe(
-          "A UUID ID for a queue. (e.g., 00000000-0000-0000-0000-000000000000)",
-        ),
-    )
-    .min(1)
-    .max(300)
-    .describe("List of up to 300 queue IDs to filter conversations by"),
+  queueId: z
+    .string()
+    .uuid()
+    .describe(
+      "The UUID of the queue to filter conversations by. (e.g., 00000000-0000-0000-0000-000000000000)",
+    ),
   startDate: z
     .string()
     .describe(
@@ -40,32 +36,18 @@ const paramsSchema = z.object({
     ),
 });
 
-const MAX_ATTEMPTS = 10;
-
-function errorResult(errorMessage: string): CallToolResult {
-  return {
-    isError: true,
-    content: [
-      {
-        type: "text",
-        text: errorMessage,
-      },
-    ],
-  };
-}
-
-export const queryQueueVolumes: ToolFactory<
+export const sampleConversationsByQueue: ToolFactory<
   ToolDependencies,
   typeof paramsSchema
 > = ({ analyticsApi }) =>
   createTool({
     schema: {
-      name: "query_queue_volumes",
+      name: "sample_conversations_by_queue",
       description:
-        "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.",
+        "Retrieves conversation analytics for a specific queue between two dates, returning a representative sample of conversation IDs. Useful for reporting, investigation, or summarisation.",
       paramsSchema,
     },
-    call: async ({ queueIds, startDate, endDate }) => {
+    call: async ({ queueId, startDate, endDate }) => {
       const from = new Date(startDate);
       const to = new Date(endDate);
 
@@ -96,10 +78,12 @@ export const queryQueueVolumes: ToolFactory<
             },
             {
               type: "or",
-              predicates: queueIds.map((id) => ({
-                dimension: "queueId",
-                value: id,
-              })),
+              predicates: [
+                {
+                  dimension: "queueId",
+                  value: queueId,
+                },
+              ],
             },
           ],
         });
@@ -114,6 +98,8 @@ export const queryQueueVolumes: ToolFactory<
           const jobStatus =
             await analyticsApi.getAnalyticsConversationsDetailsJob(jobId);
           state = jobStatus.state ?? "UNKNOWN";
+
+          console.log("UPDATE", { attempts, state });
 
           if (state === "FULFILLED") break;
 
@@ -142,31 +128,25 @@ export const queryQueueVolumes: ToolFactory<
 
         const results =
           await analyticsApi.getAnalyticsConversationsDetailsJobResults(jobId);
-        const conversations = results.conversations ?? [];
+        const conversationIds = (results.conversations ?? [])
+          .map((c) => c.conversationId)
+          .filter(Boolean);
 
-        const queueConversationCount = new Map<string, number>();
-        for (const convo of conversations) {
-          for (const queueId of queueIds) {
-            if (isQueueUsedInConvo(queueId, convo)) {
-              const count = queueConversationCount.get(queueId) ?? 0;
-              queueConversationCount.set(queueId, count + 1);
-            }
-          }
-        }
-
-        const queueBreakdown: string = [
-          "Queue volume breakdown for that period:",
-          ...queueIds.map((id) => {
-            const totalConversations = queueConversationCount.get(id) ?? 0;
-            return `Queue ID: ${id} - Total conversations: ${String(totalConversations)}`;
-          }),
-        ].join("\n");
+        const sampledIds = sampleEvenly(conversationIds, 100);
 
         return {
           content: [
             {
               type: "text",
-              text: queueBreakdown,
+              text:
+                sampledIds.length === 0
+                  ? "No conversations found in queue during specified period."
+                  : [
+                      `Sample of ${String(sampledIds.length)} conversations (out of ${String(conversationIds.length)}) in the queue during that period.`,
+                      "",
+                      "Conversation IDs:",
+                      ...sampledIds,
+                    ].join("\n"),
             },
           ],
         };

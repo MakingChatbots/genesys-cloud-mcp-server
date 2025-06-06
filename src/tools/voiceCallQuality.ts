@@ -1,7 +1,7 @@
 import { z } from "zod";
+import type { AnalyticsApi, Models } from "purecloud-platform-client-v2";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
-import type { AnalyticsApi, Models } from "purecloud-platform-client-v2";
 import { errorResult } from "./utils/errorResult.js";
 
 export interface ToolDependencies {
@@ -15,7 +15,7 @@ const paramsSchema = z.object({
         .string()
         .uuid()
         .describe(
-          "A UUID ID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
+          "A UUID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
         ),
     )
     .min(1)

@@ -1,11 +1,14 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { MockedObjectDeep } from "@vitest/spy";
-import { queryQueueVolumes, ToolDependencies } from "./queryQueueVolumes.js";
+import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpError } from "@modelcontextprotocol/sdk/types.js";
-import { randomUUID } from "node:crypto";
+import {
+  ToolDependencies,
+  sampleConversationsByQueue,
+} from "./sampleConversationsByQueue.js";
 
 describe("Query Queue Volumes Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -21,7 +24,7 @@ describe("Query Queue Volumes Tool", () => {
       },
     };
 
-    const toolDefinition = queryQueueVolumes(toolDeps);
+    const toolDefinition = sampleConversationsByQueue(toolDeps);
     toolName = toolDefinition.schema.name;
 
     const server = new McpServer({ name: "TestServer", version: "test" });
@@ -44,24 +47,18 @@ describe("Query Queue Volumes Tool", () => {
   test("schema describes tool", async () => {
     const tools = await client.listTools();
     expect(tools.tools[0]).toStrictEqual({
-      name: "query_queue_volumes",
+      name: "sample_conversations_by_queue",
       description:
-        "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.",
+        "Retrieves conversation analytics for a specific queue between two dates, returning a representative sample of conversation IDs. Useful for reporting, investigation, or summarisation.",
+
       inputSchema: {
         type: "object",
         properties: {
-          queueIds: {
-            type: "array",
-            items: {
-              type: "string",
-              format: "uuid",
-              description:
-                "A UUID ID for a queue. (e.g., 00000000-0000-0000-0000-000000000000)",
-            },
-            minItems: 1,
-            maxItems: 300,
+          queueId: {
             description:
-              "List of up to 300 queue IDs to filter conversations by",
+              "The UUID of the queue to filter conversations by. (e.g., 00000000-0000-0000-0000-000000000000)",
+            format: "uuid",
+            type: "string",
           },
           startDate: {
             type: "string",
@@ -74,7 +71,7 @@ describe("Query Queue Volumes Tool", () => {
               "The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z')",
           },
         },
-        required: ["queueIds", "startDate", "endDate"],
+        required: ["queueId", "startDate", "endDate"],
         additionalProperties: false,
 
         $schema: "http://json-schema.org/draft-07/schema#",
@@ -83,12 +80,12 @@ describe("Query Queue Volumes Tool", () => {
     });
   });
 
-  test("errors when no queue IDs provided", async () => {
+  test("errors when no queue ID provided", async () => {
     await expect(
       client.callTool({
         name: toolName,
         arguments: {
-          queueIds: [],
+          queueId: "",
           startDate: "2024-01-01T00:00:00Z",
           endDate: "2024-01-02T00:00:00Z",
         },
@@ -97,7 +94,7 @@ describe("Query Queue Volumes Tool", () => {
       (error: McpError) =>
         error.name === "McpError" &&
         error.message.includes("queueId") &&
-        error.message.includes("Array must contain at least 1 element(s)"),
+        error.message.includes("Invalid uuid"),
     );
   });
 
@@ -106,7 +103,7 @@ describe("Query Queue Volumes Tool", () => {
       client.callTool({
         name: toolName,
         arguments: {
-          queueIds: [randomUUID()],
+          queueId: randomUUID(),
           startDate: "invalid-date",
           endDate: "2024-01-02T00:00:00Z",
         },
@@ -125,7 +122,7 @@ describe("Query Queue Volumes Tool", () => {
       client.callTool({
         name: toolName,
         arguments: {
-          queueIds: [randomUUID()],
+          queueId: randomUUID(),
           startDate: "2024-01-01T00:00:00Z",
           endDate: "invalid-date",
         },
@@ -150,7 +147,7 @@ describe("Query Queue Volumes Tool", () => {
       client.callTool({
         name: toolName,
         arguments: {
-          queueIds: [randomUUID()],
+          queueId: randomUUID(),
           startDate: "2024-01-01T00:00:00Z",
           endDate: "2024-01-02T00:00:00Z",
         },
@@ -166,7 +163,7 @@ describe("Query Queue Volumes Tool", () => {
     });
   });
 
-  test("call volume returned for single queue", async () => {
+  test("message returned if no conversations found", async () => {
     const queueId = randomUUID();
     const jobId = randomUUID();
 
@@ -193,7 +190,7 @@ describe("Query Queue Volumes Tool", () => {
     const result = await client.callTool({
       name: toolName,
       arguments: {
-        queueIds: [queueId],
+        queueId: queueId,
         startDate: "2024-01-01T00:00:00Z",
         endDate: "2024-01-02T00:00:00Z",
       },
@@ -221,19 +218,19 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: `
-Queue volume breakdown for that period:
-Queue ID: ${queueId} - Total conversations: 1
-  `.trim(),
+          text: "No conversations found in queue during specified period.",
         },
       ],
     });
   });
 
-  test("call volume returned for multiple queues", async () => {
-    const queueIdOne = randomUUID();
-    const queueIdTwo = randomUUID();
+  test("sample of conversations returned for queue", async () => {
+    const queueId = randomUUID();
     const jobId = randomUUID();
+
+    const conversationOneId = randomUUID();
+    const conversationTwoId = randomUUID();
+    const conversationThreeId = randomUUID();
 
     toolDeps.analyticsApi.postAnalyticsConversationsDetailsJobs.mockResolvedValue(
       { jobId: jobId },
@@ -246,17 +243,9 @@ Queue ID: ${queueId} - Total conversations: 1
     toolDeps.analyticsApi.getAnalyticsConversationsDetailsJobResults.mockResolvedValue(
       {
         conversations: [
-          {
-            participants: [
-              { sessions: [{ segments: [{ queueId: queueIdOne }] }] },
-            ],
-          },
-          {
-            participants: [
-              { sessions: [{ segments: [{ queueId: queueIdOne }] }] },
-              { sessions: [{ segments: [{ queueId: queueIdTwo }] }] },
-            ],
-          },
+          { conversationId: conversationOneId },
+          { conversationId: conversationTwoId },
+          { conversationId: conversationThreeId },
         ],
       },
     );
@@ -264,41 +253,22 @@ Queue ID: ${queueId} - Total conversations: 1
     const result = await client.callTool({
       name: toolName,
       arguments: {
-        queueIds: [queueIdOne, queueIdTwo],
+        queueId: queueId,
         startDate: "2024-01-01T00:00:00Z",
         endDate: "2024-01-02T00:00:00Z",
       },
-    });
-
-    expect(
-      toolDeps.analyticsApi.postAnalyticsConversationsDetailsJobs,
-    ).toBeCalledWith({
-      interval: "2024-01-01T00:00:00.000Z/2024-01-02T00:00:00.000Z",
-      order: "asc",
-      orderBy: "conversationStart",
-      segmentFilters: [
-        {
-          type: "and",
-          predicates: [{ dimension: "purpose", value: "customer" }],
-        },
-        {
-          type: "or",
-          predicates: [
-            { dimension: "queueId", value: queueIdOne },
-            { dimension: "queueId", value: queueIdTwo },
-          ],
-        },
-      ],
     });
 
     expect(result).toStrictEqual({
       content: [
         {
           type: "text",
-          text: `
-Queue volume breakdown for that period:
-Queue ID: ${queueIdOne} - Total conversations: 2
-Queue ID: ${queueIdTwo} - Total conversations: 1
+          text: `Sample of 3 conversations (out of 3) in the queue during that period.
+
+Conversation IDs:
+${conversationOneId}
+${conversationTwoId}
+${conversationThreeId}
 `.trim(),
         },
       ],

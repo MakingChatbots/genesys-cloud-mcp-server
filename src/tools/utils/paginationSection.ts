@@ -16,7 +16,7 @@ export function paginationSection(
     if (totalHits === 0 && pageSize === 0) {
       return 1;
     } else {
-      return Math.max(1, Math.ceil(totalHits ?? 0) / pageSize);
+      return Math.max(1, Math.ceil((totalHits ?? 0) / pageSize));
     }
   };
 

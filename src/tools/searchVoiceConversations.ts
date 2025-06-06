@@ -1,8 +1,8 @@
 import { z } from "zod";
 import type { AnalyticsApi, Models } from "purecloud-platform-client-v2";
+import { formatDistanceStrict } from "date-fns/formatDistanceStrict";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
-import { formatDistanceStrict } from "date-fns/formatDistanceStrict";
 import { paginationSection } from "./utils/paginationSection.js";
 import { errorResult } from "./utils/errorResult.js";
 

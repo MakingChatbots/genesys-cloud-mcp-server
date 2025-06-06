@@ -37,7 +37,7 @@ Platform API endpoint used:
 
 Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.
 
-[Source file](/src/tools/queryQueueVolumes.ts).
+[Source file](/src/tools/queryQueueVolumes/queryQueueVolumes.ts).
 
 ### Inputs
 
@@ -69,7 +69,7 @@ Retrieves conversation analytics for a specific queue between two dates, returni
 ### Inputs
 
 - `queueId`
-  - The UUID ID of the queue to filter conversations by. (e.g., 00000000-0000-0000-0000-000000000000)
+  - The UUID of the queue to filter conversations by. (e.g., 00000000-0000-0000-0000-000000000000)
 - `startDate`
   - The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z')
 - `endDate`
@@ -118,7 +118,7 @@ Platform API endpoint used:
 
 Retrieves sentiment analysis scores for one or more conversations. Sentiment is evaluated based on customer phrases, categorized as positive, neutral, or negative. The result includes both a numeric sentiment score (-100 to 100) and an interpreted sentiment label.
 
-[Source file](/src/tools/conversationSentiment.ts).
+[Source file](/src/tools/conversationSentiment/conversationSentiment.ts).
 
 ### Inputs
 
@@ -144,12 +144,12 @@ Retrieves Speech and Text Analytics topics detected for a specific conversation.
 
 Read more [about programs, topics, and phrases](https://help.mypurecloud.com/articles/about-programs-topics-and-phrases/).
 
-[Source file](/src/tools/conversationTopics.ts).
+[Source file](/src/tools/conversationTopics/conversationTopics.ts).
 
 ### Input
 
 - `conversationId`
-  - A UUID ID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)
+  - A UUID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)
 
 ### Security
 
@@ -195,3 +195,28 @@ Required Permissions:
 Platform API endpoints used:
 
 - [POST /api/v2/analytics/conversations/details/query](https://developer.genesys.cloud/devapps/api-explorer-standalone#post-api-v2-analytics-conversations-details-query)
+
+## Conversation Transcript
+
+**Tool name:** `conversation_transcript`
+
+Retrieves a structured transcript of the conversation, including speaker labels, utterance timestamps, and sentiment annotations where available. The transcript is formatted as a time-aligned list of utterances attributed to each participant (e.g., customer or agent)
+
+[Source file](/src/tools/conversationTranscription/conversationTranscription.ts).
+
+### Input
+
+- `conversationId`
+  - The UUID of the conversation to retrieve the transcript for (e.g., 00000000-0000-0000-0000-000000000000)
+
+### Security
+
+Required Permissions:
+
+- `recording:recording:view`
+- `speechAndTextAnalytics:data:view`
+
+Platform API endpoints used:
+
+- [GET /api/v2/conversations/{conversationId}/recordings](https://developer.genesys.cloud/devapps/api-explorer-standalone#get-api-v2-conversations--conversationId--recordings)
+- [GET /api/v2/speechandtextanalytics/conversations/{conversationId}/communications/{communicationId}/transcripturl](https://developer.genesys.cloud/devapps/api-explorer-standalone#get-api-v2-speechandtextanalytics-conversations--conversationId--communications--communicationId--transcripturl)

@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { ToolDependencies, voiceCallQuality } from "./voiceCallQuality.js";
 import { MockedObjectDeep } from "@vitest/spy";
+import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpError } from "@modelcontextprotocol/sdk/types.js";
-import { randomUUID } from "node:crypto";
+import { ToolDependencies, voiceCallQuality } from "./voiceCallQuality.js";
 
 describe("Voice Call Quality Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -52,7 +52,7 @@ describe("Voice Call Quality Tool", () => {
               "A list of up to 100 conversation IDs to evaluate voice call quality for",
             items: {
               description:
-                "A UUID ID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
+                "A UUID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
               format: "uuid",
               type: "string",
             },
