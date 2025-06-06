@@ -99,8 +99,6 @@ export const sampleConversationsByQueue: ToolFactory<
             await analyticsApi.getAnalyticsConversationsDetailsJob(jobId);
           state = jobStatus.state ?? "UNKNOWN";
 
-          console.log("UPDATE", { attempts, state });
-
           if (state === "FULFILLED") break;
 
           switch (jobStatus.state) {
