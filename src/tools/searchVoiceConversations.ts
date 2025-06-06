@@ -56,7 +56,7 @@ const paramsSchema = z.object({
     .max(100)
     .optional()
     .describe(
-      "The maximum number of conversations to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 500",
+      "The maximum number of conversations to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 100",
     ),
   startDate: z
     .string()
