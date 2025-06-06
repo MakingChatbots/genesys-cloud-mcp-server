@@ -43,6 +43,6 @@ npm run dev
 ## Under active development
 
 This is part of [personal project](https://www.linkedin.com/posts/lucas-woodward-the-dev_genesys-genesyscloud-vertexai-activity-7321306518908280833-cWt8?utm_source=share&utm_medium=member_desktop&rcm=ACoAABsbo2wBcmnNqxYJ5UO9BrsfURZcVEtgLOU)
-to create a conversational Business Insights tool. It is a practical way for my to learn MCP servers, and how best to represent Genesys Cloud's Platform APIs in a way that can be easily consumed by LLMs.
+to create a conversational Business Insights tool. It is a practical way for me to learn MCP servers, and how best to represent Genesys Cloud's Platform APIs in a way that can be easily consumed by LLMs.
 
 There will be a lot of changes, and I will be sure to [share my learnings in my newsletter](https://makingchatbots.com/).

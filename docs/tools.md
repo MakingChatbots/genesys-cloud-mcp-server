@@ -15,7 +15,7 @@ or listing available queues.
 ### Inputs
 
 - `name`
-  - The name (or partial name) of the routing queue(s) to search for. Wildcards ('_') are supported for pattern matching (e.g., 'Support_', '*Emergency', '*Sales*'). Use '*' alone to retrieve all queues
+  - The name (or partial name) of the routing queue(s) to search for. Wildcards ('\*') are supported for pattern matching (e.g., 'Support\*', '\*Emergency', '\*Sales\*'). Use '\*' alone to retrieve all queues
 - `pageNumber`
   - The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets
 - `pageSize`
