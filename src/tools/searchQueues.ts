@@ -23,7 +23,7 @@ function formatQueues(
     pageNumber?: number;
     pageSize?: number;
     pageCount?: number;
-    total?: number;
+    totalHits?: number;
   },
 ) {
   const queueItems = queues.flatMap((q) => [
@@ -35,8 +35,13 @@ function formatQueues(
       : []),
   ]);
 
+  const firstLine =
+    pagination.totalHits !== undefined
+      ? `Found ${String(pagination.totalHits)} queues matching "${inputQueueName}":`
+      : `Found the following queues matching "${inputQueueName}":`;
+
   return [
-    `Found the following queues matching "${inputQueueName}":`,
+    firstLine,
     ...queueItems,
     "",
     ...paginationSection("Total Matching Queues", pagination),
@@ -129,7 +134,7 @@ export const searchQueues: ToolFactory<
               pageNumber: result.pageNumber,
               pageSize: result.pageSize,
               pageCount: result.pageCount,
-              total: result.total,
+              totalHits: result.total,
             }),
           },
         ],
