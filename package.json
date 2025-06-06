@@ -39,7 +39,7 @@
     "date-fns": "^4.1.0",
     "purecloud-platform-client-v2": "^223.0.0",
     "table": "^6.9.0",
-    "zod": "^3.25.48"
+    "zod": "^3.25.56"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
