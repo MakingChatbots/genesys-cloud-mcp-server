@@ -63,7 +63,7 @@ describe("Search Voice Conversations Tool", () => {
           },
           pageSize: {
             description:
-              "The maximum number of conversations to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 500",
+              "The maximum number of conversations to return per page. Defaults to 100 if not specified. Used with 'pageNumber' for pagination. The maximum value is 100",
             exclusiveMinimum: 0,
             maximum: 100,
             type: "integer",
@@ -125,6 +125,30 @@ describe("Search Voice Conversations Tool", () => {
         {
           type: "text",
           text: "endDate is not a valid ISO-8601 date.",
+        },
+      ],
+    });
+  });
+
+  test("fails when startDate is after endDate", async () => {
+    toolDeps.analyticsApi.postAnalyticsConversationsDetailsQuery.mockResolvedValue(
+      { conversations: [] },
+    );
+
+    await expect(
+      client.callTool({
+        name: toolName,
+        arguments: {
+          startDate: "2024-01-02T00:00:00Z",
+          endDate: "2024-01-01T00:00:00Z",
+        },
+      }),
+    ).resolves.toStrictEqual({
+      isError: true,
+      content: [
+        {
+          type: "text",
+          text: "Start date must be before end date.",
         },
       ],
     });
