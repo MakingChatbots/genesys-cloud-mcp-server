@@ -47,4 +47,51 @@ describe("Server Runs", () => {
       "conversation_transcript",
     ]);
   });
+
+  test("server runs via cli", async () => {
+    const transport = new StdioClientTransport({
+      command: "node",
+      args: ["--inspect", join(__dirname, "../dist/cli.js")],
+      env: {
+        PATH: process.env.PATH!,
+        GENESYSCLOUD_REGION: "test-value",
+        GENESYSCLOUD_OAUTHCLIENT_ID: "test-value",
+        GENESYSCLOUD_OAUTHCLIENT_SECRET: "test-value",
+      },
+    });
+
+    client = new Client({
+      name: "test-client",
+      version: "1.0.0",
+    });
+
+    await client.connect(transport);
+
+    const { tools } = await client.listTools();
+    expect(tools.length).toBeGreaterThan(0);
+  });
+
+  test("server runs via npx", async () => {
+    execSync("npm link", { stdio: "inherit" });
+    const transport = new StdioClientTransport({
+      command: "npx",
+      args: ["--no-install", "@makingchatbots/genesys-cloud-mcp-server"],
+      env: {
+        PATH: process.env.PATH!,
+        GENESYSCLOUD_REGION: "test-value",
+        GENESYSCLOUD_OAUTHCLIENT_ID: "test-value",
+        GENESYSCLOUD_OAUTHCLIENT_SECRET: "test-value",
+      },
+    });
+
+    client = new Client({
+      name: "test-client",
+      version: "1.0.0",
+    });
+
+    await client.connect(transport);
+
+    const { tools } = await client.listTools();
+    expect(tools.length).toBeGreaterThan(0);
+  });
 });

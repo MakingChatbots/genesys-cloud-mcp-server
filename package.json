@@ -2,7 +2,7 @@
   "name": "@makingchatbots/genesys-cloud-mcp-server",
   "version": "0.0.10",
   "description": "A Model Context Protocol (MCP) server exposing Genesys Cloud tools for LLMs, including sentiment analysis, conversation search, topic detection and more.",
-  "exports": "./dist/index.js",
+  "bin": "./dist/cli.js",
   "type": "module",
   "license": "ISC",
   "repository": {
@@ -22,7 +22,7 @@
     "start:inspector": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js",
     "clean": "rm -rf dist/*",
     "build:esm": "tsc -p tsconfig.build.json",
-    "build": "npm run clean && npm run build:esm",
+    "build": "npm run clean && npm run build:esm && chmod +x dist/cli.js",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "prettier:check": "prettier --check src/**/*.ts *.md tests/**/*.ts --no-error-on-unmatched-pattern",
@@ -32,7 +32,8 @@
     "check": "npm run lint:check && npm run prettier:check",
     "fix": "npm run lint:fix && npm run prettier:fix",
     "test": "npx vitest --config ./vitest.config.ts",
-    "prepublishOnly": "npm run test && npm run build"
+    "prepublishOnly": "npm run test && npm run build",
+    "test:pack": "npm run build && npm pack --pack-destination ./dist"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
