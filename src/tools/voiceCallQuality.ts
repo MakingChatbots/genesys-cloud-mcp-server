@@ -91,7 +91,7 @@ export const voiceCallQuality: ToolFactory<
                 ? [
                     `Call Quality Report for ${String(conversationIds.length)} conversation(s):`,
                     ...output,
-                  ].join("\n\n")
+                  ].join("\n")
                 : "No valid call quality data found for the given conversation IDs.",
           },
         ],

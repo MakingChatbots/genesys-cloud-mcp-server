@@ -1,8 +1,7 @@
 import platformClient from "purecloud-platform-client-v2";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { withAuth } from "./withAuth.js";
-import { loadConfig } from "./loadConfig.js";
+import { createConfigRetriever } from "./createConfigRetriever.js";
 import { searchQueues } from "./tools/searchQueues.js";
 import { sampleConversationsByQueue } from "./tools/sampleConversationsByQueue/sampleConversationsByQueue.js";
 import { queryQueueVolumes } from "./tools/queryQueueVolumes/queryQueueVolumes.js";
@@ -11,18 +10,18 @@ import { conversationSentiment } from "./tools/conversationSentiment/conversatio
 import { conversationTopics } from "./tools/conversationTopics/conversationTopics.js";
 import { searchVoiceConversations } from "./tools/searchVoiceConversations.js";
 import { conversationTranscription } from "./tools/conversationTranscription/conversationTranscription.js";
+import { OAuthClientCredentialsWrapper } from "./auth/OAuthClientCredentialsWrapper.js";
+import packageInfo from "../package.json" with { type: "json" };
 
-const configResult = loadConfig(process.env);
-if (!configResult.success) {
-  console.error(configResult.reason);
-  process.exit(1);
-}
-
-const config = configResult.config;
+const configRetriever = createConfigRetriever(process.env);
+const withAuth = OAuthClientCredentialsWrapper(
+  configRetriever,
+  platformClient.ApiClient.instance,
+);
 
 const server: McpServer = new McpServer({
   name: "Genesys Cloud",
-  version: "0.0.1",
+  version: packageInfo.version,
 });
 
 const routingApi = new platformClient.RoutingApi();
@@ -35,11 +34,10 @@ server.tool(
   searchQueuesTool.schema.name,
   searchQueuesTool.schema.description,
   searchQueuesTool.schema.paramsSchema.shape,
-  withAuth(
-    searchQueuesTool.call,
-    config.genesysCloud,
-    platformClient.ApiClient.instance,
-  ),
+  {
+    title: "",
+  },
+  withAuth(searchQueuesTool.call),
 );
 
 const sampleConversationsByQueueTool = sampleConversationsByQueue({
@@ -49,11 +47,7 @@ server.tool(
   sampleConversationsByQueueTool.schema.name,
   sampleConversationsByQueueTool.schema.description,
   sampleConversationsByQueueTool.schema.paramsSchema.shape,
-  withAuth(
-    sampleConversationsByQueueTool.call,
-    config.genesysCloud,
-    platformClient.ApiClient.instance,
-  ),
+  withAuth(sampleConversationsByQueueTool.call),
 );
 
 const queryQueueVolumesTool = queryQueueVolumes({ analyticsApi });
@@ -61,11 +55,7 @@ server.tool(
   queryQueueVolumesTool.schema.name,
   queryQueueVolumesTool.schema.description,
   queryQueueVolumesTool.schema.paramsSchema.shape,
-  withAuth(
-    queryQueueVolumesTool.call,
-    config.genesysCloud,
-    platformClient.ApiClient.instance,
-  ),
+  withAuth(queryQueueVolumesTool.call),
 );
 
 const voiceCallQualityTool = voiceCallQuality({ analyticsApi });
@@ -73,11 +63,7 @@ server.tool(
   voiceCallQualityTool.schema.name,
   voiceCallQualityTool.schema.description,
   voiceCallQualityTool.schema.paramsSchema.shape,
-  withAuth(
-    voiceCallQualityTool.call,
-    config.genesysCloud,
-    platformClient.ApiClient.instance,
-  ),
+  withAuth(voiceCallQualityTool.call),
 );
 
 const conversationSentimentTool = conversationSentiment({
@@ -87,11 +73,7 @@ server.tool(
   conversationSentimentTool.schema.name,
   conversationSentimentTool.schema.description,
   conversationSentimentTool.schema.paramsSchema.shape,
-  withAuth(
-    conversationSentimentTool.call,
-    config.genesysCloud,
-    platformClient.ApiClient.instance,
-  ),
+  withAuth(conversationSentimentTool.call),
 );
 
 const conversationTopicsTool = conversationTopics({
@@ -102,11 +84,7 @@ server.tool(
   conversationTopicsTool.schema.name,
   conversationTopicsTool.schema.description,
   conversationTopicsTool.schema.paramsSchema.shape,
-  withAuth(
-    conversationTopicsTool.call,
-    config.genesysCloud,
-    platformClient.ApiClient.instance,
-  ),
+  withAuth(conversationTopicsTool.call),
 );
 
 const searchVoiceConversationsTool = searchVoiceConversations({
@@ -116,11 +94,7 @@ server.tool(
   searchVoiceConversationsTool.schema.name,
   searchVoiceConversationsTool.schema.description,
   searchVoiceConversationsTool.schema.paramsSchema.shape,
-  withAuth(
-    searchVoiceConversationsTool.call,
-    config.genesysCloud,
-    platformClient.ApiClient.instance,
-  ),
+  withAuth(searchVoiceConversationsTool.call),
 );
 
 const conversationTranscriptTool = conversationTranscription({
@@ -132,13 +106,9 @@ server.tool(
   conversationTranscriptTool.schema.name,
   conversationTranscriptTool.schema.description,
   conversationTranscriptTool.schema.paramsSchema.shape,
-  withAuth(
-    conversationTranscriptTool.call,
-    config.genesysCloud,
-    platformClient.ApiClient.instance,
-  ),
+  withAuth(conversationTranscriptTool.call),
 );
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
-console.log("Started...");
+console.error("Genesys Cloud MCP Server running on stdio");

@@ -51,6 +51,7 @@ describe("Conversation Transcription Tool", () => {
     const tools = await client.listTools();
     expect(tools.tools[0]).toStrictEqual({
       name: "conversation_transcript",
+      title: undefined,
       description:
         "Retrieves a structured transcript of the conversation, including speaker labels, utterance timestamps, and sentiment annotations where available. The transcript is formatted as a time-aligned list of utterances attributed to each participant (e.g., customer or agent)",
       inputSchema: {

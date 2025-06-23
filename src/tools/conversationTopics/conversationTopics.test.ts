@@ -47,6 +47,7 @@ describe("Conversation Topics Tool", () => {
     const tools = await client.listTools();
     expect(tools.tools[0]).toStrictEqual({
       name: "conversation_topics",
+      title: undefined,
       description:
         "Retrieves Speech and Text Analytics topics detected for a specific conversation. Topics represent business-level intents (e.g. cancellation, billing enquiry) inferred from recognised phrases in the customer-agent interaction.",
       inputSchema: {

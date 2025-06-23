@@ -45,6 +45,7 @@ describe("Query Queue Volumes Tool", () => {
     const tools = await client.listTools();
     expect(tools.tools[0]).toStrictEqual({
       name: "query_queue_volumes",
+      title: undefined,
       description:
         "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.",
       inputSchema: {

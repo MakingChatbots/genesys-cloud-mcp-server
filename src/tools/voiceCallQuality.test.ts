@@ -43,6 +43,7 @@ describe("Voice Call Quality Tool", () => {
     const tools = await client.listTools();
     expect(tools.tools[0]).toStrictEqual({
       name: "voice_call_quality",
+      title: undefined,
       description:
         "Retrieves voice call quality metrics for one or more conversations by ID. This tool specifically focuses on voice interactions and returns the minimum Mean Opinion Score (MOS) observed in each conversation, helping identify degraded or poor-quality voice calls.",
       inputSchema: {
@@ -134,20 +135,12 @@ describe("Voice Call Quality Tool", () => {
           type: "text",
           text: `
 Call Quality Report for 1 conversation(s):
-
 Call Quality Report for voice conversations.
 
-
-
 MOS Quality Legend:
-
   Poor:       MOS < 3.5
-
   Acceptable: 3.5 ≤ MOS < 4.3
-
   Excellent:  MOS ≥ 4.3
-
-
 
 • Conversation ID: ${conversationId}
   • Minimum MOS: 3.50 (Acceptable)
@@ -187,24 +180,15 @@ MOS Quality Legend:
           type: "text",
           text: `
 Call Quality Report for 2 conversation(s):
-
 Call Quality Report for voice conversations.
 
-
-
 MOS Quality Legend:
-
   Poor:       MOS < 3.5
-
   Acceptable: 3.5 ≤ MOS < 4.3
-
   Excellent:  MOS ≥ 4.3
-
-
 
 • Conversation ID: ${conversationOneId}
   • Minimum MOS: 3.50 (Acceptable)
-
 • Conversation ID: ${conversationTwoId}
   • Minimum MOS: 1.00 (Poor)`.trim(),
         },
