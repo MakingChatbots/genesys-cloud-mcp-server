@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { MockedObjectDeep } from "@vitest/spy";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { randomUUID } from "node:crypto";
 import {
   searchVoiceConversations,
-  ToolDependencies,
+  type ToolDependencies,
 } from "./searchVoiceConversations.js";
 
 describe("Search Voice Conversations Tool", () => {
@@ -29,6 +29,7 @@ describe("Search Voice Conversations Tool", () => {
       toolDefinition.schema.name,
       toolDefinition.schema.description,
       toolDefinition.schema.paramsSchema.shape,
+      toolDefinition.schema.annotations,
       toolDefinition.call,
     );
 
@@ -46,6 +47,7 @@ describe("Search Voice Conversations Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "search_voice_conversations",
       title: undefined,
+      annotations: { title: "Search Voice Conversations" },
       description:
         "Searches for voice conversations within a specified time window, optionally filtering by phone number. Returns a paginated list of conversation metadata for use in further analysis or tool calls.",
       inputSchema: {
@@ -85,7 +87,6 @@ describe("Search Voice Conversations Tool", () => {
 
         $schema: "http://json-schema.org/draft-07/schema#",
       },
-      annotations: undefined,
     });
   });
 

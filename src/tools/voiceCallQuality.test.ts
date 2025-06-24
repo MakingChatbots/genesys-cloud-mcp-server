@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { MockedObjectDeep } from "@vitest/spy";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { McpError } from "@modelcontextprotocol/sdk/types.js";
-import { ToolDependencies, voiceCallQuality } from "./voiceCallQuality.js";
+import { type McpError } from "@modelcontextprotocol/sdk/types.js";
+import { voiceCallQuality, type ToolDependencies } from "./voiceCallQuality.js";
 
 describe("Voice Call Quality Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -27,6 +27,7 @@ describe("Voice Call Quality Tool", () => {
       toolDefinition.schema.name,
       toolDefinition.schema.description,
       toolDefinition.schema.paramsSchema.shape,
+      toolDefinition.schema.annotations,
       toolDefinition.call,
     );
 
@@ -44,6 +45,7 @@ describe("Voice Call Quality Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "voice_call_quality",
       title: undefined,
+      annotations: { title: "Voice Call Quality" },
       description:
         "Retrieves voice call quality metrics for one or more conversations by ID. This tool specifically focuses on voice interactions and returns the minimum Mean Opinion Score (MOS) observed in each conversation, helping identify degraded or poor-quality voice calls.",
       inputSchema: {
@@ -67,7 +69,6 @@ describe("Voice Call Quality Tool", () => {
         additionalProperties: false,
         $schema: "http://json-schema.org/draft-07/schema#",
       },
-      annotations: undefined,
     });
   });
 

@@ -1,11 +1,14 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { MockedObjectDeep } from "@vitest/spy";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { McpError } from "@modelcontextprotocol/sdk/types.js";
-import { conversationTopics, ToolDependencies } from "./conversationTopics.js";
+import { type McpError } from "@modelcontextprotocol/sdk/types.js";
+import {
+  conversationTopics,
+  type ToolDependencies,
+} from "./conversationTopics.js";
 
 describe("Conversation Topics Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -31,6 +34,7 @@ describe("Conversation Topics Tool", () => {
       toolDefinition.schema.name,
       toolDefinition.schema.description,
       toolDefinition.schema.paramsSchema.shape,
+      toolDefinition.schema.annotations,
       toolDefinition.call,
     );
 
@@ -48,6 +52,7 @@ describe("Conversation Topics Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "conversation_topics",
       title: undefined,
+      annotations: { title: "Conversation Topics" },
       description:
         "Retrieves Speech and Text Analytics topics detected for a specific conversation. Topics represent business-level intents (e.g. cancellation, billing enquiry) inferred from recognised phrases in the customer-agent interaction.",
       inputSchema: {
@@ -64,7 +69,6 @@ describe("Conversation Topics Tool", () => {
         additionalProperties: false,
         $schema: "http://json-schema.org/draft-07/schema#",
       },
-      annotations: undefined,
     });
   });
 

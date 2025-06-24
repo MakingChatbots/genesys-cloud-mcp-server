@@ -77,6 +77,7 @@ export const searchVoiceConversations: ToolFactory<
   createTool({
     schema: {
       name: "search_voice_conversations",
+      annotations: { title: "Search Voice Conversations" },
       description:
         "Searches for voice conversations within a specified time window, optionally filtering by phone number. Returns a paginated list of conversation metadata for use in further analysis or tool calls.",
       paramsSchema,

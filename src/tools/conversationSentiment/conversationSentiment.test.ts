@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { MockedObjectDeep } from "@vitest/spy";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { McpError } from "@modelcontextprotocol/sdk/types.js";
+import { type McpError } from "@modelcontextprotocol/sdk/types.js";
 import {
   conversationSentiment,
-  ToolDependencies,
+  type ToolDependencies,
 } from "./conversationSentiment.js";
 
 describe("Conversation Sentiment Tool", () => {
@@ -30,6 +30,7 @@ describe("Conversation Sentiment Tool", () => {
       toolDefinition.schema.name,
       toolDefinition.schema.description,
       toolDefinition.schema.paramsSchema.shape,
+      toolDefinition.schema.annotations,
       toolDefinition.call,
     );
 
@@ -47,6 +48,7 @@ describe("Conversation Sentiment Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "conversation_sentiment",
       title: undefined,
+      annotations: { title: "Conversation Sentiment" },
       description:
         "Retrieves sentiment analysis scores for one or more conversations. Sentiment is evaluated based on customer phrases, categorized as positive, neutral, or negative. The result includes both a numeric sentiment score (-100 to 100) and an interpreted sentiment label.",
       inputSchema: {
@@ -70,7 +72,6 @@ describe("Conversation Sentiment Tool", () => {
         additionalProperties: false,
         $schema: "http://json-schema.org/draft-07/schema#",
       },
-      annotations: undefined,
     });
   });
 

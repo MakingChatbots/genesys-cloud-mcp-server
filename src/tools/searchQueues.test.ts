@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { MockedObjectDeep } from "@vitest/spy";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { McpError } from "@modelcontextprotocol/sdk/types.js";
-import { searchQueues, ToolDependencies } from "./searchQueues.js";
+import { type McpError } from "@modelcontextprotocol/sdk/types.js";
+import { searchQueues, type ToolDependencies } from "./searchQueues.js";
 
 describe("Search Queues Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -27,6 +27,7 @@ describe("Search Queues Tool", () => {
       toolDefinition.schema.name,
       toolDefinition.schema.description,
       toolDefinition.schema.paramsSchema.shape,
+      toolDefinition.schema.annotations,
       toolDefinition.call,
     );
 
@@ -44,6 +45,7 @@ describe("Search Queues Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "search_queues",
       title: undefined,
+      annotations: { title: "Search Queues" },
       description:
         "Searches for routing queues based on their name, allowing for wildcard searches. Returns a paginated list of matching queues, including their Name, ID, Description (if available), and Member Count (if available). Also provides pagination details like current page, page size, total results found, and total pages available. Useful for finding specific queue IDs, checking queue configurations, or listing available queues.",
       inputSchema: {
@@ -73,7 +75,6 @@ describe("Search Queues Tool", () => {
         additionalProperties: false,
         $schema: "http://json-schema.org/draft-07/schema#",
       },
-      annotations: undefined,
     });
   });
 

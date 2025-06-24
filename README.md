@@ -5,10 +5,7 @@
 
 A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 
-## Tools Overview
-
-An overview of the tools that this MCP server makes available. Read more about each specific tool
-in the [tools doc](/docs/tools.md).
+## Features
 
 | Tool                                                                          | Description                                                              |
 | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
@@ -21,6 +18,29 @@ in the [tools doc](/docs/tools.md).
 | [Search Voice Conversation](/docs/tools.md#search-voice-conversations)        | Searches voice conversations by optional criteria                        |
 | [Conversation Transcript](/docs/tools.md#conversation-transcript)             | Retrieves conversation transcript                                        |
 
+## Usage with Claude Desktop
+
+Add this to your `claude_desktop_config.json`:
+
+### NPX
+
+```json
+{
+  "mcpServers": {
+    "genesys-cloud": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@makingchatbots/genesys-cloud-mcp-server"],
+      "env": {
+        "GENESYSCLOUD_REGION": "<PUT REGION HERE>",
+        "GENESYSCLOUD_OAUTHCLIENT_ID": "<PUT OAUTHCLIENT ID HERE>",
+        "GENESYSCLOUD_OAUTHCLIENT_SECRET": "<PUT OAUTHCLIENT SECRET HERE>"
+      }
+    }
+  }
+}
+```
+
 ## Authentication
 
 This currently only supports a stdio server. To configure authentication you'll need to:
@@ -32,7 +52,9 @@ This currently only supports a stdio server. To configure authentication you'll 
    - `GENESYSCLOUD_OAUTHCLIENT_ID`
    - `GENESYSCLOUD_OAUTHCLIENT_SECRET`
 
-## Getting Started
+## Development
+
+### Getting Started
 
 ```bash
 nvm use

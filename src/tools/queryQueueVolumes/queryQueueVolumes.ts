@@ -49,6 +49,7 @@ export const queryQueueVolumes: ToolFactory<
   createTool({
     schema: {
       name: "query_queue_volumes",
+      annotations: { title: "Query Queue Volumes" },
       description:
         "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.",
       paramsSchema,

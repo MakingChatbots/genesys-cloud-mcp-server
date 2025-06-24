@@ -40,6 +40,7 @@ export const conversationSentiment: ToolFactory<
       name: "conversation_sentiment",
       description:
         "Retrieves sentiment analysis scores for one or more conversations. Sentiment is evaluated based on customer phrases, categorized as positive, neutral, or negative. The result includes both a numeric sentiment score (-100 to 100) and an interpreted sentiment label.",
+      annotations: { title: "Conversation Sentiment" },
       paramsSchema,
     },
     call: async ({ conversationIds }) => {

@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { MockedObjectDeep } from "@vitest/spy";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { randomUUID } from "node:crypto";
 import {
   conversationTranscription,
-  ToolDependencies,
+  type ToolDependencies,
 } from "./conversationTranscription.js";
-import { TranscriptResponseFormat } from "./TranscriptResponse.js";
+import { type TranscriptResponseFormat } from "./TranscriptResponse.js";
 
 describe("Conversation Transcription Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -35,6 +35,7 @@ describe("Conversation Transcription Tool", () => {
       toolDefinition.schema.name,
       toolDefinition.schema.description,
       toolDefinition.schema.paramsSchema.shape,
+      toolDefinition.schema.annotations,
       toolDefinition.call,
     );
 
@@ -52,6 +53,7 @@ describe("Conversation Transcription Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "conversation_transcript",
       title: undefined,
+      annotations: { title: "Conversation Transcript" },
       description:
         "Retrieves a structured transcript of the conversation, including speaker labels, utterance timestamps, and sentiment annotations where available. The transcript is formatted as a time-aligned list of utterances attributed to each participant (e.g., customer or agent)",
       inputSchema: {
@@ -69,7 +71,6 @@ describe("Conversation Transcription Tool", () => {
 
         $schema: "http://json-schema.org/draft-07/schema#",
       },
-      annotations: undefined,
     });
   });
 

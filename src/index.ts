@@ -11,17 +11,15 @@ import { conversationTopics } from "./tools/conversationTopics/conversationTopic
 import { searchVoiceConversations } from "./tools/searchVoiceConversations.js";
 import { conversationTranscription } from "./tools/conversationTranscription/conversationTranscription.js";
 import { OAuthClientCredentialsWrapper } from "./auth/OAuthClientCredentialsWrapper.js";
-import packageInfo from "../package.json" with { type: "json" };
 
-const configRetriever = createConfigRetriever(process.env);
 const withAuth = OAuthClientCredentialsWrapper(
-  configRetriever,
+  createConfigRetriever(process.env),
   platformClient.ApiClient.instance,
 );
 
 const server: McpServer = new McpServer({
   name: "Genesys Cloud",
-  version: packageInfo.version,
+  version: "0.0.12", // Same version as version in package.json
 });
 
 const routingApi = new platformClient.RoutingApi();
@@ -34,9 +32,7 @@ server.tool(
   searchQueuesTool.schema.name,
   searchQueuesTool.schema.description,
   searchQueuesTool.schema.paramsSchema.shape,
-  {
-    title: "",
-  },
+  searchQueuesTool.schema.annotations,
   withAuth(searchQueuesTool.call),
 );
 
@@ -47,6 +43,7 @@ server.tool(
   sampleConversationsByQueueTool.schema.name,
   sampleConversationsByQueueTool.schema.description,
   sampleConversationsByQueueTool.schema.paramsSchema.shape,
+  sampleConversationsByQueueTool.schema.annotations,
   withAuth(sampleConversationsByQueueTool.call),
 );
 
@@ -55,6 +52,7 @@ server.tool(
   queryQueueVolumesTool.schema.name,
   queryQueueVolumesTool.schema.description,
   queryQueueVolumesTool.schema.paramsSchema.shape,
+  queryQueueVolumesTool.schema.annotations,
   withAuth(queryQueueVolumesTool.call),
 );
 
@@ -63,6 +61,7 @@ server.tool(
   voiceCallQualityTool.schema.name,
   voiceCallQualityTool.schema.description,
   voiceCallQualityTool.schema.paramsSchema.shape,
+  voiceCallQualityTool.schema.annotations,
   withAuth(voiceCallQualityTool.call),
 );
 
@@ -73,6 +72,7 @@ server.tool(
   conversationSentimentTool.schema.name,
   conversationSentimentTool.schema.description,
   conversationSentimentTool.schema.paramsSchema.shape,
+  conversationSentimentTool.schema.annotations,
   withAuth(conversationSentimentTool.call),
 );
 
@@ -84,6 +84,7 @@ server.tool(
   conversationTopicsTool.schema.name,
   conversationTopicsTool.schema.description,
   conversationTopicsTool.schema.paramsSchema.shape,
+  conversationTopicsTool.schema.annotations,
   withAuth(conversationTopicsTool.call),
 );
 
@@ -94,6 +95,7 @@ server.tool(
   searchVoiceConversationsTool.schema.name,
   searchVoiceConversationsTool.schema.description,
   searchVoiceConversationsTool.schema.paramsSchema.shape,
+  searchVoiceConversationsTool.schema.annotations,
   withAuth(searchVoiceConversationsTool.call),
 );
 
@@ -106,6 +108,7 @@ server.tool(
   conversationTranscriptTool.schema.name,
   conversationTranscriptTool.schema.description,
   conversationTranscriptTool.schema.paramsSchema.shape,
+  conversationTranscriptTool.schema.annotations,
   withAuth(conversationTranscriptTool.call),
 );
 

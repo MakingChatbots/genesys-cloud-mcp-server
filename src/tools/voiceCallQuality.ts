@@ -32,6 +32,7 @@ export const voiceCallQuality: ToolFactory<
   createTool({
     schema: {
       name: "voice_call_quality",
+      annotations: { title: "Voice Call Quality" },
       description:
         "Retrieves voice call quality metrics for one or more conversations by ID. This tool specifically focuses on voice interactions and returns the minimum Mean Opinion Score (MOS) observed in each conversation, helping identify degraded or poor-quality voice calls.",
       paramsSchema,

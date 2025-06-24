@@ -39,6 +39,7 @@ export const conversationTopics: ToolFactory<
   createTool({
     schema: {
       name: "conversation_topics",
+      annotations: { title: "Conversation Topics" },
       description:
         "Retrieves Speech and Text Analytics topics detected for a specific conversation. Topics represent business-level intents (e.g. cancellation, billing enquiry) inferred from recognised phrases in the customer-agent interaction.",
       paramsSchema,

@@ -3,7 +3,8 @@ import { join } from "path";
 import { execSync } from "node:child_process";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import packageInfo from "../package.json" with { type: "json" };
 
 describe("Server Runs", () => {
   let client: Client | null = null;
@@ -44,6 +45,27 @@ describe("Server Runs", () => {
       "search_voice_conversations",
       "conversation_transcript",
     ]);
+  });
+
+  test("server version matches version in package.json", async () => {
+    const transport = new StdioClientTransport({
+      command: "node",
+      args: ["--inspect", join(__dirname, "../dist/index.js")],
+      env: {
+        // Provides path for node binary to be used in test
+        PATH: process.env.PATH!,
+      },
+    });
+
+    client = new Client({
+      name: "test-client",
+      version: "1.0.0",
+    });
+
+    await client.connect(transport);
+
+    const serverVersion = client.getServerVersion();
+    expect(serverVersion?.version).toStrictEqual(packageInfo.version);
   });
 
   test("server runs via cli", async () => {

@@ -1,8 +1,8 @@
+import { z } from "zod";
 import { type ApiClientClass } from "purecloud-platform-client-v2";
 import { type ToolCall } from "../tools/utils/createTool.js";
-import { ConfigRetriever } from "../createConfigRetriever.js";
+import { type ConfigRetriever } from "../createConfigRetriever.js";
 import { errorResult } from "../tools/utils/errorResult.js";
-import { z } from "zod";
 
 let isAuthenticated = false;
 

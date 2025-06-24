@@ -1,11 +1,14 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { MockedObjectDeep } from "@vitest/spy";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { McpError } from "@modelcontextprotocol/sdk/types.js";
-import { queryQueueVolumes, ToolDependencies } from "./queryQueueVolumes.js";
+import { type McpError } from "@modelcontextprotocol/sdk/types.js";
+import {
+  queryQueueVolumes,
+  type ToolDependencies,
+} from "./queryQueueVolumes.js";
 
 describe("Query Queue Volumes Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -29,6 +32,7 @@ describe("Query Queue Volumes Tool", () => {
       toolDefinition.schema.name,
       toolDefinition.schema.description,
       toolDefinition.schema.paramsSchema.shape,
+      toolDefinition.schema.annotations,
       toolDefinition.call,
     );
 
@@ -46,6 +50,7 @@ describe("Query Queue Volumes Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "query_queue_volumes",
       title: undefined,
+      annotations: { title: "Query Queue Volumes" },
       description:
         "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.",
       inputSchema: {
@@ -77,10 +82,8 @@ describe("Query Queue Volumes Tool", () => {
         },
         required: ["queueIds", "startDate", "endDate"],
         additionalProperties: false,
-
         $schema: "http://json-schema.org/draft-07/schema#",
       },
-      annotations: undefined,
     });
   });
 

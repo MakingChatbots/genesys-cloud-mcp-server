@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
-import { MockedObjectDeep } from "@vitest/spy";
+import { type MockedObjectDeep } from "@vitest/spy";
 import { randomUUID } from "node:crypto";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { McpError } from "@modelcontextprotocol/sdk/types.js";
+import { type McpError } from "@modelcontextprotocol/sdk/types.js";
 import {
-  ToolDependencies,
   sampleConversationsByQueue,
+  type ToolDependencies,
 } from "./sampleConversationsByQueue.js";
 
 describe("Query Queue Volumes Tool", () => {
@@ -32,6 +32,7 @@ describe("Query Queue Volumes Tool", () => {
       toolDefinition.schema.name,
       toolDefinition.schema.description,
       toolDefinition.schema.paramsSchema.shape,
+      toolDefinition.schema.annotations,
       toolDefinition.call,
     );
 
@@ -49,9 +50,9 @@ describe("Query Queue Volumes Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "sample_conversations_by_queue",
       title: undefined,
+      annotations: { title: "Sample Conversations by Queue" },
       description:
         "Retrieves conversation analytics for a specific queue between two dates, returning a representative sample of conversation IDs. Useful for reporting, investigation, or summarisation.",
-
       inputSchema: {
         type: "object",
         properties: {
@@ -77,7 +78,6 @@ describe("Query Queue Volumes Tool", () => {
 
         $schema: "http://json-schema.org/draft-07/schema#",
       },
-      annotations: undefined,
     });
   });
 
