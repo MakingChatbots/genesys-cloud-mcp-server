@@ -7,7 +7,7 @@ export default tseslint.config(
   {
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        project: "./tsconfig.eslint.json",
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -16,7 +16,7 @@ export default tseslint.config(
   tseslint.configs.stylisticTypeChecked,
   prettierConfig,
   {
-    ignores: ["**/*.js"],
+    ignores: ["**/*.js", "dist/**", "eslint.config.mjs", "vitest.config.ts"],
   },
   {
     files: ["**/*.{ts}"],
@@ -27,6 +27,12 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
         ecmaVersion: "latest",
       },
+    },
+  },
+  {
+    files: ["tests/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-non-null-assertion": "off",
     },
   },
   {
