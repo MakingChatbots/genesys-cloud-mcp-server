@@ -3,7 +3,7 @@ import type { AnalyticsApi, Models } from "purecloud-platform-client-v2";
 import { formatDistanceStrict } from "date-fns/formatDistanceStrict";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
-import { paginationSection } from "./utils/paginationSection.js";
+import { paginationSectionJson } from "./utils/paginationSection.js";
 import { errorResult } from "./utils/errorResult.js";
 
 export interface ToolDependencies {
@@ -155,9 +155,7 @@ export const searchVoiceConversations: ToolFactory<
         };
       }
 
-      const conversationToDurationMapping: string[] = (
-        result.conversations ?? []
-      )
+      const conversationToDurationMapping = (result.conversations ?? [])
         .filter((convo) => convo.conversationId)
         .map((conversation) => {
           let distance: string | null = null;
@@ -168,25 +166,24 @@ export const searchVoiceConversations: ToolFactory<
             );
           }
 
-          return `${conversation.conversationId ?? ""}${distance !== null ? ` (${distance})` : ""}`;
+          return {
+            conversationId: conversation.conversationId,
+            ...(distance !== null ? { duration: distance } : {}),
+          };
         });
 
       return {
         content: [
           {
             type: "text",
-            text: [
-              `Total hits: ${String(result.totalHits ?? 0)}`,
-              "",
-              "Conversation IDs and Durations of matches:",
-              ...conversationToDurationMapping,
-              "",
-              ...paginationSection("Total Conversations returned", {
+            text: JSON.stringify({
+              conversations: conversationToDurationMapping,
+              pagination: paginationSectionJson("totalConversationsReturned", {
                 pageSize,
                 pageNumber,
                 totalHits: result.totalHits,
               }),
-            ].join("\n"),
+            }),
           },
         ],
       };
