@@ -55,7 +55,15 @@ export const conversationSentiment: ToolFactory<
         )),
       );
 
-      const output: string[] = [];
+      const output: (
+        | {
+            found: true;
+            conversationId: string;
+            sentimentScore: number;
+            sentimentDescription: string;
+          }
+        | { found: false; conversationId: string }
+      )[] = [];
 
       for (const convo of conversations) {
         if (convo.status === "fulfilled") {
@@ -65,15 +73,19 @@ export const conversationSentiment: ToolFactory<
           if (id === undefined || score === undefined) continue;
           const scaledScore = Math.round(score * 100);
 
-          output.push(
-            `• Conversation ID: ${id}\n  • Sentiment Score: ${String(scaledScore)} (${interpretSentiment(scaledScore)})`,
-          );
+          output.push({
+            found: true,
+            conversationId: id,
+            sentimentScore: scaledScore,
+            sentimentDescription: interpretSentiment(scaledScore),
+          });
         } else {
           const result = isConversationNotFoundError(convo.reason);
           if (result.isResourceNotFoundError && result.conversationId) {
-            output.push(
-              `• Conversation ID: ${result.conversationId}\n  • Error: Conversation not found`,
-            );
+            output.push({
+              conversationId: result.conversationId,
+              found: false,
+            });
           } else if (isUnauthorisedError(convo.reason)) {
             return errorResult(
               "Failed to retrieve sentiment analysis: Unauthorised access. Please check API credentials or permissions.",
@@ -88,13 +100,18 @@ export const conversationSentiment: ToolFactory<
         content: [
           {
             type: "text",
-            text:
-              output.length > 0
-                ? [
-                    `Sentiment results for ${String(output.length)} conversation(s):`,
-                    ...output,
-                  ].join("\n\n")
-                : "No sentiment data found for the given conversation IDs.",
+            text: JSON.stringify({
+              conversationsWithSentiment: output
+                .filter((o) => o.found)
+                .map((o) => ({
+                  conversationId: o.conversationId,
+                  sentimentScore: o.sentimentScore,
+                  sentimentDescription: o.sentimentDescription,
+                })),
+              conversationsWithoutSentiment: output
+                .filter((o) => !o.found)
+                .map((o) => o.conversationId),
+            }),
           },
         ],
       };
