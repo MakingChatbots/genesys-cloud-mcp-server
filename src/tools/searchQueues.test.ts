@@ -168,17 +168,20 @@ describe("Search Queues Tool", () => {
       content: [
         {
           type: "text",
-          text: `
-Found the following queues matching "test-queue":
-• Name: test-queue
-  • ID: ${queueId}
-
---- Pagination Info ---
-Page Number: N/A
-Page Size: N/A
-Total Pages: N/A
-Total Matching Queues: N/A
-`.trim(),
+          text: JSON.stringify({
+            queues: [
+              {
+                name: "test-queue",
+                id: queueId,
+              },
+            ],
+            pagination: {
+              pageNumber: "N/A",
+              pageSize: "N/A",
+              totalPages: "N/A",
+              totalMatchingQueues: "N/A",
+            },
+          }),
         },
       ],
     });

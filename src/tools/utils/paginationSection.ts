@@ -5,6 +5,36 @@ export interface PaginationArgs {
   readonly pageCount?: number;
 }
 
+export function paginationSectionJson(
+  totalSectionName: string,
+  { pageSize, pageNumber, totalHits, pageCount }: PaginationArgs,
+) {
+  const calculateTotalPages = (
+    totalHits: number | undefined,
+    pageSize: number,
+  ) => {
+    if (totalHits === 0 && pageSize === 0) {
+      return 1;
+    } else {
+      return Math.max(1, Math.ceil((totalHits ?? 0) / pageSize));
+    }
+  };
+
+  let formattedTotalPages: string | number = "N/A";
+  if (pageCount !== undefined) {
+    formattedTotalPages = pageCount;
+  } else if (pageSize !== undefined && pageSize > 0) {
+    formattedTotalPages = calculateTotalPages(totalHits, pageSize);
+  }
+
+  return {
+    pageNumber: pageNumber ?? "N/A",
+    pageSize: pageSize ?? "N/A",
+    totalPages: formattedTotalPages,
+    [totalSectionName]: totalHits ?? "N/A",
+  };
+}
+
 export function paginationSection(
   totalSectionName: string,
   { pageSize, pageNumber, totalHits, pageCount }: PaginationArgs,
