@@ -158,13 +158,10 @@ export const conversationTopics: ToolFactory<
         content: [
           {
             type: "text",
-            text: [
-              `Conversation ID: ${conversationId}`,
-              "Detected Topics:",
-              ...topicNames.map(
-                ({ name, description }) => ` • ${name}: ${description}`,
-              ),
-            ].join("\n"),
+            text: JSON.stringify({
+              conversationId: conversationId,
+              detectedTopics: topicNames,
+            }),
           },
         ],
       };

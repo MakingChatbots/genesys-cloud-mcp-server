@@ -129,12 +129,13 @@ describe("Conversation Topics Tool", () => {
       content: [
         {
           type: "text",
-          text: `
-Conversation ID: ${conversationId}
-Detected Topics:
- • Test Topic 1: Test Topic 1 Desc
- • Test Topic 2: Test Topic 2 Desc
-`.trim(),
+          text: JSON.stringify({
+            conversationId: conversationId,
+            detectedTopics: [
+              { name: "Test Topic 1", description: "Test Topic 1 Desc" },
+              { name: "Test Topic 2", description: "Test Topic 2 Desc" },
+            ],
+          }),
         },
       ],
     });
