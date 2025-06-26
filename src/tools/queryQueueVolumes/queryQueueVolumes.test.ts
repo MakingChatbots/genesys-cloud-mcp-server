@@ -225,10 +225,9 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: `
-Queue volume breakdown for that period:
-Queue ID: ${queueId} - Total conversations: 1
-  `.trim(),
+          text: JSON.stringify({
+            queues: [{ queueId: queueId, totalConversations: 1 }],
+          }),
         },
       ],
     });
@@ -299,11 +298,12 @@ Queue ID: ${queueId} - Total conversations: 1
       content: [
         {
           type: "text",
-          text: `
-Queue volume breakdown for that period:
-Queue ID: ${queueIdOne} - Total conversations: 2
-Queue ID: ${queueIdTwo} - Total conversations: 1
-`.trim(),
+          text: JSON.stringify({
+            queues: [
+              { queueId: queueIdOne, totalConversations: 2 },
+              { queueId: queueIdTwo, totalConversations: 1 },
+            ],
+          }),
         },
       ],
     });

@@ -143,19 +143,16 @@ export const queryQueueVolumes: ToolFactory<
           }
         }
 
-        const queueBreakdown: string = [
-          "Queue volume breakdown for that period:",
-          ...queueIds.map((id) => {
-            const totalConversations = queueConversationCount.get(id) ?? 0;
-            return `Queue ID: ${id} - Total conversations: ${String(totalConversations)}`;
-          }),
-        ].join("\n");
+        const queueBreakdown = queueIds.map((id) => {
+          const totalConversations = queueConversationCount.get(id) ?? 0;
+          return { queueId: id, totalConversations };
+        });
 
         return {
           content: [
             {
               type: "text",
-              text: queueBreakdown,
+              text: JSON.stringify({ queues: queueBreakdown }),
             },
           ],
         };
