@@ -29,7 +29,7 @@ const paramsSchema = z.object({
     )
     .min(1)
     .max(300)
-    .describe("List of up to 300 queue IDs to filter conversations by"),
+    .describe("List of up to MAX of 300 queue IDs"),
   startDate: z
     .string()
     .describe(
@@ -51,7 +51,7 @@ export const queryQueueVolumes: ToolFactory<
       name: "query_queue_volumes",
       annotations: { title: "Query Queue Volumes" },
       description:
-        "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.",
+        "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues. MAX 300 queue IDs",
       paramsSchema,
     },
     call: async ({ queueIds, startDate, endDate }) => {

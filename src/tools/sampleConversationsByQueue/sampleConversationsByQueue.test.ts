@@ -219,7 +219,11 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: "No conversations found in queue during specified period.",
+          text: JSON.stringify({
+            sizeOfSample: 0,
+            totalConversationsSampled: 0,
+            sampledConversations: [],
+          }),
         },
       ],
     });
@@ -264,13 +268,15 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: `Sample of 3 conversations (out of 3) in the queue during that period.
-
-Conversation IDs:
-${conversationOneId}
-${conversationTwoId}
-${conversationThreeId}
-`.trim(),
+          text: JSON.stringify({
+            sizeOfSample: 3,
+            totalConversationsSampled: 3,
+            sampledConversations: [
+              conversationOneId,
+              conversationTwoId,
+              conversationThreeId,
+            ],
+          }),
         },
       ],
     });

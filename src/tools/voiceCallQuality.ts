@@ -4,6 +4,14 @@ import { createTool, type ToolFactory } from "./utils/createTool.js";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { errorResult } from "./utils/errorResult.js";
 
+function interpretCallQuality(mos?: number): string {
+  if (mos === undefined) return "Unknown";
+
+  if (mos < 3.5) return "Poor";
+  if (mos < 4.3) return "Acceptable";
+  return "Excellent";
+}
+
 export interface ToolDependencies {
   readonly analyticsApi: Pick<AnalyticsApi, "getAnalyticsConversationsDetails">;
 }
@@ -34,7 +42,10 @@ export const voiceCallQuality: ToolFactory<
       name: "voice_call_quality",
       annotations: { title: "Voice Call Quality" },
       description:
-        "Retrieves voice call quality metrics for one or more conversations by ID. This tool specifically focuses on voice interactions and returns the minimum Mean Opinion Score (MOS) observed in each conversation, helping identify degraded or poor-quality voice calls.",
+        "Retrieves voice call quality metrics for one or more conversations by ID. This tool specifically focuses on voice interactions and returns the minimum Mean Opinion Score (MOS) observed in each conversation as structured JSON. MOS is a measure of perceived audio quality based on factors such as jitter, latency, packet loss, and codec. Use the following legend to interpret MOS values:\n\n" +
+        "  • Poor:       MOS < 3.5\n" +
+        "  • Acceptable: 3.5 ≤ MOS < 4.3\n" +
+        "  • Excellent:  MOS ≥ 4.3",
       paramsSchema,
     },
     call: async ({ conversationIds }) => {
@@ -52,15 +63,11 @@ export const voiceCallQuality: ToolFactory<
         return errorResult(message);
       }
 
-      const output: string[] = [
-        "Call Quality Report for voice conversations.",
-        "",
-        "MOS Quality Legend:",
-        "  Poor:       MOS < 3.5",
-        "  Acceptable: 3.5 ≤ MOS < 4.3",
-        "  Excellent:  MOS ≥ 4.3",
-        "",
-      ];
+      const output: {
+        conversationId: string;
+        minimumMos: string;
+        qualityLabel: string;
+      }[] = [];
 
       for (const convo of conversationDetails.conversations ?? []) {
         if (!convo.conversationId || !convo.mediaStatsMinConversationMos) {
@@ -68,32 +75,21 @@ export const voiceCallQuality: ToolFactory<
         }
 
         const mos = convo.mediaStatsMinConversationMos;
-        let qualityLabel = "Unknown";
 
-        if (mos < 3.5) {
-          qualityLabel = "Poor";
-        } else if (mos < 4.3) {
-          qualityLabel = "Acceptable";
-        } else {
-          qualityLabel = "Excellent";
-        }
-
-        output.push(
-          `• Conversation ID: ${convo.conversationId}\n  • Minimum MOS: ${mos.toFixed(2)} (${qualityLabel})`,
-        );
+        output.push({
+          conversationId: convo.conversationId,
+          minimumMos: mos.toFixed(2),
+          qualityLabel: interpretCallQuality(mos),
+        });
       }
 
       return {
         content: [
           {
             type: "text",
-            text:
-              output.length > 0
-                ? [
-                    `Call Quality Report for ${String(conversationIds.length)} conversation(s):`,
-                    ...output,
-                  ].join("\n")
-                : "No valid call quality data found for the given conversation IDs.",
+            text: JSON.stringify({
+              conversations: output,
+            }),
           },
         ],
       };

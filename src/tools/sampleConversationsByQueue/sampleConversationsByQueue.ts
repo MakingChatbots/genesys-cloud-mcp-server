@@ -137,15 +137,11 @@ export const sampleConversationsByQueue: ToolFactory<
           content: [
             {
               type: "text",
-              text:
-                sampledIds.length === 0
-                  ? "No conversations found in queue during specified period."
-                  : [
-                      `Sample of ${String(sampledIds.length)} conversations (out of ${String(conversationIds.length)}) in the queue during that period.`,
-                      "",
-                      "Conversation IDs:",
-                      ...sampledIds,
-                    ].join("\n"),
+              text: JSON.stringify({
+                sizeOfSample: sampledIds.length,
+                totalConversationsSampled: conversationIds.length,
+                sampledConversations: sampledIds,
+              }),
             },
           ],
         };
