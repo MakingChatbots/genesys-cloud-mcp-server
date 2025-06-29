@@ -3,7 +3,7 @@ import type { AnalyticsApi, Models } from "purecloud-platform-client-v2";
 import { formatDistanceStrict } from "date-fns/formatDistanceStrict";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
-import { paginationSectionJson } from "./utils/paginationSection.js";
+import { paginationSection } from "./utils/paginationSection.js";
 import { errorResult } from "./utils/errorResult.js";
 
 export interface ToolDependencies {
@@ -178,7 +178,7 @@ export const searchVoiceConversations: ToolFactory<
             type: "text",
             text: JSON.stringify({
               conversations: conversationToDurationMapping,
-              pagination: paginationSectionJson("totalConversationsReturned", {
+              pagination: paginationSection("totalConversationsReturned", {
                 pageSize,
                 pageNumber,
                 totalHits: result.totalHits,

@@ -5,21 +5,21 @@ export interface PaginationArgs {
   readonly pageCount?: number;
 }
 
-export function paginationSectionJson(
+const calculateTotalPages = (
+  totalHits: number | undefined,
+  pageSize: number,
+) => {
+  if (totalHits === 0 && pageSize === 0) {
+    return 1;
+  } else {
+    return Math.max(1, Math.ceil((totalHits ?? 0) / pageSize));
+  }
+};
+
+export function paginationSection(
   totalSectionName: string,
   { pageSize, pageNumber, totalHits, pageCount }: PaginationArgs,
 ) {
-  const calculateTotalPages = (
-    totalHits: number | undefined,
-    pageSize: number,
-  ) => {
-    if (totalHits === 0 && pageSize === 0) {
-      return 1;
-    } else {
-      return Math.max(1, Math.ceil((totalHits ?? 0) / pageSize));
-    }
-  };
-
   let formattedTotalPages: string | number = "N/A";
   if (pageCount !== undefined) {
     formattedTotalPages = pageCount;
@@ -35,33 +35,33 @@ export function paginationSectionJson(
   };
 }
 
-export function paginationSection(
-  totalSectionName: string,
-  { pageSize, pageNumber, totalHits, pageCount }: PaginationArgs,
-): string[] {
-  const calculateTotalPages = (
-    totalHits: number | undefined,
-    pageSize: number,
-  ) => {
-    if (totalHits === 0 && pageSize === 0) {
-      return 1;
-    } else {
-      return Math.max(1, Math.ceil((totalHits ?? 0) / pageSize));
-    }
-  };
-
-  let formattedTotalPages = "N/A";
-  if (pageCount !== undefined) {
-    formattedTotalPages = String(pageCount);
-  } else if (pageSize !== undefined && pageSize > 0) {
-    formattedTotalPages = String(calculateTotalPages(totalHits, pageSize));
-  }
-
-  return [
-    "--- Pagination Info ---",
-    `Page Number: ${pageNumber ? String(pageNumber) : "N/A"}`,
-    `Page Size: ${pageSize ? String(pageSize) : "N/A"}`,
-    `Total Pages: ${formattedTotalPages}`,
-    `${totalSectionName}: ${totalHits ? String(totalHits) : "N/A"}`,
-  ];
-}
+// export function paginationSection(
+//   totalSectionName: string,
+//   { pageSize, pageNumber, totalHits, pageCount }: PaginationArgs,
+// ): string[] {
+//   const calculateTotalPages = (
+//     totalHits: number | undefined,
+//     pageSize: number,
+//   ) => {
+//     if (totalHits === 0 && pageSize === 0) {
+//       return 1;
+//     } else {
+//       return Math.max(1, Math.ceil((totalHits ?? 0) / pageSize));
+//     }
+//   };
+//
+//   let formattedTotalPages = "N/A";
+//   if (pageCount !== undefined) {
+//     formattedTotalPages = String(pageCount);
+//   } else if (pageSize !== undefined && pageSize > 0) {
+//     formattedTotalPages = String(calculateTotalPages(totalHits, pageSize));
+//   }
+//
+//   return [
+//     "--- Pagination Info ---",
+//     `Page Number: ${pageNumber ? String(pageNumber) : "N/A"}`,
+//     `Page Size: ${pageSize ? String(pageSize) : "N/A"}`,
+//     `Total Pages: ${formattedTotalPages}`,
+//     `${totalSectionName}: ${totalHits ? String(totalHits) : "N/A"}`,
+//   ];
+// }

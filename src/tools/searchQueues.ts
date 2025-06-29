@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { Models, RoutingApi } from "purecloud-platform-client-v2";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
-import { paginationSectionJson } from "./utils/paginationSection.js";
+import { paginationSection } from "./utils/paginationSection.js";
 
 type PartRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
@@ -32,7 +32,7 @@ function formatQueuesJson(
       ...(q.description ? { description: q.description } : {}),
       ...(q.memberCount !== undefined ? { memberCount: q.memberCount } : {}),
     })),
-    pagination: paginationSectionJson("totalMatchingQueues", pagination),
+    pagination: paginationSection("totalMatchingQueues", pagination),
   };
 }
 

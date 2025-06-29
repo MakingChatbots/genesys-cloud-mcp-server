@@ -4,7 +4,7 @@ import { PaginationArgs, paginationSection } from "./paginationSection.js";
 const testCases: {
   name: string;
   input: PaginationArgs;
-  expected: string[];
+  expected: ReturnType<typeof paginationSection>;
 }[] = [
   {
     name: "All zeros",
@@ -13,13 +13,12 @@ const testCases: {
       pageNumber: 0,
       totalHits: 0,
     },
-    expected: [
-      "--- Pagination Info ---",
-      "Page Number: N/A",
-      "Page Size: N/A",
-      "Total Pages: N/A",
-      "Total Conversations returned: N/A",
-    ],
+    expected: {
+      pageNumber: "N/A",
+      pageSize: "N/A",
+      totalPages: "N/A",
+      totalConversationsReturned: "N/A",
+    },
   },
   {
     name: "Missing total hits",
@@ -27,14 +26,14 @@ const testCases: {
       pageSize: 100,
       pageNumber: 1,
     },
-    expected: [
-      "--- Pagination Info ---",
-      "Page Number: 1",
-      "Page Size: 100",
-      "Total Pages: 1",
-      "Total Conversations returned: N/A",
-    ],
+    expected: {
+      pageNumber: 1,
+      pageSize: 100,
+      totalPages: 1,
+      totalConversationsReturned: "N/A",
+    },
   },
+
   {
     name: "Divisible hit count",
     input: {
@@ -42,13 +41,12 @@ const testCases: {
       pageNumber: 1,
       totalHits: 200,
     },
-    expected: [
-      "--- Pagination Info ---",
-      "Page Number: 1",
-      "Page Size: 100",
-      "Total Pages: 2",
-      "Total Conversations returned: 200",
-    ],
+    expected: {
+      pageNumber: 1,
+      pageSize: 100,
+      totalPages: 2,
+      totalConversationsReturned: 200,
+    },
   },
   {
     name: "Non-divisible hit count",
@@ -57,18 +55,17 @@ const testCases: {
       pageNumber: 1,
       totalHits: 201,
     },
-    expected: [
-      "--- Pagination Info ---",
-      "Page Number: 1",
-      "Page Size: 100",
-      "Total Pages: 3",
-      "Total Conversations returned: 201",
-    ],
+    expected: {
+      pageNumber: 1,
+      pageSize: 100,
+      totalPages: 3,
+      totalConversationsReturned: 201,
+    },
   },
 ];
 
 test.each(testCases)("should correctly parse: $name", ({ input, expected }) => {
-  expect(
-    paginationSection("Total Conversations returned", input),
-  ).toStrictEqual(expected);
+  expect(paginationSection("totalConversationsReturned", input)).toStrictEqual(
+    expected,
+  );
 });
