@@ -14,10 +14,10 @@ const testCases: {
       totalHits: 0,
     },
     expected: {
-      pageNumber: "N/A",
-      pageSize: "N/A",
-      totalPages: "N/A",
-      totalConversationsReturned: "N/A",
+      pageNumber: 0,
+      pageSize: 0,
+      totalPages: 0,
+      totalConversationsReturned: 0,
     },
   },
   {
