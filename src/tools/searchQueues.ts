@@ -3,6 +3,7 @@ import type { Models, RoutingApi } from "purecloud-platform-client-v2";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
 import { paginationSection } from "./utils/paginationSection.js";
+import { errorResult } from "./utils/errorResult.js";
 
 type PartRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
@@ -83,35 +84,13 @@ export const searchQueues: ToolFactory<
           pageNumber: pageNumber,
         });
       } catch (error: unknown) {
-        const message = isUnauthorisedError(error)
-          ? "Failed to search queues: Unauthorised access. Please check API credentials or permissions."
+        const errorMessage = isUnauthorisedError(error)
+          ? "Failed to search queues: Unauthorised access. Please check API credentials or permissions"
           : `Failed to search queues: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-        return {
-          isError: true,
-          content: [
-            {
-              type: "text",
-              text: message,
-            },
-          ],
-        };
+        return errorResult(errorMessage);
       }
       const entities = result.entities ?? [];
-
-      if (entities.length === 0) {
-        return {
-          content: [
-            {
-              type: "text",
-              text:
-                name === "*"
-                  ? "No routing queues found in the system."
-                  : `No routing queues found matching the name pattern "${name}".`,
-            },
-          ],
-        };
-      }
 
       const foundQueues = entities.filter(hasIdAndName);
 
@@ -121,10 +100,10 @@ export const searchQueues: ToolFactory<
             type: "text",
             text: JSON.stringify(
               formatQueuesJson(foundQueues, {
-                pageNumber: result.pageNumber,
-                pageSize: result.pageSize,
-                pageCount: result.pageCount,
-                totalHits: result.total,
+                pageNumber: entities.length === 0 ? 0 : result.pageNumber,
+                pageSize: entities.length === 0 ? 0 : result.pageSize,
+                pageCount: entities.length === 0 ? 0 : result.pageCount,
+                totalHits: entities.length === 0 ? 0 : result.total,
               }),
             ),
           },

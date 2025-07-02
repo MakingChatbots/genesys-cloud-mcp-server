@@ -124,7 +124,10 @@ describe("Conversation Sentiment Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to retrieve sentiment analysis: Unauthorised access. Please check API credentials or permissions.",
+          text: JSON.stringify({
+            errorMessage:
+              "Failed to retrieve sentiment analysis: Unauthorised access. Please check API credentials or permissions",
+          }),
         },
       ],
     });

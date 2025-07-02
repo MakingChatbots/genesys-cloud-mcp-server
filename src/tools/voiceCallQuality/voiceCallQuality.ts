@@ -49,11 +49,11 @@ export const voiceCallQuality: ToolFactory<
             id: conversationIds,
           });
       } catch (error: unknown) {
-        const message = isUnauthorisedError(error)
-          ? "Failed to query conversations call quality: Unauthorised access. Please check API credentials or permissions."
+        const errorMessage = isUnauthorisedError(error)
+          ? "Failed to query conversations call quality: Unauthorised access. Please check API credentials or permissions"
           : `Failed to query conversations call quality: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-        return errorResult(message);
+        return errorResult(errorMessage);
       }
 
       const output: {

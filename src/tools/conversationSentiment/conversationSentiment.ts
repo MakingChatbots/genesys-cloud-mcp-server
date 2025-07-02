@@ -88,7 +88,7 @@ export const conversationSentiment: ToolFactory<
             });
           } else if (isUnauthorisedError(convo.reason)) {
             return errorResult(
-              "Failed to retrieve sentiment analysis: Unauthorised access. Please check API credentials or permissions.",
+              "Failed to retrieve sentiment analysis: Unauthorised access. Please check API credentials or permissions",
             );
           } else {
             // Ignore conversation

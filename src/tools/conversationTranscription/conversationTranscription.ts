@@ -132,11 +132,11 @@ export const conversationTranscription: ToolFactory<
             conversationId,
           )) as Models.Recording[] | undefined;
         } catch (error: unknown) {
-          const message = isUnauthorisedError(error)
-            ? "Failed to retrieve transcript: Unauthorised access. Please check API credentials or permissions."
+          const errorMessage = isUnauthorisedError(error)
+            ? "Failed to retrieve transcript: Unauthorised access. Please check API credentials or permissions"
             : `Failed to retrieve transcript: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-          return errorResult(message);
+          return errorResult(errorMessage);
         }
 
         if (recordings) {
@@ -168,11 +168,11 @@ export const conversationTranscription: ToolFactory<
               recordingSessionId,
             );
         } catch (error) {
-          const message = isUnauthorisedError(error)
-            ? "Failed to retrieve transcript: Unauthorised access. Please check API credentials or permissions."
+          const errorMessage = isUnauthorisedError(error)
+            ? "Failed to retrieve transcript: Unauthorised access. Please check API credentials or permissions"
             : `Failed to retrieve transcript: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-          return errorResult(message);
+          return errorResult(errorMessage);
         }
         if (!transcriptUrl.url) {
           return errorResult(

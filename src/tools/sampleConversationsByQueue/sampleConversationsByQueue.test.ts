@@ -114,7 +114,9 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: "startDate is not a valid ISO-8601 date.",
+          text: JSON.stringify({
+            errorMessage: "startDate is not a valid ISO-8601 date",
+          }),
         },
       ],
     });
@@ -133,7 +135,9 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: "endDate is not a valid ISO-8601 date.",
+          text: JSON.stringify({
+            errorMessage: "endDate is not a valid ISO-8601 date",
+          }),
         },
       ],
     });
@@ -158,7 +162,9 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to query conversations: Test Error Message",
+          text: JSON.stringify({
+            errorMessage: "Failed to query conversations: Test Error Message",
+          }),
         },
       ],
     });

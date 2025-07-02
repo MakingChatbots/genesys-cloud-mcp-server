@@ -108,7 +108,9 @@ describe("Search Voice Conversations Tool", () => {
       content: [
         {
           type: "text",
-          text: "startDate is not a valid ISO-8601 date.",
+          text: JSON.stringify({
+            errorMessage: "startDate is not a valid ISO-8601 date",
+          }),
         },
       ],
     });
@@ -126,7 +128,9 @@ describe("Search Voice Conversations Tool", () => {
       content: [
         {
           type: "text",
-          text: "endDate is not a valid ISO-8601 date.",
+          text: JSON.stringify({
+            errorMessage: "endDate is not a valid ISO-8601 date",
+          }),
         },
       ],
     });
@@ -150,7 +154,9 @@ describe("Search Voice Conversations Tool", () => {
       content: [
         {
           type: "text",
-          text: "Start date must be before end date.",
+          text: JSON.stringify({
+            errorMessage: "Start date must be before end date",
+          }),
         },
       ],
     });
@@ -174,7 +180,9 @@ describe("Search Voice Conversations Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to search conversations: Test Error Message",
+          text: JSON.stringify({
+            errorMessage: "Failed to search conversations: Test Error Message",
+          }),
         },
       ],
     });

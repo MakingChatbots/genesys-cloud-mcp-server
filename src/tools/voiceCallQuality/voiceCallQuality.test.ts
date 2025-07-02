@@ -108,7 +108,10 @@ describe("Voice Call Quality Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to query conversations call quality: Test Error Message",
+          text: JSON.stringify({
+            errorMessage:
+              "Failed to query conversations call quality: Test Error Message",
+          }),
         },
       ],
     });

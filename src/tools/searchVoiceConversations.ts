@@ -13,22 +13,21 @@ export interface ToolDependencies {
   >;
 }
 
+function normalisePhoneNumber(phoneNumber: string): string {
+  // N.B. This appears to be what is happening within the Genesys Cloud UI,
+  // although I don't know if my version is too simplistic.
+  return phoneNumber.replace(/\D/g, "");
+}
+
 function createAniSegmentFilter(
   phoneNumber: string,
 ): Models.SegmentDetailQueryFilter {
-  /* Normalises the phone number.
-   *
-   * N.B. This appears to be what is happening within the Genesys Cloud UI,
-   * although I don't know if my version is too simplistic.
-   */
-  const normalisedPhoneNumber = phoneNumber.replace(/\D/g, "");
-
   return {
     type: "or",
     predicates: [
       {
         dimension: "ani",
-        value: normalisedPhoneNumber,
+        value: normalisePhoneNumber(phoneNumber),
       },
     ],
   };
@@ -93,10 +92,10 @@ export const searchVoiceConversations: ToolFactory<
       const to = new Date(endDate);
 
       if (isNaN(from.getTime()))
-        return errorResult("startDate is not a valid ISO-8601 date.");
+        return errorResult("startDate is not a valid ISO-8601 date");
       if (isNaN(to.getTime()))
-        return errorResult("endDate is not a valid ISO-8601 date.");
-      if (from >= to) return errorResult("Start date must be before end date.");
+        return errorResult("endDate is not a valid ISO-8601 date");
+      if (from >= to) return errorResult("Start date must be before end date");
       const now = new Date();
       if (to > now) {
         to.setTime(now.getTime());
@@ -140,19 +139,11 @@ export const searchVoiceConversations: ToolFactory<
           surveyFilters: [],
         });
       } catch (error: unknown) {
-        const message = isUnauthorisedError(error)
-          ? "Failed to search conversations: Unauthorised access. Please check API credentials or permissions."
+        const errorMessage = isUnauthorisedError(error)
+          ? "Failed to search conversations: Unauthorised access. Please check API credentials or permissions"
           : `Failed to search conversations: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-        return {
-          isError: true,
-          content: [
-            {
-              type: "text",
-              text: message,
-            },
-          ],
-        };
+        return errorResult(errorMessage);
       }
 
       const conversationToDurationMapping = (result.conversations ?? [])

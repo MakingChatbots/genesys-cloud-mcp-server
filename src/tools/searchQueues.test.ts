@@ -111,13 +111,15 @@ describe("Search Queues Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to search queues: Test Error Message",
+          text: JSON.stringify({
+            errorMessage: "Failed to search queues: Test Error Message",
+          }),
         },
       ],
     });
   });
 
-  test("message provided for no queues found", async () => {
+  test("empty queues and all zero pagination returned when no queues found", async () => {
     toolDeps.routingApi.getRoutingQueues.mockResolvedValue({
       entities: [],
     });
@@ -133,7 +135,15 @@ describe("Search Queues Tool", () => {
       content: [
         {
           type: "text",
-          text: "No routing queues found in the system.",
+          text: JSON.stringify({
+            queues: [],
+            pagination: {
+              pageNumber: 0,
+              pageSize: 0,
+              totalPages: 0,
+              totalMatchingQueues: 0,
+            },
+          }),
         },
       ],
     });

@@ -91,7 +91,9 @@ describe("Conversation Transcription Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to retrieve transcript: Test Error Message",
+          text: JSON.stringify({
+            errorMessage: "Failed to retrieve transcript: Test Error Message",
+          }),
         },
       ],
     });
@@ -120,7 +122,9 @@ describe("Conversation Transcription Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to retrieve transcript: Test Error Message",
+          text: JSON.stringify({
+            errorMessage: "Failed to retrieve transcript: Test Error Message",
+          }),
         },
       ],
     });

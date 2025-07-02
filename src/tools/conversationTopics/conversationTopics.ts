@@ -51,11 +51,11 @@ export const conversationTopics: ToolFactory<
         conversationDetails =
           await analyticsApi.getAnalyticsConversationDetails(conversationId);
       } catch (error: unknown) {
-        const message = isUnauthorisedError(error)
-          ? "Failed to retrieve conversation topics: Unauthorised access. Please check API credentials or permissions."
+        const errorMessage = isUnauthorisedError(error)
+          ? "Failed to retrieve conversation topics: Unauthorised access. Please check API credentials or permissions"
           : `Failed to retrieve conversation topics: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-        return errorResult(message);
+        return errorResult(errorMessage);
       }
 
       if (
@@ -98,11 +98,11 @@ export const conversationTopics: ToolFactory<
           },
         );
       } catch (error: unknown) {
-        const message = isUnauthorisedError(error)
-          ? "Failed to retrieve conversation topics: Unauthorised access. Please check API credentials or permissions."
+        const errorMessage = isUnauthorisedError(error)
+          ? "Failed to retrieve conversation topics: Unauthorised access. Please check API credentials or permissions"
           : `Failed to retrieve conversation topics: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-        return errorResult(message);
+        return errorResult(errorMessage);
       }
 
       const topicIds = new Set<string>();
@@ -140,11 +140,11 @@ export const conversationTopics: ToolFactory<
           topics.push(...(topicsListings.entities ?? []));
         }
       } catch (error: unknown) {
-        const message = isUnauthorisedError(error)
-          ? "Failed to retrieve conversation topics: Unauthorised access. Please check API credentials or permissions."
+        const errorMessage = isUnauthorisedError(error)
+          ? "Failed to retrieve conversation topics: Unauthorised access. Please check API credentials or permissions"
           : `Failed to retrieve conversation topics: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-        return errorResult(message);
+        return errorResult(errorMessage);
       }
 
       const topicNames = topics
