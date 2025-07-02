@@ -29,7 +29,7 @@ const paramsSchema = z.object({
     )
     .min(1)
     .max(300)
-    .describe("List of up to 300 queue IDs to filter conversations by"),
+    .describe("List of up to MAX of 300 queue IDs"),
   startDate: z
     .string()
     .describe(
@@ -51,7 +51,7 @@ export const queryQueueVolumes: ToolFactory<
       name: "query_queue_volumes",
       annotations: { title: "Query Queue Volumes" },
       description:
-        "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.",
+        "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues. MAX 300 queue IDs",
       paramsSchema,
     },
     call: async ({ queueIds, startDate, endDate }) => {
@@ -59,10 +59,10 @@ export const queryQueueVolumes: ToolFactory<
       const to = new Date(endDate);
 
       if (isNaN(from.getTime()))
-        return errorResult("startDate is not a valid ISO-8601 date.");
+        return errorResult("startDate is not a valid ISO-8601 date");
       if (isNaN(to.getTime()))
-        return errorResult("endDate is not a valid ISO-8601 date.");
-      if (from >= to) return errorResult("Start date must be before end date.");
+        return errorResult("endDate is not a valid ISO-8601 date");
+      if (from >= to) return errorResult("Start date must be before end date");
       const now = new Date();
       if (to > now) {
         to.setTime(now.getTime());
@@ -143,28 +143,25 @@ export const queryQueueVolumes: ToolFactory<
           }
         }
 
-        const queueBreakdown: string = [
-          "Queue volume breakdown for that period:",
-          ...queueIds.map((id) => {
-            const totalConversations = queueConversationCount.get(id) ?? 0;
-            return `Queue ID: ${id} - Total conversations: ${String(totalConversations)}`;
-          }),
-        ].join("\n");
+        const queueBreakdown = queueIds.map((id) => {
+          const totalConversations = queueConversationCount.get(id) ?? 0;
+          return { queueId: id, totalConversations };
+        });
 
         return {
           content: [
             {
               type: "text",
-              text: queueBreakdown,
+              text: JSON.stringify({ queues: queueBreakdown }),
             },
           ],
         };
       } catch (error: unknown) {
-        const message = isUnauthorisedError(error)
-          ? "Failed to query conversations: Unauthorised access. Please check API credentials or permissions."
+        const errorMessage = isUnauthorisedError(error)
+          ? "Failed to query conversations: Unauthorised access. Please check API credentials or permissions"
           : `Failed to query conversations: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-        return errorResult(message);
+        return errorResult(errorMessage);
       }
     },
   });

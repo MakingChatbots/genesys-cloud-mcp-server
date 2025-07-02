@@ -3,6 +3,7 @@ import type { Models, RoutingApi } from "purecloud-platform-client-v2";
 import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
 import { paginationSection } from "./utils/paginationSection.js";
+import { errorResult } from "./utils/errorResult.js";
 
 type PartRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
@@ -16,8 +17,7 @@ export interface ToolDependencies {
   readonly routingApi: Pick<RoutingApi, "getRoutingQueues">;
 }
 
-function formatQueues(
-  inputQueueName: string,
+function formatQueuesJson(
   queues: PartRequired<Models.Queue, "id" | "name">[],
   pagination: {
     pageNumber?: number;
@@ -25,27 +25,16 @@ function formatQueues(
     pageCount?: number;
     totalHits?: number;
   },
-) {
-  const queueItems = queues.flatMap((q) => [
-    `• Name: ${q.name}`,
-    `  • ID: ${q.id}`,
-    ...(q.description ? [`  • Description: ${q.description}`] : []),
-    ...(q.memberCount !== undefined
-      ? [`  • Member Count: ${String(q.memberCount)}`]
-      : []),
-  ]);
-
-  const firstLine =
-    pagination.totalHits !== undefined
-      ? `Found ${String(pagination.totalHits)} queues matching "${inputQueueName}":`
-      : `Found the following queues matching "${inputQueueName}":`;
-
-  return [
-    firstLine,
-    ...queueItems,
-    "",
-    ...paginationSection("Total Matching Queues", pagination),
-  ].join("\n");
+): Record<string, unknown> {
+  return {
+    queues: queues.map((q) => ({
+      name: q.name,
+      id: q.id,
+      ...(q.description ? { description: q.description } : {}),
+      ...(q.memberCount !== undefined ? { memberCount: q.memberCount } : {}),
+    })),
+    pagination: paginationSection("totalMatchingQueues", pagination),
+  };
 }
 
 const paramsSchema = z.object({
@@ -95,35 +84,13 @@ export const searchQueues: ToolFactory<
           pageNumber: pageNumber,
         });
       } catch (error: unknown) {
-        const message = isUnauthorisedError(error)
-          ? "Failed to search queues: Unauthorised access. Please check API credentials or permissions."
+        const errorMessage = isUnauthorisedError(error)
+          ? "Failed to search queues: Unauthorised access. Please check API credentials or permissions"
           : `Failed to search queues: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-        return {
-          isError: true,
-          content: [
-            {
-              type: "text",
-              text: message,
-            },
-          ],
-        };
+        return errorResult(errorMessage);
       }
       const entities = result.entities ?? [];
-
-      if (entities.length === 0) {
-        return {
-          content: [
-            {
-              type: "text",
-              text:
-                name === "*"
-                  ? "No routing queues found in the system."
-                  : `No routing queues found matching the name pattern "${name}".`,
-            },
-          ],
-        };
-      }
 
       const foundQueues = entities.filter(hasIdAndName);
 
@@ -131,12 +98,14 @@ export const searchQueues: ToolFactory<
         content: [
           {
             type: "text",
-            text: formatQueues(name, foundQueues, {
-              pageNumber: result.pageNumber,
-              pageSize: result.pageSize,
-              pageCount: result.pageCount,
-              totalHits: result.total,
-            }),
+            text: JSON.stringify(
+              formatQueuesJson(foundQueues, {
+                pageNumber: entities.length === 0 ? 0 : result.pageNumber,
+                pageSize: entities.length === 0 ? 0 : result.pageSize,
+                pageCount: entities.length === 0 ? 0 : result.pageCount,
+                totalHits: entities.length === 0 ? 0 : result.total,
+              }),
+            ),
           },
         ],
       };

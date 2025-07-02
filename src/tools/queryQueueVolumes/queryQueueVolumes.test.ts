@@ -52,7 +52,7 @@ describe("Query Queue Volumes Tool", () => {
       title: undefined,
       annotations: { title: "Query Queue Volumes" },
       description:
-        "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.",
+        "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues. MAX 300 queue IDs",
       inputSchema: {
         type: "object",
         properties: {
@@ -66,8 +66,7 @@ describe("Query Queue Volumes Tool", () => {
             },
             minItems: 1,
             maxItems: 300,
-            description:
-              "List of up to 300 queue IDs to filter conversations by",
+            description: "List of up to MAX of 300 queue IDs",
           },
           startDate: {
             type: "string",
@@ -120,7 +119,9 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: "startDate is not a valid ISO-8601 date.",
+          text: JSON.stringify({
+            errorMessage: "startDate is not a valid ISO-8601 date",
+          }),
         },
       ],
     });
@@ -139,7 +140,9 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: "endDate is not a valid ISO-8601 date.",
+          text: JSON.stringify({
+            errorMessage: "endDate is not a valid ISO-8601 date",
+          }),
         },
       ],
     });
@@ -164,7 +167,9 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to query conversations: Test Error Message",
+          text: JSON.stringify({
+            errorMessage: "Failed to query conversations: Test Error Message",
+          }),
         },
       ],
     });
@@ -225,10 +230,9 @@ describe("Query Queue Volumes Tool", () => {
       content: [
         {
           type: "text",
-          text: `
-Queue volume breakdown for that period:
-Queue ID: ${queueId} - Total conversations: 1
-  `.trim(),
+          text: JSON.stringify({
+            queues: [{ queueId: queueId, totalConversations: 1 }],
+          }),
         },
       ],
     });
@@ -299,11 +303,12 @@ Queue ID: ${queueId} - Total conversations: 1
       content: [
         {
           type: "text",
-          text: `
-Queue volume breakdown for that period:
-Queue ID: ${queueIdOne} - Total conversations: 2
-Queue ID: ${queueIdTwo} - Total conversations: 1
-`.trim(),
+          text: JSON.stringify({
+            queues: [
+              { queueId: queueIdOne, totalConversations: 2 },
+              { queueId: queueIdTwo, totalConversations: 1 },
+            ],
+          }),
         },
       ],
     });

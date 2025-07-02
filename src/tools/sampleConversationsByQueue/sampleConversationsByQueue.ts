@@ -53,10 +53,10 @@ export const sampleConversationsByQueue: ToolFactory<
       const to = new Date(endDate);
 
       if (isNaN(from.getTime()))
-        return errorResult("startDate is not a valid ISO-8601 date.");
+        return errorResult("startDate is not a valid ISO-8601 date");
       if (isNaN(to.getTime()))
-        return errorResult("endDate is not a valid ISO-8601 date.");
-      if (from >= to) return errorResult("Start date must be before end date.");
+        return errorResult("endDate is not a valid ISO-8601 date");
+      if (from >= to) return errorResult("Start date must be before end date");
       const now = new Date();
       if (to > now) {
         to.setTime(now.getTime());
@@ -137,24 +137,20 @@ export const sampleConversationsByQueue: ToolFactory<
           content: [
             {
               type: "text",
-              text:
-                sampledIds.length === 0
-                  ? "No conversations found in queue during specified period."
-                  : [
-                      `Sample of ${String(sampledIds.length)} conversations (out of ${String(conversationIds.length)}) in the queue during that period.`,
-                      "",
-                      "Conversation IDs:",
-                      ...sampledIds,
-                    ].join("\n"),
+              text: JSON.stringify({
+                sizeOfSample: sampledIds.length,
+                totalConversationsSampled: conversationIds.length,
+                sampledConversations: sampledIds,
+              }),
             },
           ],
         };
       } catch (error: unknown) {
-        const message = isUnauthorisedError(error)
-          ? "Failed to query conversations: Unauthorised access. Please check API credentials or permissions."
+        const errorMessage = isUnauthorisedError(error)
+          ? "Failed to query conversations: Unauthorised access. Please check API credentials or permissions"
           : `Failed to query conversations: ${error instanceof Error ? error.message : JSON.stringify(error)}`;
 
-        return errorResult(message);
+        return errorResult(errorMessage);
       }
     },
   });
