@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/makingchatbots-genesys-cloud-mcp-server-badge.png)](https://mseep.ai/app/makingchatbots-genesys-cloud-mcp-server)
+
 # Genesys Cloud MCP Server
 
 [![npm](https://img.shields.io/npm/v/@makingchatbots/genesys-cloud-mcp-server)](https://www.npmjs.com/package/@makingchatbots/genesys-cloud-mcp-server)
