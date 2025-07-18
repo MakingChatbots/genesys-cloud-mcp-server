@@ -1,6 +1,6 @@
 {
   "name": "@makingchatbots/genesys-cloud-mcp-server",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "A Model Context Protocol (MCP) server exposing Genesys Cloud tools for LLMs, including sentiment analysis, conversation search, topic detection and more.",
   "bin": "./dist/cli.js",
   "type": "module",
@@ -36,28 +36,27 @@
     "test:pack": "npm run build && npm pack --pack-destination ./dist"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.13.0",
+    "@modelcontextprotocol/sdk": "^1.16.0",
     "date-fns": "^4.1.0",
-    "purecloud-platform-client-v2": "^224.0.0",
-    "table": "^6.9.0",
-    "zod": "^3.25.67"
+    "purecloud-platform-client-v2": "^227.0.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.28.0",
+    "@eslint/js": "^9.31.0",
     "@types/eslint-config-prettier": "^6.11.3",
-    "@types/node": "^22.15.29",
+    "@types/node": "^22.16.4",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
-    "@typescript-eslint/parser": "^8.33.1",
-    "eslint": "^9.28.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-import-resolver-typescript": "^4.4.2",
-    "lint-staged": "^16.1.0",
-    "prettier": "^3.5.3",
-    "tsx": "^4.19.4",
+    "@typescript-eslint/parser": "^8.37.0",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.33.1",
-    "vitest": "^3.2.0"
+    "typescript-eslint": "^8.37.0",
+    "vitest": "^3.2.4"
   },
   "lint-staged": {
     "src/*.ts": [

@@ -95,7 +95,7 @@ Retrieves voice call quality metrics for one or more conversations by ID. This t
 
 Read more [about MOS scores and how they're determined](https://developer.genesys.cloud/analyticsdatamanagement/analytics/detail/call-quality).
 
-[Source file](/src/tools/voiceCallQuality.ts).
+[Source file](/src/tools/voiceCallQuality/voiceCallQuality.ts).
 
 ### Inputs
 

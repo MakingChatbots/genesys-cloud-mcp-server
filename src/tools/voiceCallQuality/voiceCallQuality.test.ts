@@ -5,7 +5,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { type McpError } from "@modelcontextprotocol/sdk/types.js";
-import { voiceCallQuality, type ToolDependencies } from "./voiceCallQuality.js";
+import { type ToolDependencies, voiceCallQuality } from "./voiceCallQuality.js";
 
 describe("Voice Call Quality Tool", () => {
   let toolDeps: MockedObjectDeep<ToolDependencies>;
@@ -47,7 +47,10 @@ describe("Voice Call Quality Tool", () => {
       title: undefined,
       annotations: { title: "Voice Call Quality" },
       description:
-        "Retrieves voice call quality metrics for one or more conversations by ID. This tool specifically focuses on voice interactions and returns the minimum Mean Opinion Score (MOS) observed in each conversation, helping identify degraded or poor-quality voice calls.",
+        "Retrieves voice call quality metrics for one or more conversations by ID. This tool specifically focuses on voice interactions and returns the minimum Mean Opinion Score (MOS) observed in each conversation as structured JSON. MOS is a measure of perceived audio quality based on factors such as jitter, latency, packet loss, and codec. Use the following legend to interpret MOS values:\n\n" +
+        "  • Poor:       MOS < 3.5\n" +
+        "  • Acceptable: 3.5 ≤ MOS < 4.3\n" +
+        "  • Excellent:  MOS ≥ 4.3",
       inputSchema: {
         properties: {
           conversationIds: {
@@ -105,7 +108,10 @@ describe("Voice Call Quality Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to query conversations call quality: Test Error Message",
+          text: JSON.stringify({
+            errorMessage:
+              "Failed to query conversations call quality: Test Error Message",
+          }),
         },
       ],
     });
@@ -134,18 +140,15 @@ describe("Voice Call Quality Tool", () => {
       content: [
         {
           type: "text",
-          text: `
-Call Quality Report for 1 conversation(s):
-Call Quality Report for voice conversations.
-
-MOS Quality Legend:
-  Poor:       MOS < 3.5
-  Acceptable: 3.5 ≤ MOS < 4.3
-  Excellent:  MOS ≥ 4.3
-
-• Conversation ID: ${conversationId}
-  • Minimum MOS: 3.50 (Acceptable)
-`.trim(),
+          text: JSON.stringify({
+            conversations: [
+              {
+                conversationId: conversationId,
+                minimumMos: "3.50",
+                qualityLabel: "Acceptable",
+              },
+            ],
+          }),
         },
       ],
     });
@@ -179,19 +182,20 @@ MOS Quality Legend:
       content: [
         {
           type: "text",
-          text: `
-Call Quality Report for 2 conversation(s):
-Call Quality Report for voice conversations.
-
-MOS Quality Legend:
-  Poor:       MOS < 3.5
-  Acceptable: 3.5 ≤ MOS < 4.3
-  Excellent:  MOS ≥ 4.3
-
-• Conversation ID: ${conversationOneId}
-  • Minimum MOS: 3.50 (Acceptable)
-• Conversation ID: ${conversationTwoId}
-  • Minimum MOS: 1.00 (Poor)`.trim(),
+          text: JSON.stringify({
+            conversations: [
+              {
+                conversationId: conversationOneId,
+                minimumMos: "3.50",
+                qualityLabel: "Acceptable",
+              },
+              {
+                conversationId: conversationTwoId,
+                minimumMos: "1.00",
+                qualityLabel: "Poor",
+              },
+            ],
+          }),
         },
       ],
     });

@@ -6,7 +6,7 @@ export function errorResult(errorMessage: string): CallToolResult {
     content: [
       {
         type: "text",
-        text: errorMessage,
+        text: JSON.stringify({ errorMessage }),
       },
     ],
   };

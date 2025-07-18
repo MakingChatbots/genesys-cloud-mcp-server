@@ -49,7 +49,7 @@ describe("Search Voice Conversations Tool", () => {
       title: undefined,
       annotations: { title: "Search Voice Conversations" },
       description:
-        "Searches for voice conversations within a specified time window, optionally filtering by phone number. Returns a paginated list of conversation metadata for use in further analysis or tool calls.",
+        "Searches for voice conversations within a specified time window, optionally filtering by phone number. Returns a paginated list of conversation IDs and call duration for use in further analysis or tool calls.",
       inputSchema: {
         type: "object",
         properties: {
@@ -108,7 +108,9 @@ describe("Search Voice Conversations Tool", () => {
       content: [
         {
           type: "text",
-          text: "startDate is not a valid ISO-8601 date.",
+          text: JSON.stringify({
+            errorMessage: "startDate is not a valid ISO-8601 date",
+          }),
         },
       ],
     });
@@ -126,7 +128,9 @@ describe("Search Voice Conversations Tool", () => {
       content: [
         {
           type: "text",
-          text: "endDate is not a valid ISO-8601 date.",
+          text: JSON.stringify({
+            errorMessage: "endDate is not a valid ISO-8601 date",
+          }),
         },
       ],
     });
@@ -150,7 +154,9 @@ describe("Search Voice Conversations Tool", () => {
       content: [
         {
           type: "text",
-          text: "Start date must be before end date.",
+          text: JSON.stringify({
+            errorMessage: "Start date must be before end date",
+          }),
         },
       ],
     });
@@ -174,7 +180,9 @@ describe("Search Voice Conversations Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to search conversations: Test Error Message",
+          text: JSON.stringify({
+            errorMessage: "Failed to search conversations: Test Error Message",
+          }),
         },
       ],
     });
@@ -243,18 +251,20 @@ describe("Search Voice Conversations Tool", () => {
     expect(result).toStrictEqual({
       content: [
         {
-          text: `
-Total hits: 1
-
-Conversation IDs and Durations of matches:
-${conversationId} (1 hour)
-
---- Pagination Info ---
-Page Number: 1
-Page Size: 100
-Total Pages: 1
-Total Conversations returned: 1
-`.trim(),
+          text: JSON.stringify({
+            conversations: [
+              {
+                conversationId,
+                duration: "1 hour",
+              },
+            ],
+            pagination: {
+              pageNumber: 1,
+              pageSize: 100,
+              totalPages: 1,
+              totalConversationsReturned: 1,
+            },
+          }),
           type: "text",
         },
       ],
@@ -334,18 +344,19 @@ Total Conversations returned: 1
     expect(result).toStrictEqual({
       content: [
         {
-          text: `
-Total hits: 1
-
-Conversation IDs and Durations of matches:
-${conversationId}
-
---- Pagination Info ---
-Page Number: 1
-Page Size: 100
-Total Pages: 1
-Total Conversations returned: 1
-`.trim(),
+          text: JSON.stringify({
+            conversations: [
+              {
+                conversationId,
+              },
+            ],
+            pagination: {
+              pageNumber: 1,
+              pageSize: 100,
+              totalPages: 1,
+              totalConversationsReturned: 1,
+            },
+          }),
           type: "text",
         },
       ],

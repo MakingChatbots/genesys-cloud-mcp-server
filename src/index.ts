@@ -5,7 +5,7 @@ import { createConfigRetriever } from "./createConfigRetriever.js";
 import { searchQueues } from "./tools/searchQueues.js";
 import { sampleConversationsByQueue } from "./tools/sampleConversationsByQueue/sampleConversationsByQueue.js";
 import { queryQueueVolumes } from "./tools/queryQueueVolumes/queryQueueVolumes.js";
-import { voiceCallQuality } from "./tools/voiceCallQuality.js";
+import { voiceCallQuality } from "./tools/voiceCallQuality/voiceCallQuality.js";
 import { conversationSentiment } from "./tools/conversationSentiment/conversationSentiment.js";
 import { conversationTopics } from "./tools/conversationTopics/conversationTopics.js";
 import { searchVoiceConversations } from "./tools/searchVoiceConversations.js";
@@ -19,7 +19,7 @@ const withAuth = OAuthClientCredentialsWrapper(
 
 const server: McpServer = new McpServer({
   name: "Genesys Cloud",
-  version: "0.0.13", // Same version as version in package.json
+  version: "0.0.14", // Same version as version in package.json
 });
 
 const routingApi = new platformClient.RoutingApi();

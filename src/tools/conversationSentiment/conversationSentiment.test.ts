@@ -124,7 +124,10 @@ describe("Conversation Sentiment Tool", () => {
       content: [
         {
           type: "text",
-          text: "Failed to retrieve sentiment analysis: Unauthorised access. Please check API credentials or permissions.",
+          text: JSON.stringify({
+            errorMessage:
+              "Failed to retrieve sentiment analysis: Unauthorised access. Please check API credentials or permissions",
+          }),
         },
       ],
     });
@@ -152,12 +155,10 @@ describe("Conversation Sentiment Tool", () => {
       content: [
         {
           type: "text",
-          text: `
-Sentiment results for 1 conversation(s):
-
-• Conversation ID: ${conversationId}
-  • Error: Conversation not found
-`.trim(),
+          text: JSON.stringify({
+            conversationsWithSentiment: [],
+            conversationsWithoutSentiment: [conversationId],
+          }),
         },
       ],
     });
@@ -183,12 +184,16 @@ Sentiment results for 1 conversation(s):
       content: [
         {
           type: "text",
-          text: `
-Sentiment results for 1 conversation(s):
-
-• Conversation ID: ${conversationId}
-  • Sentiment Score: 40 (Slightly Positive)
-`.trim(),
+          text: JSON.stringify({
+            conversationsWithSentiment: [
+              {
+                conversationId: conversationId,
+                sentimentScore: 40,
+                sentimentDescription: "Slightly Positive",
+              },
+            ],
+            conversationsWithoutSentiment: [],
+          }),
         },
       ],
     });
@@ -231,15 +236,21 @@ Sentiment results for 1 conversation(s):
       content: [
         {
           type: "text",
-          text: `
-Sentiment results for 2 conversation(s):
-
-• Conversation ID: ${conversationOneId}
-  • Sentiment Score: 10 (Neutral)
-
-• Conversation ID: ${conversationTwoId}
-  • Sentiment Score: 20 (Slightly Positive)
-`.trim(),
+          text: JSON.stringify({
+            conversationsWithSentiment: [
+              {
+                conversationId: conversationOneId,
+                sentimentScore: 10,
+                sentimentDescription: "Neutral",
+              },
+              {
+                conversationId: conversationTwoId,
+                sentimentScore: 20,
+                sentimentDescription: "Slightly Positive",
+              },
+            ],
+            conversationsWithoutSentiment: [],
+          }),
         },
       ],
     });
