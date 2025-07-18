@@ -5,7 +5,6 @@ import {
   SpeechTextAnalyticsApi,
 } from "purecloud-platform-client-v2";
 import { isWithinInterval } from "date-fns/isWithinInterval";
-import { getBorderCharacters, table } from "table";
 import { createTool, type ToolFactory } from "../utils/createTool.js";
 import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
 import { errorResult } from "../utils/errorResult.js";
@@ -246,45 +245,18 @@ export const conversationTranscription: ToolFactory<
         }
       }
 
-      const sentimentPresent = utterances.some(
-        (u) => u.sentiment !== undefined,
-      );
-
-      const data = [
-        [
-          "Time",
-          "Who",
-          ...(sentimentPresent ? ["Sentiment"] : []),
-          "Utterance",
-        ],
-        ...utterances.map((u) => {
-          return [
-            formatTimeUtteranceStarted(u),
-            u.speaker,
-            ...(sentimentPresent ? [friendlySentiment(u.sentiment)] : []),
-            u.utterance,
-          ];
-        }),
-      ];
-
-      const utteranceTable = table(data, {
-        border: getBorderCharacters("void"),
-        columnDefault: {
-          paddingLeft: 0,
-          paddingRight: 2,
-        },
-        drawHorizontalLine: () => false,
-      })
-        .split("\n")
-        .map((line) => line.trimEnd())
-        .join("\n")
-        .trim();
+      const data = utterances.map((u) => ({
+        time: formatTimeUtteranceStarted(u),
+        who: u.speaker,
+        sentiment: friendlySentiment(u.sentiment),
+        utterance: u.utterance,
+      }));
 
       return {
         content: [
           {
             type: "text",
-            text: utteranceTable,
+            text: JSON.stringify(data),
           },
         ],
       };

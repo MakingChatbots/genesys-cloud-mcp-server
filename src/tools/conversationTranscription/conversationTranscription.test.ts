@@ -209,11 +209,20 @@ describe("Conversation Transcription Tool", () => {
     expect(result).toStrictEqual({
       content: [
         {
-          text: `
-Time   Who       Sentiment  Utterance
-00:00  IVR                  I'm an IVR
-00:05  customer  Positive   I'm a customer
-`.trim(),
+          text: JSON.stringify([
+            {
+              time: "00:00",
+              who: "IVR",
+              sentiment: "",
+              utterance: "I'm an IVR",
+            },
+            {
+              time: "00:05",
+              who: "customer",
+              sentiment: "Positive",
+              utterance: "I'm a customer",
+            },
+          ]),
           type: "text",
         },
       ],

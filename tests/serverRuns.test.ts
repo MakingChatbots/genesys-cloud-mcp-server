@@ -133,12 +133,13 @@ describe("Server Runs", () => {
     });
     const textContext = (result as CallToolResult).content[0].text;
     expect(textContext).toStrictEqual(
-      `
-Failed to authenticate with Genesys Cloud. Reason:
+      JSON.stringify({
+        errorMessage: `Failed to authenticate with Genesys Cloud. Reason:
 Failed to parse environment variables
 Missing environment variable: GENESYSCLOUD_REGION
 Missing environment variable: GENESYSCLOUD_OAUTHCLIENT_ID
-Missing environment variable: GENESYSCLOUD_OAUTHCLIENT_SECRET`.trim(),
+Missing environment variable: GENESYSCLOUD_OAUTHCLIENT_SECRET`,
+      }),
     );
   });
 });
