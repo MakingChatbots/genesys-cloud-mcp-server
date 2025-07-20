@@ -20,9 +20,22 @@ A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 
 ## Usage with Claude Desktop
 
-Add this to your `claude_desktop_config.json`:
+### Desktop Extension
+
+This MCP Server provides a Desktop Extension (.dxt file) along with each [release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases),
+which is a single-click installable packages for Claude Desktop. To use it:
+
+1. Download the `.dxt` file from the [latest release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases)
+2. In Claude Desktop navigate to Settings > Extensions.
+3. Browse or drag in the .dxt file downloaded
+4. Click "Install"
+5. Configure the Region and OAuth Client for the extension
+
+The extension will now be available in your conversations.
 
 ### NPX
+
+Add this to your `claude_desktop_config.json`:
 
 ```json
 {
