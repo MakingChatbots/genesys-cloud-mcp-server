@@ -49,7 +49,7 @@ jobs:
         with:
           node-version-file: ".nvmrc"
       - run: npm install
-      - run: dxt validate manifest.json
+      - run: npm run validate:dxt
       - run: npm run package:dxt
       - run: npm run test
 
