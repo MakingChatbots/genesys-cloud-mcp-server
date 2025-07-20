@@ -27,6 +27,7 @@ jobs:
           GENESYSCLOUD_REGION: dummy
           GENESYSCLOUD_OAUTHCLIENT_ID: dummy
           GENESYSCLOUD_OAUTHCLIENT_SECRET: dummy
+
   test-node:
     runs-on: ubuntu-latest
     name: Test
@@ -37,6 +38,18 @@ jobs:
           node-version-file: ".nvmrc"
       - run: npm install
       - run: npm run build
+      - run: npm run test
+
+  test-building-dxt:
+    runs-on: ubuntu-latest
+    name: Test Anthropic Desktop Extensions
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+      - run: dxt validate manifest.json
+      - run: npm run package:dxt
       - run: npm run test
 
   lint:

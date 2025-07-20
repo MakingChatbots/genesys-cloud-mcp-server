@@ -4,12 +4,7 @@
 
 **Tool name:** `search_queues`
 
-Searches for routing queues based on their name, allowing for wildcard searches. Returns a paginated
-list of matching queues, including their Name, ID, Description (if available), and Member Count
-(if available). Also provides pagination details like current page, page size, total results found,
-and total pages available. Useful for finding specific queue IDs, checking queue configurations,
-or listing available queues.
-
+Searches for routing queues based on their name, allowing for wildcard searches. Returns a paginated list of matching queues, including their Name, ID, Description (if available), and Member Count (if available). Also provides pagination details like current page, page size, total results found, and total pages available. Useful for finding specific queue IDs, checking queue configurations, or listing available queues.
 [Source file](/src/tools/searchQueues.ts).
 
 ### Inputs
@@ -200,7 +195,7 @@ Platform API endpoints used:
 
 **Tool name:** `conversation_transcript`
 
-Retrieves a structured transcript of the conversation, including speaker labels, utterance timestamps, and sentiment annotations where available. The transcript is formatted as a time-aligned list of utterances attributed to each participant (e.g., customer or agent)
+Retrieves a structured transcript of the conversation, including speaker labels, utterance timestamps, and sentiment annotations where available. The transcript is formatted as a time-aligned list of utterances attributed to each participant (e.g., customer or agent).
 
 [Source file](/src/tools/conversationTranscription/conversationTranscription.ts).
 

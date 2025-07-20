@@ -4,7 +4,7 @@
   "description": "A Model Context Protocol (MCP) server exposing Genesys Cloud tools for LLMs, including sentiment analysis, conversation search, topic detection and more.",
   "bin": "./dist/cli.js",
   "type": "module",
-  "license": "ISC",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MakingChatbots/genesys-cloud-mcp-server.git"
@@ -22,7 +22,11 @@
     "start:inspector": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js",
     "clean": "rm -rf dist/*",
     "build:esm": "tsc -p tsconfig.build.json",
+    "build:esm:dxt": "tsc -p tsconfig.build-dxt.json",
     "build": "npm run clean && npm run build:esm && chmod +x dist/cli.js",
+    "clean:dxt": "npm run clean && rm -rf dxt-contents/*",
+    "deps:dxt": "cp manifest.json package.json package-lock.json dxt-contents/ && cd dxt-contents && npm ci --omit=dev && rm package-lock.json",
+    "package:dxt": "npm run clean:dxt && npm run build:esm:dxt && npm run deps:dxt && dxt pack dxt-contents genesys-cloud-mcp-server.dxt",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "prettier:check": "prettier --check src/**/*.ts *.md tests/**/*.ts --no-error-on-unmatched-pattern",
@@ -53,6 +57,7 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2",
+    "@anthropic-ai/dxt": "^0.2.5",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.37.0",
