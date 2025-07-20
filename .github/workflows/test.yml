@@ -48,6 +48,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
+      - run: npm install
       - run: dxt validate manifest.json
       - run: npm run package:dxt
       - run: npm run test
