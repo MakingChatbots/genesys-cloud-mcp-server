@@ -1,0 +1,102 @@
+{
+  "dxt_version": "0.1",
+  "name": "Genesys Cloud MCP Server",
+  "version": "0.0.15",
+  "description": "Interact with Genesys Cloud's Platform API",
+  "long_description": "This extension allows Claude to connect to Genesys Cloud's Platform API via a local MCP server. It provides tools for querying queue volumes, retrieving conversation samples, analyzing sentiment and voice quality, accessing transcripts, and more.\n\nThis project is not affiliated with Genesys.",
+  "author": {
+    "name": "Lucas Woodward",
+    "url": "https://github.com/SketchingDev"
+  },
+  "documentation": "https://github.com/MakingChatbots/genesys-cloud-mcp-server#readme",
+  "support": "https://github.com/MakingChatbots/genesys-cloud-mcp-server/issues",
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": [
+        "${__dirname}/dist/index.js"
+      ],
+      "env": {
+        "GENESYSCLOUD_REGION": "${user_config.genesys_cloud_region}",
+        "GENESYSCLOUD_OAUTHCLIENT_ID": "${user_config.genesys_cloud_oauth_client_id}",
+        "GENESYSCLOUD_OAUTHCLIENT_SECRET":  "${user_config.genesys_cloud_oauth_client_secret}"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "search_queues",
+      "description": "Searches for routing queues based on their name, allowing for wildcard searches. Returns a paginated list of matching queues, including their Name, ID, Description (if available), and Member Count (if available). Also provides pagination details like current page, page size, total results found, and total pages available. Useful for finding specific queue IDs, checking queue configurations, or listing available queues."
+    },
+    {
+      "name": "query_queue_volumes",
+      "description": "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues."
+    },
+    {
+      "name": "sample_conversations_by_queue",
+      "description": "Retrieves conversation analytics for a specific queue between two dates, returning a representative sample of conversation IDs. Useful for reporting, investigation, or summarisation."
+    },
+    {
+      "name": "voice_call_quality",
+      "description": "Retrieves voice call quality metrics for one or more conversations by ID. This tool specifically focuses on voice interactions and returns the minimum Mean Opinion Score (MOS) observed in each conversation, helping identify degraded or poor-quality voice calls."
+    },
+    {
+      "name": "conversation_sentiment",
+      "description": "Retrieves sentiment analysis scores for one or more conversations. Sentiment is evaluated based on customer phrases, categorized as positive, neutral, or negative. The result includes both a numeric sentiment score (-100 to 100) and an interpreted sentiment label."
+    },
+    {
+      "name": "conversation_topics",
+      "description": "Retrieves Speech and Text Analytics topics detected for a specific conversation. Topics represent business-level intents (e.g. cancellation, billing enquiry) inferred from recognised phrases in the customer-agent interaction."
+    },
+    {
+      "name": "search_voice_conversations",
+      "description": "Searches for voice conversations within a specified time window, optionally filtering by phone number. Returns a paginated list of conversation metadata for use in further analysis or tool calls."
+    },
+    {
+      "name": "conversation_transcript",
+      "description": "Retrieves a structured transcript of the conversation, including speaker labels, utterance timestamps, and sentiment annotations where available. The transcript is formatted as a time-aligned list of utterances attributed to each participant (e.g., customer or agent)."
+    }
+  ],
+  "user_config": {
+    "genesys_cloud_region": {
+      "type": "string",
+      "title": "Genesys Cloud Region",
+      "description": "Region of your Genesys Cloud Organization",
+      "required": true,
+      "sensitive": false
+    },
+    "genesys_cloud_oauth_client_id": {
+      "type": "string",
+      "title": "Genesys Cloud OAuth Client ID",
+      "description": "ID for the OAuth Client in your Genesys Cloud Organization",
+      "required": true,
+      "sensitive": true
+    },
+    "genesys_cloud_oauth_client_secret": {
+      "type": "string",
+      "title": "Genesys Cloud OAuth Client Secret",
+      "description": "Secret for the OAuth Client in your Genesys Cloud Organization",
+      "required": true,
+      "sensitive": true
+    }
+  },
+  "compatibility": {
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  },
+  "keywords": [
+    "contact-center",
+    "genesys-cloud",
+    "speech-and-text-analytics",
+    "sentiment-analysis",
+    "conversation-analysis"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MakingChatbots/genesys-cloud-mcp-server.git"
+  }
+}
