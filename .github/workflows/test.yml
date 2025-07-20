@@ -42,7 +42,7 @@ jobs:
 
   test-building-dxt:
     runs-on: ubuntu-latest
-    name: Test Anthropic Desktop Extensions
+    name: Test Desktop Extension
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

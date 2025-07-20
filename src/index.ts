@@ -19,7 +19,7 @@ const withAuth = OAuthClientCredentialsWrapper(
 
 const server: McpServer = new McpServer({
   name: "Genesys Cloud",
-  version: "0.0.14", // Same version as version in package.json
+  version: "0.0.15", // Same version as version in package.json
 });
 
 const routingApi = new platformClient.RoutingApi();

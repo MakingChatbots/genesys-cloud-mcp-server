@@ -1,7 +1,7 @@
 {
   "dxt_version": "0.1",
   "name": "Genesys Cloud MCP Server",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Interact with Genesys Cloud's Platform API",
   "long_description": "This extension allows Claude to connect to Genesys Cloud's Platform API via a local MCP server. It provides tools for querying queue volumes, retrieving conversation samples, analyzing sentiment and voice quality, accessing transcripts, and more.\n\nThis project is not affiliated with Genesys.",
   "author": {

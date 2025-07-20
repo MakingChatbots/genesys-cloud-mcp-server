@@ -1,4 +1,5 @@
 name: Release on npm
+
 on:
   push:
     branches:
@@ -14,20 +15,17 @@ permissions:
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: read
-      id-token: write
+
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
 
       - name: Install dependencies
-        run: |
-          npm install
+        run: npm install
 
       - name: Build
         run: |
@@ -58,7 +56,6 @@ jobs:
         if: steps.publish.outputs.type != 'none'
         run: |
           echo '{"categories": [], "template": "## Commits:\n\n${{ '${{UNCATEGORIZED}}' }}", "pr_template": ${{ '"- ${{MERGE_SHA}} ${{TITLE}}"' }} }' > changelog_config.json
-          cat changelog_config.json
           echo "last_tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
           echo "curr_commit=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
@@ -84,6 +81,20 @@ jobs:
           tag_name: v${{ steps.publish.outputs.version }}
           release_name: v${{ steps.publish.outputs.version }}
           commitish: ${{ github.ref }}
-          body: ${{steps.github_release.outputs.changelog}}
+          body: ${{ steps.github_release.outputs.changelog }}
           draft: false
           prerelease: false
+
+      - name: Build .dxt file
+        if: steps.publish.outputs.type != 'none'
+        run: npm run package:dxt
+
+      - name: Upload .dxt to GitHub release
+        if: steps.publish.outputs.type != 'none'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.publish.outputs.version }}
+          files: |
+            genesys-cloud-mcp-server.dxt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
