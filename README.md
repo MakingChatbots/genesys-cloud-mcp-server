@@ -74,7 +74,6 @@ Add below to your `.gemini/settings.json` file. You can read more about the [set
 }
 ```
 
-
 ## Authentication
 
 This currently only supports a stdio server. To configure authentication you'll need to:
