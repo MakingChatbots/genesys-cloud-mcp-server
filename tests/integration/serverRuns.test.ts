@@ -4,8 +4,6 @@ import { execSync } from "node:child_process";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
 import packageInfo from "../../package.json" with { type: "json" };
 
 describe("Server Runs", () => {

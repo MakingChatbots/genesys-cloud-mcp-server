@@ -5,11 +5,15 @@ export default defineConfig({
     environment: "node",
     isolate: false,
     watch: false,
+
     projects: [
       {
         test: {
           name: "unit",
           include: ["src/**/*.test.ts", "tests/integration/**/*.test.ts"],
+          typecheck: {
+            tsconfig: "tsconfig.test.json",
+          },
         },
       },
       {
@@ -17,6 +21,9 @@ export default defineConfig({
           name: "evaluation",
           include: ["tests/evaluations/**/*.test.ts"],
           setupFiles: ["dotenv/config"],
+          typecheck: {
+            tsconfig: "tsconfig.test.json",
+          },
         },
       },
     ],
