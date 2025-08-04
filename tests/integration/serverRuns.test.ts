@@ -4,7 +4,9 @@ import { execSync } from "node:child_process";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import packageInfo from "../package.json" with { type: "json" };
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import packageInfo from "../../package.json" with { type: "json" };
 
 describe("Server Runs", () => {
   let client: Client | null = null;
@@ -20,7 +22,7 @@ describe("Server Runs", () => {
   test("server returns list of tools", async () => {
     const transport = new StdioClientTransport({
       command: "node",
-      args: ["--inspect", join(__dirname, "../dist/index.js")],
+      args: ["--inspect", join(__dirname, "../../dist/index.js")],
       env: {
         // Provides path for node binary to be used in test
         PATH: process.env.PATH!,
@@ -50,7 +52,7 @@ describe("Server Runs", () => {
   test("server version matches version in package.json", async () => {
     const transport = new StdioClientTransport({
       command: "node",
-      args: ["--inspect", join(__dirname, "../dist/index.js")],
+      args: ["--inspect", join(__dirname, "../../dist/index.js")],
       env: {
         // Provides path for node binary to be used in test
         PATH: process.env.PATH!,
@@ -71,7 +73,7 @@ describe("Server Runs", () => {
   test("server runs via cli", async () => {
     const transport = new StdioClientTransport({
       command: "node",
-      args: ["--inspect", join(__dirname, "../dist/cli.js")],
+      args: ["--inspect", join(__dirname, "../../dist/cli.js")],
       env: {
         PATH: process.env.PATH!,
       },
@@ -112,7 +114,7 @@ describe("Server Runs", () => {
   test("calling tool errors if not OAuth config", async () => {
     const transport = new StdioClientTransport({
       command: "node",
-      args: ["--inspect", join(__dirname, "../dist/cli.js")],
+      args: ["--inspect", join(__dirname, "../../dist/cli.js")],
       env: {
         PATH: process.env.PATH!,
       },

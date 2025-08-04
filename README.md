@@ -20,19 +20,6 @@ A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 
 ## Usage with Claude Desktop
 
-### Desktop Extension
-
-This MCP Server provides a Desktop Extension (.dxt file) along with each [release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases),
-which is a single-click installable packages for Claude Desktop. To use it:
-
-1. Download the `.dxt` file from the [latest release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases)
-2. In Claude Desktop navigate to Settings > Extensions.
-3. Browse or drag in the .dxt file downloaded
-4. Click "Install"
-5. Configure the Region and OAuth Client for the extension
-
-The extension will now be available in your conversations.
-
 ### NPX
 
 Add this to your `claude_desktop_config.json`:
@@ -53,6 +40,40 @@ Add this to your `claude_desktop_config.json`:
   }
 }
 ```
+
+### Desktop Extension
+
+This MCP Server provides a Desktop Extension (.dxt file) along with each [release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases),
+which is a single-click installable package for Claude Desktop. To use it:
+
+1. Download the `.dxt` file from the [latest release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases)
+2. In Claude Desktop navigate to Settings > Extensions.
+3. Browse to, or drag in the .dxt file downloaded
+4. Click "Install"
+5. Configure the Region and OAuth Client for the extension
+
+The extension will now be available in your conversations.
+
+## Usage with Gemini CLI
+
+Add below to your `.gemini/settings.json` file. You can read more about the [setup from the official guide](https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/tutorials.md#configure-the-mcp-server-in-settingsjson).
+
+```json
+{
+  "mcpServers": {
+    "genesysCloud": {
+      "command": "npx",
+      "args": ["-y", "@makingchatbots/genesys-cloud-mcp-server"],
+      "env": {
+        "GENESYSCLOUD_REGION": "${GENESYSCLOUD_REGION}",
+        "GENESYSCLOUD_OAUTHCLIENT_ID": "${GENESYSCLOUD_OAUTHCLIENT_ID}",
+        "GENESYSCLOUD_OAUTHCLIENT_SECRET": "${GENESYSCLOUD_OAUTHCLIENT_SECRET}"
+      }
+    }
+  }
+}
+```
+
 
 ## Authentication
 

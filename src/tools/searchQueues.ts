@@ -17,6 +17,21 @@ export interface ToolDependencies {
   readonly routingApi: Pick<RoutingApi, "getRoutingQueues">;
 }
 
+export interface SearchQueuesResponse {
+  queues: {
+    name: string;
+    id: string;
+    description?: string;
+    memberCount?: number;
+  }[];
+  pagination: {
+    totalMatchingQueues: string | number;
+    pageNumber: string | number;
+    pageSize: string | number;
+    totalPages: string | number;
+  };
+}
+
 function formatQueuesJson(
   queues: PartRequired<Models.Queue, "id" | "name">[],
   pagination: {
@@ -25,7 +40,7 @@ function formatQueuesJson(
     pageCount?: number;
     totalHits?: number;
   },
-): Record<string, unknown> {
+): SearchQueuesResponse {
   return {
     queues: queues.map((q) => ({
       name: q.name,
@@ -94,18 +109,18 @@ export const searchQueues: ToolFactory<
 
       const foundQueues = entities.filter(hasIdAndName);
 
+      const response: SearchQueuesResponse = formatQueuesJson(foundQueues, {
+        pageNumber: entities.length === 0 ? 0 : result.pageNumber,
+        pageSize: entities.length === 0 ? 0 : result.pageSize,
+        pageCount: entities.length === 0 ? 0 : result.pageCount,
+        totalHits: entities.length === 0 ? 0 : result.total,
+      });
+
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(
-              formatQueuesJson(foundQueues, {
-                pageNumber: entities.length === 0 ? 0 : result.pageNumber,
-                pageSize: entities.length === 0 ? 0 : result.pageSize,
-                pageCount: entities.length === 0 ? 0 : result.pageCount,
-                totalHits: entities.length === 0 ? 0 : result.total,
-              }),
-            ),
+            text: JSON.stringify(response),
           },
         ],
       };
