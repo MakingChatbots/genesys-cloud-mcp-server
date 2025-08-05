@@ -3,8 +3,29 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     environment: "node",
-    include: ["src/**/*.test.ts", "tests/*.test.ts"],
     isolate: false,
     watch: false,
+
+    projects: [
+      {
+        test: {
+          name: "unit",
+          include: ["src/**/*.test.ts", "tests/integration/**/*.test.ts"],
+          typecheck: {
+            tsconfig: "tsconfig.test.json",
+          },
+        },
+      },
+      {
+        test: {
+          name: "evaluation",
+          include: ["tests/evaluations/**/*.test.ts"],
+          setupFiles: ["dotenv/config"],
+          typecheck: {
+            tsconfig: "tsconfig.test.json",
+          },
+        },
+      },
+    ],
   },
 });

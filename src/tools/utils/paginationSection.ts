@@ -14,10 +14,16 @@ const calculateTotalPages = (
   return Math.ceil(totalHits / pageSize);
 };
 
-export function paginationSection(
-  totalSectionName: string,
+type PaginationResult<T extends string> = Record<T, string | number> & {
+  pageNumber: string | number;
+  pageSize: string | number;
+  totalPages: string | number;
+};
+
+export function paginationSection<T extends string>(
+  totalSectionName: T,
   { pageSize, pageNumber, totalHits, pageCount }: PaginationArgs,
-) {
+): PaginationResult<T> {
   let formattedTotalPages: string | number = "N/A";
   if (pageCount !== undefined) {
     formattedTotalPages = pageCount;
@@ -30,5 +36,5 @@ export function paginationSection(
     pageSize: pageSize ?? "N/A",
     totalPages: formattedTotalPages,
     [totalSectionName]: totalHits ?? "N/A",
-  };
+  } as PaginationResult<T>;
 }

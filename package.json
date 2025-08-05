@@ -36,7 +36,8 @@
     "lint:fix": "eslint --cache --fix --ext .ts ./src",
     "check": "npm run lint:check && npm run prettier:check",
     "fix": "npm run lint:fix && npm run prettier:fix",
-    "test": "npx vitest --config ./vitest.config.ts",
+    "test": "npx vitest --config ./vitest.config.ts --project unit",
+    "test:evaluation": "npx vitest --config ./vitest.config.ts --project evaluation",
     "prepublishOnly": "npm run test && npm run build",
     "test:pack": "npm run build && npm pack --pack-destination ./dist"
   },
@@ -47,8 +48,11 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "dotenv": "^17.2.1",
+    "@anthropic-ai/dxt": "^0.2.5",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.31.0",
+    "@google/genai": "^1.12.0",
     "@types/eslint-config-prettier": "^6.11.3",
     "@types/node": "^22.16.4",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
@@ -58,7 +62,6 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2",
-    "@anthropic-ai/dxt": "^0.2.5",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.37.0",
