@@ -48,6 +48,7 @@ describe("Conversation Sentiment Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "conversation_sentiment",
       title: undefined,
+      _meta: undefined,
       annotations: { title: "Conversation Sentiment" },
       description:
         "Retrieves sentiment analysis scores for one or more conversations. Sentiment is evaluated based on customer phrases, categorized as positive, neutral, or negative. The result includes both a numeric sentiment score (-100 to 100) and an interpreted sentiment label.",
