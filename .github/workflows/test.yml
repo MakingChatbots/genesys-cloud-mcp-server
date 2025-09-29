@@ -49,7 +49,7 @@ jobs:
         with:
           node-version-file: ".nvmrc"
       - run: npm install
-      - run: npm run validate:dxt
+      #- run: npm run validate:dxt # Temporarily disable due to privacy policy not being recognised.
       - run: npm run package:dxt
       - run: npm run test
 
