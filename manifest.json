@@ -1,5 +1,5 @@
 {
-  "dxt_version": "0.1",
+  "manifest_version": "0.2",
   "name": "Genesys Cloud MCP Server",
   "version": "0.0.16",
   "description": "Interact with Genesys Cloud's Platform API",

@@ -40,7 +40,7 @@ jobs:
       - run: npm run build
       - run: npm run test
 
-  test-building-dxt:
+  test-building-mcpb:
     runs-on: ubuntu-latest
     name: Test Desktop Extension
     steps:
@@ -49,8 +49,8 @@ jobs:
         with:
           node-version-file: ".nvmrc"
       - run: npm install
-      #- run: npm run validate:dxt # Temporarily disable due to privacy policy not being recognised.
-      - run: npm run package:dxt
+      - run: npm run validate:mcpb
+      - run: npm run package:mcpb
       - run: npm run test
 
   lint:

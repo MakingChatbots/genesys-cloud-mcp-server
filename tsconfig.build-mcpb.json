@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "dxt-contents/dist"
+    "outDir": "mcpb-contents/dist"
   },
   "exclude": ["**/*.test.ts"]
 }
