@@ -14,7 +14,8 @@
   },
   "homepage": "https://makingchatbots.com",
   "author": {
-    "name": "Lucas Woodward"
+    "name": "Lucas Woodward",
+    "url": "https://makingchatbots.com"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",

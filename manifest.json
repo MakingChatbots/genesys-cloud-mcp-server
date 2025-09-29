@@ -95,6 +95,9 @@
     "conversation-analysis"
   ],
   "license": "MIT",
+  "privacy_policies": [
+    "https://www.genesys.com/en-gb/company/legal/privacy-policy"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MakingChatbots/genesys-cloud-mcp-server.git"
