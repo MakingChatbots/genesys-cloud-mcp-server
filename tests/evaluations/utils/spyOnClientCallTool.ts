@@ -1,10 +1,10 @@
-import { vi } from "vitest";
-import {
-  type CallToolRequestParams,
-  type CallToolTrace,
-} from "./callToolInterceptor.js";
+import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { CallToolResultSchema } from "@modelcontextprotocol/sdk/types.js";
-import { type Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { vi } from "vitest";
+import type {
+  CallToolRequestParams,
+  CallToolTrace,
+} from "./callToolInterceptor.js";
 
 export function spyOnClientCallTool(client: Client) {
   const spy = vi.spyOn(client, "callTool");

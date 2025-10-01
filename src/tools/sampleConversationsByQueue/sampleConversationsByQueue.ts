@@ -1,10 +1,10 @@
+import type { AnalyticsApi } from "purecloud-platform-client-v2";
 import { z } from "zod";
-import { type AnalyticsApi } from "purecloud-platform-client-v2";
 import { createTool, type ToolFactory } from "../utils/createTool.js";
-import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
-import { sampleEvenly } from "./sampleEvenly.js";
-import { waitFor } from "../utils/waitFor.js";
 import { errorResult } from "../utils/errorResult.js";
+import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
+import { waitFor } from "../utils/waitFor.js";
+import { sampleEvenly } from "./sampleEvenly.js";
 
 export interface ToolDependencies {
   readonly analyticsApi: Pick<
@@ -52,9 +52,9 @@ export const sampleConversationsByQueue: ToolFactory<
       const from = new Date(startDate);
       const to = new Date(endDate);
 
-      if (isNaN(from.getTime()))
+      if (Number.isNaN(from.getTime()))
         return errorResult("startDate is not a valid ISO-8601 date");
-      if (isNaN(to.getTime()))
+      if (Number.isNaN(to.getTime()))
         return errorResult("endDate is not a valid ISO-8601 date");
       if (from >= to) return errorResult("Start date must be before end date");
       const now = new Date();
@@ -93,7 +93,7 @@ export const sampleConversationsByQueue: ToolFactory<
         if (!jobId)
           return errorResult("Job ID not returned from Genesys Cloud.");
 
-        let state: string | undefined = undefined;
+        let state: string | undefined;
         let attempts = 0;
         while (attempts < MAX_ATTEMPTS) {
           const jobStatus =

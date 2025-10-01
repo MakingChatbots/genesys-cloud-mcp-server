@@ -1,8 +1,8 @@
-import { z } from "zod";
-import {
-  type CallToolResult,
+import type {
+  CallToolResult,
   ToolAnnotations,
 } from "@modelcontextprotocol/sdk/types.js";
+import type { z } from "zod";
 
 export interface ToolSchema<Schema extends z.Schema> {
   name: string;

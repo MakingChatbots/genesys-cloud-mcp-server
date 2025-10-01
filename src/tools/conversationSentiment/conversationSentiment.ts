@@ -1,13 +1,13 @@
-import { z } from "zod";
 import type {
-  SpeechTextAnalyticsApi,
   Models,
+  SpeechTextAnalyticsApi,
 } from "purecloud-platform-client-v2";
+import { z } from "zod";
 import { createTool, type ToolFactory } from "../utils/createTool.js";
-import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
 import { errorResult } from "../utils/errorResult.js";
-import { isConversationNotFoundError } from "./isConversationNotFoundError.js";
+import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
 import { interpretSentiment } from "./interpretSentiment.js";
+import { isConversationNotFoundError } from "./isConversationNotFoundError.js";
 
 export interface ToolDependencies {
   readonly speechTextAnalyticsApi: Pick<

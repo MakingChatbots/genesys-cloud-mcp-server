@@ -1,20 +1,20 @@
-import { z } from "zod";
-import {
+import { isWithinInterval } from "date-fns/isWithinInterval";
+import type {
   Models,
   RecordingApi,
   SpeechTextAnalyticsApi,
 } from "purecloud-platform-client-v2";
-import { isWithinInterval } from "date-fns/isWithinInterval";
+import { z } from "zod";
 import { createTool, type ToolFactory } from "../utils/createTool.js";
-import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
 import { errorResult } from "../utils/errorResult.js";
-import {
+import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
+import { formatTimeUtteranceStarted } from "./formatTimeUtteranceStarted.js";
+import type {
   Participant,
   Transcript,
   TranscriptResponseFormat,
 } from "./TranscriptResponse.js";
-import { Utterance } from "./Utterance.js";
-import { formatTimeUtteranceStarted } from "./formatTimeUtteranceStarted.js";
+import type { Utterance } from "./Utterance.js";
 
 export interface ToolDependencies {
   readonly recordingApi: Pick<RecordingApi, "getConversationRecordings">;

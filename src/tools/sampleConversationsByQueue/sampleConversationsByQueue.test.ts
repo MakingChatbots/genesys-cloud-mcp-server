@@ -1,10 +1,10 @@
-import { beforeEach, describe, expect, test, vi } from "vitest";
-import { type MockedObjectDeep } from "@vitest/spy";
 import { randomUUID } from "node:crypto";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
-import { type McpError } from "@modelcontextprotocol/sdk/types.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpError } from "@modelcontextprotocol/sdk/types.js";
+import type { MockedObjectDeep } from "@vitest/spy";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 import {
   sampleConversationsByQueue,
   type ToolDependencies,

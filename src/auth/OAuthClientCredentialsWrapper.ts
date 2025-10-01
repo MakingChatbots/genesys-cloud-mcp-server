@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { type ApiClientClass } from "purecloud-platform-client-v2";
-import { type ToolCall } from "../tools/utils/createTool.js";
-import { type ConfigRetriever } from "../createConfigRetriever.js";
+import type { ApiClientClass } from "purecloud-platform-client-v2";
+import type { z } from "zod";
+import type { ConfigRetriever } from "../createConfigRetriever.js";
+import type { ToolCall } from "../tools/utils/createTool.js";
 import { errorResult } from "../tools/utils/errorResult.js";
 
 let isAuthenticated = false;
@@ -42,10 +42,10 @@ export const OAuthClientCredentialsWrapper = (
   configRetriever: ConfigRetriever,
   apiClient: ApiClientClass,
 ) => {
-  return function <Schema extends z.Schema = z.Schema>(
+  return <Schema extends z.Schema = z.Schema>(
     call: ToolCall<Schema>,
-  ): ToolCall<Schema> {
-    return async (input: Schema) => {
+  ): ToolCall<Schema> =>
+    async (input: Schema) => {
       if (!isAuthenticated) {
         const authResult = await authenticate(apiClient, configRetriever);
         if (authResult.authenticated) {
@@ -59,5 +59,4 @@ export const OAuthClientCredentialsWrapper = (
 
       return call(input);
     };
-  };
 };

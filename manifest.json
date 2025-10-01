@@ -15,13 +15,11 @@
     "entry_point": "dist/index.js",
     "mcp_config": {
       "command": "node",
-      "args": [
-        "${__dirname}/dist/index.js"
-      ],
+      "args": ["${__dirname}/dist/index.js"],
       "env": {
         "GENESYSCLOUD_REGION": "${user_config.genesys_cloud_region}",
         "GENESYSCLOUD_OAUTHCLIENT_ID": "${user_config.genesys_cloud_oauth_client_id}",
-        "GENESYSCLOUD_OAUTHCLIENT_SECRET":  "${user_config.genesys_cloud_oauth_client_secret}"
+        "GENESYSCLOUD_OAUTHCLIENT_SECRET": "${user_config.genesys_cloud_oauth_client_secret}"
       }
     }
   },
