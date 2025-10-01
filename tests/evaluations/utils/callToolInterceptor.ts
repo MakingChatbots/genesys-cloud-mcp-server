@@ -1,8 +1,8 @@
-import { z } from "zod";
-import {
-  type CallToolRequest,
+import type {
+  CallToolRequest,
   CallToolResultSchema,
 } from "@modelcontextprotocol/sdk/types.js";
+import type { z } from "zod";
 
 export type CallToolRequestParams = CallToolRequest["params"];
 export type CallToolResult = z.infer<typeof CallToolResultSchema>;

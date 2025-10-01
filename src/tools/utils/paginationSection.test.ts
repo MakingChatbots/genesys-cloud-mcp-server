@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { PaginationArgs, paginationSection } from "./paginationSection.js";
+import { type PaginationArgs, paginationSection } from "./paginationSection.js";
 
 const testCases: {
   name: string;

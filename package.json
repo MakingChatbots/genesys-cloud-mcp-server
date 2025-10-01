@@ -29,14 +29,8 @@
     "clean:mcpb": "npm run clean && rm -rf mcpb-contents/*",
     "deps:mcpb": "cp manifest.json package.json package-lock.json mcpb-contents/ && cd mcpb-contents && npm ci --omit=dev && rm package-lock.json",
     "package:mcpb": "npm run clean:mcpb && npm run build:esm:mcpb && npm run deps:mcpb && mcpb pack mcpb-contents genesys-cloud-mcp-server.mcpb",
-    "lint": "eslint . --ext .ts",
-    "format": "prettier --write .",
-    "prettier:check": "prettier --check src/**/*.ts *.md tests/**/*.ts --no-error-on-unmatched-pattern",
-    "prettier:fix": "prettier --write src/**/*.ts *.md tests/**/*.ts --ignore-unknown --no-error-on-unmatched-pattern",
-    "lint:check": "eslint --cache --ext .ts ./src",
-    "lint:fix": "eslint --cache --fix --ext .ts ./src",
-    "check": "npm run lint:check && npm run prettier:check",
-    "fix": "npm run lint:fix && npm run prettier:fix",
+    "lint:write": "biome check --write",
+    "lint:check": "biome check",
     "test": "npx vitest --config ./vitest.config.ts --project unit",
     "test:evaluation": "npx vitest --config ./vitest.config.ts --project evaluation",
     "prepublishOnly": "npm run test && npm run build",
@@ -51,30 +45,17 @@
   "devDependencies": {
     "dotenv": "^17.2.2",
     "@anthropic-ai/mcpb": "^1.1.1",
-    "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.31.0",
     "@google/genai": "^1.12.0",
-    "@types/eslint-config-prettier": "^6.11.3",
     "@types/node": "^22.16.4",
-    "@typescript-eslint/eslint-plugin": "^8.33.1",
-    "@typescript-eslint/parser": "^8.37.0",
-    "eslint": "^9.31.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-import-resolver-typescript": "^4.4.4",
     "lint-staged": "^16.1.2",
-    "prettier": "^3.6.2",
     "tsx": "^4.20.6",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.37.0",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "@biomejs/biome": "2.2.4"
   },
   "lint-staged": {
     "src/*.ts": [
-      "eslint --cache --fix",
-      "prettier --ignore-unknown --write"
-    ],
-    "*.md": [
-      "prettier --ignore-unknown --write"
+      "biome check --write"
     ]
   },
   "engines": {

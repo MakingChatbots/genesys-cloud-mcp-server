@@ -1,9 +1,9 @@
-export { spyOnClientCallTool } from "./spyOnClientCallTool.js";
 export {
   type CallToolInterception,
-  callToolInterceptor,
   type CallToolResult,
+  callToolInterceptor,
 } from "./callToolInterceptor.js";
+export { spyOnClientCallTool } from "./spyOnClientCallTool.js";
 export {
   prettyPrintResults,
   toolUsageEvaluator,
