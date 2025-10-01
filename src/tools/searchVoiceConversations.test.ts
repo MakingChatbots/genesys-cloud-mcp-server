@@ -47,6 +47,7 @@ describe("Search Voice Conversations Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "search_voice_conversations",
       title: undefined,
+      _meta: undefined,
       annotations: { title: "Search Voice Conversations" },
       description:
         "Searches for voice conversations within a specified time window, optionally filtering by phone number. Returns a paginated list of conversation IDs and call duration for use in further analysis or tool calls.",

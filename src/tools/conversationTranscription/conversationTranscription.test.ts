@@ -53,6 +53,7 @@ describe("Conversation Transcription Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "conversation_transcript",
       title: undefined,
+      _meta: undefined,
       annotations: { title: "Conversation Transcript" },
       description:
         "Retrieves a structured transcript of the conversation, including speaker labels, utterance timestamps, and sentiment annotations where available. The transcript is formatted as a time-aligned list of utterances attributed to each participant (e.g., customer or agent)",

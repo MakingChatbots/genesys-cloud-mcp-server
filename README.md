@@ -41,14 +41,14 @@ Add this to your `claude_desktop_config.json`:
 }
 ```
 
-### Desktop Extension
+### MCP Bundle
 
-This MCP Server provides a Desktop Extension (.dxt file) along with each [release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases),
+This MCP Server provides an [MCP Bundle](https://github.com/anthropics/mcpb) (.mcpb file) along with each [release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases),
 which is a single-click installable package for Claude Desktop. To use it:
 
-1. Download the `.dxt` file from the [latest release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases)
+1. Download the `.mcpb` file from the [latest release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases)
 2. In Claude Desktop navigate to Settings > Extensions.
-3. Browse to, or drag in the .dxt file downloaded
+3. Browse to, or drag in the .mcpb file downloaded
 4. Click "Install"
 5. Configure the Region and OAuth Client for the extension
 

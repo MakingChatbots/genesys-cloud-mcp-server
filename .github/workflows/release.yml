@@ -85,16 +85,16 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Build .dxt file
+      - name: Build .mcpb file
         if: steps.publish.outputs.type != 'none'
-        run: npm run package:dxt
+        run: npm run package:mcpb
 
-      - name: Upload .dxt to GitHub release
+      - name: Upload .mcpb to GitHub release
         if: steps.publish.outputs.type != 'none'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.publish.outputs.version }}
           files: |
-            genesys-cloud-mcp-server.dxt
+            genesys-cloud-mcp-server.mcpb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

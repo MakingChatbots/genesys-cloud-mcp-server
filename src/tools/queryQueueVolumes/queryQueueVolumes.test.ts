@@ -50,6 +50,7 @@ describe("Query Queue Volumes Tool", () => {
     expect(tools.tools[0]).toStrictEqual({
       name: "query_queue_volumes",
       title: undefined,
+      _meta: undefined,
       annotations: { title: "Query Queue Volumes" },
       description:
         "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues. MAX 300 queue IDs",

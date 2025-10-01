@@ -1,7 +1,7 @@
 {
-  "dxt_version": "0.1",
+  "manifest_version": "0.2",
   "name": "Genesys Cloud MCP Server",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Interact with Genesys Cloud's Platform API",
   "long_description": "This extension allows Claude to connect to Genesys Cloud's Platform API via a local MCP server. It provides tools for querying queue volumes, retrieving conversation samples, analyzing sentiment and voice quality, accessing transcripts, and more.\n\nThis project is not affiliated with Genesys.",
   "author": {
@@ -95,6 +95,9 @@
     "conversation-analysis"
   ],
   "license": "MIT",
+  "privacy_policies": [
+    "https://www.genesys.com/en-gb/company/legal/privacy-policy"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MakingChatbots/genesys-cloud-mcp-server.git"
