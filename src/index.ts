@@ -28,51 +28,61 @@ const speechTextAnalyticsApi = new platformClient.SpeechTextAnalyticsApi();
 const recordingApi = new platformClient.RecordingApi();
 
 const searchQueuesTool = searchQueues({ routingApi });
-server.tool(
+server.registerTool(
   searchQueuesTool.schema.name,
-  searchQueuesTool.schema.description,
-  searchQueuesTool.schema.paramsSchema.shape,
-  searchQueuesTool.schema.annotations,
+  {
+    description: searchQueuesTool.schema.description,
+    inputSchema: searchQueuesTool.schema.paramsSchema.shape,
+    annotations: searchQueuesTool.schema.annotations,
+  },
   withAuth(searchQueuesTool.call),
 );
 
 const sampleConversationsByQueueTool = sampleConversationsByQueue({
   analyticsApi,
 });
-server.tool(
+server.registerTool(
   sampleConversationsByQueueTool.schema.name,
-  sampleConversationsByQueueTool.schema.description,
-  sampleConversationsByQueueTool.schema.paramsSchema.shape,
-  sampleConversationsByQueueTool.schema.annotations,
+  {
+    description: sampleConversationsByQueueTool.schema.description,
+    inputSchema: sampleConversationsByQueueTool.schema.paramsSchema.shape,
+    annotations: sampleConversationsByQueueTool.schema.annotations,
+  },
   withAuth(sampleConversationsByQueueTool.call),
 );
 
 const queryQueueVolumesTool = queryQueueVolumes({ analyticsApi });
-server.tool(
+server.registerTool(
   queryQueueVolumesTool.schema.name,
-  queryQueueVolumesTool.schema.description,
-  queryQueueVolumesTool.schema.paramsSchema.shape,
-  queryQueueVolumesTool.schema.annotations,
+  {
+    description: queryQueueVolumesTool.schema.description,
+    inputSchema: queryQueueVolumesTool.schema.paramsSchema.shape,
+    annotations: queryQueueVolumesTool.schema.annotations,
+  },
   withAuth(queryQueueVolumesTool.call),
 );
 
 const voiceCallQualityTool = voiceCallQuality({ analyticsApi });
-server.tool(
+server.registerTool(
   voiceCallQualityTool.schema.name,
-  voiceCallQualityTool.schema.description,
-  voiceCallQualityTool.schema.paramsSchema.shape,
-  voiceCallQualityTool.schema.annotations,
+  {
+    description: voiceCallQualityTool.schema.description,
+    inputSchema: voiceCallQualityTool.schema.paramsSchema.shape,
+    annotations: voiceCallQualityTool.schema.annotations,
+  },
   withAuth(voiceCallQualityTool.call),
 );
 
 const conversationSentimentTool = conversationSentiment({
   speechTextAnalyticsApi,
 });
-server.tool(
+server.registerTool(
   conversationSentimentTool.schema.name,
-  conversationSentimentTool.schema.description,
-  conversationSentimentTool.schema.paramsSchema.shape,
-  conversationSentimentTool.schema.annotations,
+  {
+    description: conversationSentimentTool.schema.description,
+    inputSchema: conversationSentimentTool.schema.paramsSchema.shape,
+    annotations: conversationSentimentTool.schema.annotations,
+  },
   withAuth(conversationSentimentTool.call),
 );
 
@@ -80,22 +90,26 @@ const conversationTopicsTool = conversationTopics({
   speechTextAnalyticsApi,
   analyticsApi,
 });
-server.tool(
+server.registerTool(
   conversationTopicsTool.schema.name,
-  conversationTopicsTool.schema.description,
-  conversationTopicsTool.schema.paramsSchema.shape,
-  conversationTopicsTool.schema.annotations,
+  {
+    description: conversationTopicsTool.schema.description,
+    inputSchema: conversationTopicsTool.schema.paramsSchema.shape,
+    annotations: conversationTopicsTool.schema.annotations,
+  },
   withAuth(conversationTopicsTool.call),
 );
 
 const searchVoiceConversationsTool = searchVoiceConversations({
   analyticsApi,
 });
-server.tool(
+server.registerTool(
   searchVoiceConversationsTool.schema.name,
-  searchVoiceConversationsTool.schema.description,
-  searchVoiceConversationsTool.schema.paramsSchema.shape,
-  searchVoiceConversationsTool.schema.annotations,
+  {
+    description: searchVoiceConversationsTool.schema.description,
+    inputSchema: searchVoiceConversationsTool.schema.paramsSchema.shape,
+    annotations: searchVoiceConversationsTool.schema.annotations,
+  },
   withAuth(searchVoiceConversationsTool.call),
 );
 
@@ -104,11 +118,13 @@ const conversationTranscriptTool = conversationTranscription({
   speechTextAnalyticsApi,
   fetchUrl: fetch,
 });
-server.tool(
+server.registerTool(
   conversationTranscriptTool.schema.name,
-  conversationTranscriptTool.schema.description,
-  conversationTranscriptTool.schema.paramsSchema.shape,
-  conversationTranscriptTool.schema.annotations,
+  {
+    description: conversationTranscriptTool.schema.description,
+    inputSchema: conversationTranscriptTool.schema.paramsSchema.shape,
+    annotations: conversationTranscriptTool.schema.annotations,
+  },
   withAuth(conversationTranscriptTool.call),
 );
 
