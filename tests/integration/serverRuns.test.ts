@@ -1,9 +1,9 @@
-import { afterEach, beforeAll, describe, expect, test } from "vitest";
-import { join } from "path";
 import { execSync } from "node:child_process";
+import { join } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import { afterEach, beforeAll, describe, expect, test } from "vitest";
 import packageInfo from "../../package.json" with { type: "json" };
 
 describe("Server Runs", () => {
@@ -23,7 +23,7 @@ describe("Server Runs", () => {
       args: ["--inspect", join(__dirname, "../../dist/index.js")],
       env: {
         // Provides path for node binary to be used in test
-        PATH: process.env.PATH!,
+        PATH: process.env.PATH ?? "",
       },
     });
 
@@ -53,7 +53,7 @@ describe("Server Runs", () => {
       args: ["--inspect", join(__dirname, "../../dist/index.js")],
       env: {
         // Provides path for node binary to be used in test
-        PATH: process.env.PATH!,
+        PATH: process.env.PATH ?? "",
       },
     });
 
@@ -73,7 +73,7 @@ describe("Server Runs", () => {
       command: "node",
       args: ["--inspect", join(__dirname, "../../dist/cli.js")],
       env: {
-        PATH: process.env.PATH!,
+        PATH: process.env.PATH ?? "",
       },
     });
 
@@ -94,7 +94,7 @@ describe("Server Runs", () => {
       command: "npx",
       args: ["--no-install", "@makingchatbots/genesys-cloud-mcp-server"],
       env: {
-        PATH: process.env.PATH!,
+        PATH: process.env.PATH ?? "",
       },
     });
 
@@ -114,7 +114,7 @@ describe("Server Runs", () => {
       command: "node",
       args: ["--inspect", join(__dirname, "../../dist/cli.js")],
       env: {
-        PATH: process.env.PATH!,
+        PATH: process.env.PATH ?? "",
       },
     });
 

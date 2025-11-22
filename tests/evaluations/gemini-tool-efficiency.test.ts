@@ -1,17 +1,17 @@
-import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { GoogleGenAI, mcpToTool } from "@google/genai";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
-import { type CallToolRequest } from "@modelcontextprotocol/sdk/types.js";
-import { type SearchQueuesResponse } from "../../src/tools/searchQueues.js";
+import type { CallToolRequest } from "@modelcontextprotocol/sdk/types.js";
+import { afterEach, beforeEach, describe, expect, test } from "vitest";
+import type { SearchQueuesResponse } from "../../src/tools/searchQueues.js";
 import {
   type CallToolInterception,
   type CallToolResult,
   callToolInterceptor,
-  spyOnClientCallTool,
   prettyPrintResults,
+  spyOnClientCallTool,
   toolUsageEvaluator,
-} from "./utils";
+} from "./utils/index.js";
 
 const timeout = 30_000;
 const model = "gemini-2.5-flash";
@@ -61,10 +61,11 @@ describe(
         command: "npm",
         args: ["run", "start"],
         env: {
-          GENESYSCLOUD_REGION: process.env.GENESYSCLOUD_REGION!,
-          GENESYSCLOUD_OAUTHCLIENT_ID: process.env.GENESYSCLOUD_OAUTHCLIENT_ID!,
+          GENESYSCLOUD_REGION: process.env.GENESYSCLOUD_REGION ?? "",
+          GENESYSCLOUD_OAUTHCLIENT_ID:
+            process.env.GENESYSCLOUD_OAUTHCLIENT_ID ?? "",
           GENESYSCLOUD_OAUTHCLIENT_SECRET:
-            process.env.GENESYSCLOUD_OAUTHCLIENT_SECRET!,
+            process.env.GENESYSCLOUD_OAUTHCLIENT_SECRET ?? "",
         },
       });
 

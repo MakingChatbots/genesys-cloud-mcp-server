@@ -1,4 +1,4 @@
-import { type CallToolTrace } from "./callToolInterceptor.js";
+import type { CallToolTrace } from "./callToolInterceptor.js";
 
 export function toolUsageEvaluator(
   traces: readonly CallToolTrace[],

@@ -1,9 +1,9 @@
-import { z } from "zod";
 import type {
   AnalyticsApi,
   Models,
   SpeechTextAnalyticsApi,
 } from "purecloud-platform-client-v2";
+import { z } from "zod";
 import { createTool, type ToolFactory } from "../utils/createTool.js";
 import { errorResult } from "../utils/errorResult.js";
 import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";

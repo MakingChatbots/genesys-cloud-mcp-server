@@ -1,10 +1,10 @@
-import { z } from "zod";
-import type { AnalyticsApi, Models } from "purecloud-platform-client-v2";
 import { formatDistanceStrict } from "date-fns/formatDistanceStrict";
-import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
+import type { AnalyticsApi, Models } from "purecloud-platform-client-v2";
+import { z } from "zod";
 import { createTool, type ToolFactory } from "./utils/createTool.js";
-import { paginationSection } from "./utils/paginationSection.js";
 import { errorResult } from "./utils/errorResult.js";
+import { isUnauthorisedError } from "./utils/genesys/isUnauthorisedError.js";
+import { paginationSection } from "./utils/paginationSection.js";
 
 export interface ToolDependencies {
   readonly analyticsApi: Pick<
@@ -91,9 +91,9 @@ export const searchVoiceConversations: ToolFactory<
       const from = new Date(startDate);
       const to = new Date(endDate);
 
-      if (isNaN(from.getTime()))
+      if (Number.isNaN(from.getTime()))
         return errorResult("startDate is not a valid ISO-8601 date");
-      if (isNaN(to.getTime()))
+      if (Number.isNaN(to.getTime()))
         return errorResult("endDate is not a valid ISO-8601 date");
       if (from >= to) return errorResult("Start date must be before end date");
       const now = new Date();
