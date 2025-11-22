@@ -29,7 +29,7 @@
     "clean:mcpb": "npm run clean && rm -rf mcpb-contents/*",
     "deps:mcpb": "cp manifest.json package.json package-lock.json mcpb-contents/ && cd mcpb-contents && npm ci --omit=dev && rm package-lock.json",
     "package:mcpb": "npm run clean:mcpb && npm run build:esm:mcpb && npm run deps:mcpb && mcpb pack mcpb-contents genesys-cloud-mcp-server.mcpb",
-    "lint:write": "biome check --write",
+    "lint:fix": "biome check --write",
     "lint:check": "biome check",
     "test": "npx vitest --config ./vitest.config.ts --project unit",
     "test:evaluation": "npx vitest --config ./vitest.config.ts --project evaluation",
