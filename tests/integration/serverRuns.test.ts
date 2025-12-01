@@ -44,6 +44,8 @@ describe("Server Runs", () => {
       "conversation_topics",
       "search_voice_conversations",
       "conversation_transcript",
+      "oauth_clients",
+      "oauth_client_usage",
     ]);
   });
 
@@ -79,7 +81,7 @@ describe("Server Runs", () => {
 
     client = new Client({
       name: "test-client",
-      version: "1.0.0",
+      version: "1.0.1",
     });
 
     await client.connect(transport);
