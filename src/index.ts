@@ -6,6 +6,8 @@ import { createConfigRetriever } from "./createConfigRetriever.js";
 import { conversationSentiment } from "./tools/conversationSentiment/conversationSentiment.js";
 import { conversationTopics } from "./tools/conversationTopics/conversationTopics.js";
 import { conversationTranscription } from "./tools/conversationTranscription/conversationTranscription.js";
+import { oauthClients } from "./tools/oauthClients/oauthClients.js";
+import { oauthClientUsage } from "./tools/oauthClientUsage/oauthClientUsage.js";
 import { queryQueueVolumes } from "./tools/queryQueueVolumes/queryQueueVolumes.js";
 import { sampleConversationsByQueue } from "./tools/sampleConversationsByQueue/sampleConversationsByQueue.js";
 import { searchQueues } from "./tools/searchQueues.js";
@@ -19,13 +21,15 @@ const withAuth = OAuthClientCredentialsWrapper(
 
 const server: McpServer = new McpServer({
   name: "Genesys Cloud",
-  version: "1.0.0", // Same version as version in package.json
+  version: "1.0.1", // Same version as version in package.json
 });
 
 const routingApi = new platformClient.RoutingApi();
 const analyticsApi = new platformClient.AnalyticsApi();
 const speechTextAnalyticsApi = new platformClient.SpeechTextAnalyticsApi();
 const recordingApi = new platformClient.RecordingApi();
+const oauthApi = new platformClient.OAuthApi();
+const authorizationApi = new platformClient.AuthorizationApi();
 
 const searchQueuesTool = searchQueues({ routingApi });
 server.registerTool(
@@ -126,6 +130,33 @@ server.registerTool(
     annotations: conversationTranscriptTool.schema.annotations,
   },
   withAuth(conversationTranscriptTool.call),
+);
+
+const oauthClientsTool = oauthClients({
+  oauthApi,
+  authorizationApi,
+});
+server.registerTool(
+  oauthClientsTool.schema.name,
+  {
+    description: oauthClientsTool.schema.description,
+    inputSchema: oauthClientsTool.schema.paramsSchema.shape,
+    annotations: oauthClientsTool.schema.annotations,
+  },
+  withAuth(oauthClientsTool.call),
+);
+
+const oauthClientUsageTool = oauthClientUsage({
+  oauthApi,
+});
+server.registerTool(
+  oauthClientUsageTool.schema.name,
+  {
+    description: oauthClientUsageTool.schema.description,
+    inputSchema: oauthClientUsageTool.schema.paramsSchema.shape,
+    annotations: oauthClientUsageTool.schema.annotations,
+  },
+  withAuth(oauthClientUsageTool.call),
 );
 
 const transport = new StdioServerTransport();

@@ -30,7 +30,7 @@ Platform API endpoint used:
 
 **Tool name:** `query_queue_volumes`
 
-Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.
+Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues. MAX 300 queue IDs.
 
 [Source file](/src/tools/queryQueueVolumes/queryQueueVolumes.ts).
 
@@ -215,3 +215,53 @@ Platform API endpoints used:
 
 - [GET /api/v2/conversations/{conversationId}/recordings](https://developer.genesys.cloud/devapps/api-explorer-standalone#get-api-v2-conversations--conversationId--recordings)
 - [GET /api/v2/speechandtextanalytics/conversations/{conversationId}/communications/{communicationId}/transcripturl](https://developer.genesys.cloud/devapps/api-explorer-standalone#get-api-v2-speechandtextanalytics-conversations--conversationId--communications--communicationId--transcripturl)
+
+## OAuth Clients
+
+**Tool name:** `oauth_clients`
+
+Retrieves a list of all OAuth clients, including their associated roles and divisions. This tool is useful for auditing and managing OAuth clients in the Genesys Cloud organization.
+
+[Source file](/src/tools/oauthClients/oauthClients.ts).
+
+### Security
+
+Required Permissions:
+
+- `oauth:client:view`
+- `authorization:role:view`
+  - Optional: Used to populate names of roles used by OAuth Client
+
+Platform API endpoints used:
+
+- [GET /api/v2/oauth/clients](https://developer.genesys.cloud/devapps/api-explorer-standalone#get-api-v2-oauth-clients)
+- [GET /api/v2/authorization/divisions](https://developer.genesys.cloud/devapps/api-explorer-standalone#get-api-v2-authorization-divisions)
+- [GET /api/v2/authorization/roles](https://developer.genesys.cloud/devapps/api-explorer-standalone#get-api-v2-authorization-roles)
+
+## OAuth Client Usage
+
+**Tool name:** `oauth_client_usage`
+
+Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of requests per organization.
+
+[Source file](/src/tools/oauthClientUsage/oauthClientUsage.ts).
+
+### Input
+
+- `oauthClientId`
+    - The UUID of the OAuth Client to retrieve the usage for (e.g., 00000000-0000-0000-0000-000000000000)
+- `startDate`
+    - The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z')
+- `endDate`
+    - The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z')
+
+### Security
+
+Required Permissions:
+
+- `usage:client:view`
+
+Platform API endpoints used:
+
+- [POST /api/v2/oauth/clients/{clientId}/usage/query](https://developer.genesys.cloud/devapps/api-explorer-standalone#post-api-v2-oauth-clients--clientId--usage-query)
+- [GET /api/v2/oauth/clients/{clientId}/usage/query/results/{executionId}](https://developer.genesys.cloud/devapps/api-explorer-standalone#get-api-v2-oauth-clients--clientId--usage-query-results--executionId-)

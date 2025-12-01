@@ -8,7 +8,7 @@ A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 ## Features
 
 | Tool                                                                          | Description                                                              |
-| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+|-------------------------------------------------------------------------------|--------------------------------------------------------------------------|
 | [Search Queues](/docs/tools.md#search-queues)                                 | Searches for queues by their name (supports wildcards)                   |
 | [Query Queue Volumes](/docs/tools.md#query-queue-volumes)                     | Retrieves conversation volumes and member count by Queue IDs             |
 | [Sample Conversations By Queue](/docs/tools.md#sample-conversations-by-queue) | Retrieves a representative sample of Conversation IDs for a Queue ID     |
@@ -17,6 +17,8 @@ A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 | [Conversation Topics](/docs/tools.md#conversation-topics)                     | Retrieves the topics for a conversation by ID                            |
 | [Search Voice Conversation](/docs/tools.md#search-voice-conversations)        | Searches voice conversations by optional criteria                        |
 | [Conversation Transcript](/docs/tools.md#conversation-transcript)             | Retrieves conversation transcript                                        |
+| [OAuth Clients](/docs/tools.md#oauth-clients)                                 | Retrieves a list of all the OAuth clients                                |
+| [OAuth Client Usage](/docs/tools.md#oauth-client-usage)                       | Retrieves usage of an OAuth client                                       |
 
 ## Usage with Claude Desktop
 
