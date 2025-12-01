@@ -30,7 +30,7 @@ Platform API endpoint used:
 
 **Tool name:** `query_queue_volumes`
 
-Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues.
+Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues. MAX 300 queue IDs.
 
 [Source file](/src/tools/queryQueueVolumes/queryQueueVolumes.ts).
 
@@ -242,7 +242,7 @@ Platform API endpoints used:
 
 **Tool name:** `oauth_client_usage`
 
-Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of requests per organization
+Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of requests per organization.
 
 [Source file](/src/tools/oauthClientUsage/oauthClientUsage.ts).
 

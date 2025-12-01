@@ -42,7 +42,7 @@ export const oauthClientUsage: ToolFactory<
       name: "oauth_client_usage",
       annotations: { title: "OAuth Client Usage" },
       description:
-        "Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of requests per organization",
+        "Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of requests per organization.",
       paramsSchema,
     },
     call: async ({ oauthClientId, startDate, endDate }) => {
