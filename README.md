@@ -22,6 +22,18 @@ A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 
 ## Usage with Claude Desktop
 
+### MCP Bundle
+
+This MCP Server provides an [MCP Bundle](https://github.com/anthropics/mcpb) (.mcpb file) along with each [release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases),
+which is a single-click installable package for Claude Desktop. To use it:
+
+1. Download the `.mcpb` file from the [latest release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases)
+2. In Claude Desktop navigate to Settings > Extensions.
+3. Open the .mcpb file with Claude
+4. Configure the Region and OAuth Client for the extension
+
+The extension will now be available in your conversations.
+
 ### NPX
 
 Add this to your `claude_desktop_config.json`:
@@ -42,19 +54,6 @@ Add this to your `claude_desktop_config.json`:
   }
 }
 ```
-
-### MCP Bundle
-
-This MCP Server provides an [MCP Bundle](https://github.com/anthropics/mcpb) (.mcpb file) along with each [release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases),
-which is a single-click installable package for Claude Desktop. To use it:
-
-1. Download the `.mcpb` file from the [latest release](https://github.com/MakingChatbots/genesys-cloud-mcp-server/releases)
-2. In Claude Desktop navigate to Settings > Extensions.
-3. Browse to, or drag in the .mcpb file downloaded
-4. Click "Install"
-5. Configure the Region and OAuth Client for the extension
-
-The extension will now be available in your conversations.
 
 ## Usage with Gemini CLI
 

@@ -1,3 +1,4 @@
+import type { LRUCache } from "lru-cache";
 import type { Models, OAuthApi } from "purecloud-platform-client-v2";
 import { z } from "zod";
 import { createTool, type ToolFactory } from "../utils/createTool.js";
@@ -6,12 +7,24 @@ import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
 import { waitFor } from "../utils/waitFor.js";
 
 const MAX_ATTEMPTS = 10;
+const TOOL_CACHE_KEY = "oauthClientUsage";
+
+export interface OAuthClientUsageResponse {
+  startDate: string;
+  endDate: string;
+  totalRequest: number;
+  requestsPerOrganisation: {
+    organisationId?: string;
+    requests?: number;
+  }[];
+}
 
 export interface ToolDependencies {
   readonly oauthApi: Pick<
     OAuthApi,
     "postOauthClientUsageQuery" | "getOauthClientUsageQueryResult"
   >;
+  readonly cache?: LRUCache<string, OAuthClientUsageResponse>;
 }
 
 const paramsSchema = z.object({
@@ -36,7 +49,7 @@ const paramsSchema = z.object({
 export const oauthClientUsage: ToolFactory<
   ToolDependencies,
   typeof paramsSchema
-> = ({ oauthApi }) =>
+> = ({ oauthApi, cache }) =>
   createTool({
     schema: {
       name: "oauth_client_usage",
@@ -59,6 +72,20 @@ export const oauthClientUsage: ToolFactory<
         to.setTime(now.getTime());
       }
 
+      const cacheName = `${TOOL_CACHE_KEY}.${oauthClientId}-${from.getTime()}-${to.getTime()}`;
+
+      const cachedResult = cache?.get(cacheName);
+      if (cachedResult) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(cachedResult),
+            },
+          ],
+        };
+      }
+
       let result: Models.UsageExecutionResult;
       try {
         result = await oauthApi.postOauthClientUsageQuery(oauthClientId, {
@@ -66,7 +93,6 @@ export const oauthClientUsage: ToolFactory<
           metrics: ["Requests"],
           groupBy: ["OrganizationId"],
         });
-        console.log(result);
       } catch (error: unknown) {
         const errorMessage = isUnauthorisedError(error)
           ? "Failed to retrieve usage of OAuth client: Unauthorised access. Please check API credentials or permissions"
@@ -118,24 +144,31 @@ export const oauthClientUsage: ToolFactory<
         );
       }
 
+      const toolResult: OAuthClientUsageResponse = {
+        startDate,
+        endDate,
+        totalRequest: (apiUsageQueryResult?.results ?? []).reduce(
+          (acc, curr) => acc + (curr.requests ?? 0),
+          0,
+        ),
+        requestsPerOrganisation: (apiUsageQueryResult?.results ?? []).map(
+          (result) => ({
+            organisationId: result.organizationId,
+            requests: result.requests,
+          }),
+        ),
+      };
+
+      cache?.set(
+        `${TOOL_CACHE_KEY}.${oauthClientId}-${from.getTime()}-${to.getTime()}`,
+        toolResult,
+      );
+
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify({
-              startDate,
-              endDate,
-              totalRequest: (apiUsageQueryResult?.results ?? []).reduce(
-                (acc, curr) => acc + (curr.requests ?? 0),
-                0,
-              ),
-              requestsPerOrganisation: (apiUsageQueryResult?.results ?? []).map(
-                (result) => ({
-                  organisationId: result.organizationId,
-                  requests: result.requests,
-                }),
-              ),
-            }),
+            text: JSON.stringify(toolResult),
           },
         ],
       };
