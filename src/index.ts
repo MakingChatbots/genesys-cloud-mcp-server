@@ -1,5 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { LRUCache } from "lru-cache";
 import platformClient from "purecloud-platform-client-v2";
 import { OAuthClientCredentialsWrapper } from "./auth/OAuthClientCredentialsWrapper.js";
 import { createConfigRetriever } from "./createConfigRetriever.js";
@@ -7,7 +8,10 @@ import { conversationSentiment } from "./tools/conversationSentiment/conversatio
 import { conversationTopics } from "./tools/conversationTopics/conversationTopics.js";
 import { conversationTranscription } from "./tools/conversationTranscription/conversationTranscription.js";
 import { oauthClients } from "./tools/oauthClients/oauthClients.js";
-import { oauthClientUsage } from "./tools/oauthClientUsage/oauthClientUsage.js";
+import {
+  type OAuthClientUsageResponse,
+  oauthClientUsage,
+} from "./tools/oauthClientUsage/oauthClientUsage.js";
 import { queryQueueVolumes } from "./tools/queryQueueVolumes/queryQueueVolumes.js";
 import { sampleConversationsByQueue } from "./tools/sampleConversationsByQueue/sampleConversationsByQueue.js";
 import { searchQueues } from "./tools/searchQueues.js";
@@ -21,7 +25,17 @@ const withAuth = OAuthClientCredentialsWrapper(
 
 const server: McpServer = new McpServer({
   name: "Genesys Cloud",
-  version: "1.0.1", // Same version as version in package.json
+  version: "1.0.2", // Same version as version in package.json
+});
+
+const cache = new LRUCache<string, OAuthClientUsageResponse>({
+  max: 500,
+  ttl: 1000 * 60 * 5, // 5 minutes
+
+  allowStale: false,
+
+  updateAgeOnGet: false,
+  updateAgeOnHas: false,
 });
 
 const routingApi = new platformClient.RoutingApi();
@@ -147,6 +161,7 @@ server.registerTool(
 );
 
 const oauthClientUsageTool = oauthClientUsage({
+  cache,
   oauthApi,
 });
 server.registerTool(

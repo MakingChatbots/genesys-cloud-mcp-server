@@ -1,7 +1,7 @@
 {
   "manifest_version": "0.2",
   "name": "Genesys Cloud MCP Server",
-  "version": "0.0.16",
+  "version": "1.0.2",
   "description": "Interact with Genesys Cloud's Platform API",
   "long_description": "This extension allows Claude to connect to Genesys Cloud's Platform API via a local MCP server. It provides tools for querying queue volumes, retrieving conversation samples, analyzing sentiment and voice quality, accessing transcripts, and more.\n\nThis project is not affiliated with Genesys.",
   "author": {
@@ -55,6 +55,14 @@
     {
       "name": "conversation_transcript",
       "description": "Retrieves a structured transcript of the conversation, including speaker labels, utterance timestamps, and sentiment annotations where available. The transcript is formatted as a time-aligned list of utterances attributed to each participant (e.g., customer or agent)."
+    },
+    {
+      "name": "oauth_clients",
+      "description": "Retrieves a list of all OAuth clients, including their associated roles and divisions. This tool is useful for auditing and managing OAuth clients in the Genesys Cloud organization."
+    },
+    {
+      "name": "oauth_client_usage",
+      "description": "Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of requests per organization."
     }
   ],
   "user_config": {
