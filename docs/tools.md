@@ -242,7 +242,7 @@ Platform API endpoints used:
 
 **Tool name:** `oauth_client_usage`
 
-Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of requests per organization.
+Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of Platform API endpoints used by the client.
 
 [Source file](/src/tools/oauthClientUsage/oauthClientUsage.ts).
 
