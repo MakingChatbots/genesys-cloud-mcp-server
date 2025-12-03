@@ -12,9 +12,9 @@ const TOOL_CACHE_KEY = "oauthClientUsage";
 export interface OAuthClientUsageResponse {
   startDate: string;
   endDate: string;
-  totalRequest: number;
-  requestsPerOrganisation: {
-    organisationId?: string;
+  totalRequests: number;
+  requestsPerEndpoint: {
+    endpoint?: string;
     requests?: number;
   }[];
 }
@@ -91,7 +91,7 @@ export const oauthClientUsage: ToolFactory<
         result = await oauthApi.postOauthClientUsageQuery(oauthClientId, {
           interval: `${from.toISOString()}/${to.toISOString()}`,
           metrics: ["Requests"],
-          groupBy: ["OrganizationId"],
+          groupBy: ["TemplateUri", "HttpMethod"],
         });
       } catch (error: unknown) {
         const errorMessage = isUnauthorisedError(error)
@@ -147,13 +147,14 @@ export const oauthClientUsage: ToolFactory<
       const toolResult: OAuthClientUsageResponse = {
         startDate,
         endDate,
-        totalRequest: (apiUsageQueryResult?.results ?? []).reduce(
+        totalRequests: (apiUsageQueryResult?.results ?? []).reduce(
           (acc, curr) => acc + (curr.requests ?? 0),
           0,
         ),
-        requestsPerOrganisation: (apiUsageQueryResult?.results ?? []).map(
+        requestsPerEndpoint: (apiUsageQueryResult?.results ?? []).map(
           (result) => ({
-            organisationId: result.organizationId,
+            endpoint:
+              [result.httpMethod, result.templateUri].join(" ") || undefined,
             requests: result.requests,
           }),
         ),
