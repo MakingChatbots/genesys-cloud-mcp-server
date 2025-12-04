@@ -18,6 +18,7 @@ describe("OAuth Client Usage", () => {
         postOauthClientUsageQuery: vi.fn(),
         getOauthClientUsageQueryResult: vi.fn(),
       },
+      cache: undefined,
     };
     const toolDefinition = oauthClientUsage(toolDeps);
     toolName = toolDefinition.schema.name;
@@ -48,7 +49,7 @@ describe("OAuth Client Usage", () => {
       _meta: undefined,
       annotations: { title: "OAuth Client Usage" },
       description:
-        "Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of requests per organization.",
+        "Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of Platform API endpoints used by the client.",
       inputSchema: {
         properties: {
           oauthClientId: {
@@ -141,8 +142,6 @@ describe("OAuth Client Usage", () => {
   test("OAuth Client usage returned for date range", async () => {
     const oauthClientId = randomUUID();
     const executionId = randomUUID();
-    const organisationOneId = randomUUID();
-    const organisationTwoId = randomUUID();
 
     toolDeps.oauthApi.postOauthClientUsageQuery.mockResolvedValue({
       executionId,
@@ -152,11 +151,13 @@ describe("OAuth Client Usage", () => {
     toolDeps.oauthApi.getOauthClientUsageQueryResult.mockResolvedValue({
       results: [
         {
-          organizationId: organisationOneId,
+          templateUri: "api/v2/authorization/divisions",
+          httpMethod: "GET",
           requests: 5,
         },
         {
-          organizationId: organisationTwoId,
+          templateUri: "api/v2/authorization/roles",
+          httpMethod: "GET",
           requests: 10,
         },
       ],
@@ -181,14 +182,14 @@ describe("OAuth Client Usage", () => {
           text: JSON.stringify({
             startDate,
             endDate,
-            totalRequest: 15,
-            requestsPerOrganisation: [
+            totalRequests: 15,
+            requestsPerEndpoint: [
               {
-                organisationId: organisationOneId,
+                endpoint: "GET api/v2/authorization/divisions",
                 requests: 5,
               },
               {
-                organisationId: organisationTwoId,
+                endpoint: "GET api/v2/authorization/roles",
                 requests: 10,
               },
             ],

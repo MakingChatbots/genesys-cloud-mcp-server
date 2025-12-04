@@ -18,7 +18,7 @@ A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 | [Search Voice Conversation](/docs/tools.md#search-voice-conversations)        | Searches voice conversations by optional criteria                        |
 | [Conversation Transcript](/docs/tools.md#conversation-transcript)             | Retrieves conversation transcript                                        |
 | [OAuth Clients](/docs/tools.md#oauth-clients)                                 | Retrieves a list of all the OAuth clients                                |
-| [OAuth Client Usage](/docs/tools.md#oauth-client-usage)                       | Retrieves usage of an OAuth client                                       |
+| [OAuth Client Usage](/docs/tools.md#oauth-client-usage)                       | Retrieves OAuth client usage for given period                            |
 
 ## Usage with Claude Desktop
 

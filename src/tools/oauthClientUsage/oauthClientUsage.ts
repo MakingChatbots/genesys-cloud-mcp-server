@@ -7,14 +7,14 @@ import { isUnauthorisedError } from "../utils/genesys/isUnauthorisedError.js";
 import { waitFor } from "../utils/waitFor.js";
 
 const MAX_ATTEMPTS = 10;
-const TOOL_CACHE_KEY = "oauthClientUsage";
+const TOOL_CACHE_KEY = "oauth-client-usage";
 
 export interface OAuthClientUsageResponse {
   startDate: string;
   endDate: string;
-  totalRequest: number;
-  requestsPerOrganisation: {
-    organisationId?: string;
+  totalRequests: number;
+  requestsPerEndpoint: {
+    endpoint?: string;
     requests?: number;
   }[];
 }
@@ -55,7 +55,7 @@ export const oauthClientUsage: ToolFactory<
       name: "oauth_client_usage",
       annotations: { title: "OAuth Client Usage" },
       description:
-        "Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of requests per organization.",
+        "Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of Platform API endpoints used by the client.",
       paramsSchema,
     },
     call: async ({ oauthClientId, startDate, endDate }) => {
@@ -91,7 +91,7 @@ export const oauthClientUsage: ToolFactory<
         result = await oauthApi.postOauthClientUsageQuery(oauthClientId, {
           interval: `${from.toISOString()}/${to.toISOString()}`,
           metrics: ["Requests"],
-          groupBy: ["OrganizationId"],
+          groupBy: ["TemplateUri", "HttpMethod"],
         });
       } catch (error: unknown) {
         const errorMessage = isUnauthorisedError(error)
@@ -147,13 +147,14 @@ export const oauthClientUsage: ToolFactory<
       const toolResult: OAuthClientUsageResponse = {
         startDate,
         endDate,
-        totalRequest: (apiUsageQueryResult?.results ?? []).reduce(
+        totalRequests: (apiUsageQueryResult?.results ?? []).reduce(
           (acc, curr) => acc + (curr.requests ?? 0),
           0,
         ),
-        requestsPerOrganisation: (apiUsageQueryResult?.results ?? []).map(
+        requestsPerEndpoint: (apiUsageQueryResult?.results ?? []).map(
           (result) => ({
-            organisationId: result.organizationId,
+            endpoint:
+              [result.httpMethod, result.templateUri].join(" ") || undefined,
             requests: result.requests,
           }),
         ),

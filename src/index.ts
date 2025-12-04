@@ -25,7 +25,7 @@ const withAuth = OAuthClientCredentialsWrapper(
 
 const server: McpServer = new McpServer({
   name: "Genesys Cloud",
-  version: "1.0.2", // Same version as version in package.json
+  version: "1.0.3", // Same version as version in package.json
 });
 
 const cache = new LRUCache<string, OAuthClientUsageResponse>({
