@@ -2,7 +2,11 @@ import { randomUUID } from "node:crypto";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { McpError } from "@modelcontextprotocol/sdk/types.js";
+import type {
+  CallToolResult,
+  TextContent,
+} from "@modelcontextprotocol/sdk/types.js";
+
 import type { MockedObjectDeep } from "@vitest/spy";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import {
@@ -56,6 +60,7 @@ describe("Conversation Topics Tool", () => {
       annotations: { title: "Conversation Topics" },
       description:
         "Retrieves Speech and Text Analytics topics detected for a specific conversation. Topics represent business-level intents (e.g. cancellation, billing enquiry) inferred from recognised phrases in the customer-agent interaction.",
+      execution: { taskSupport: "forbidden" },
       inputSchema: {
         type: "object",
         properties: {
@@ -81,11 +86,11 @@ describe("Conversation Topics Tool", () => {
           conversationId: "",
         },
       }),
-    ).rejects.toSatisfy(
-      (error: McpError) =>
-        error.name === "McpError" &&
-        error.message.includes("conversationId") &&
-        error.message.includes("Invalid uuid"),
+    ).resolves.toSatisfy(
+      (result: CallToolResult) =>
+        result.isError === true &&
+        (result.content[0] as TextContent).text.includes("conversationId") &&
+        (result.content[0] as TextContent).text.includes("Invalid uuid"),
     );
   });
 

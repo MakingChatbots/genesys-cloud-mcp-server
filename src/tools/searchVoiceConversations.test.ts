@@ -51,6 +51,7 @@ describe("Search Voice Conversations Tool", () => {
       annotations: { title: "Search Voice Conversations" },
       description:
         "Searches for voice conversations within a specified time window, optionally filtering by phone number. Returns a paginated list of conversation IDs and call duration for use in further analysis or tool calls.",
+      execution: { taskSupport: "forbidden" },
       inputSchema: {
         type: "object",
         properties: {

@@ -37,7 +37,7 @@
     "test:pack": "npm run build && npm pack --pack-destination ./dist"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.18.2",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "date-fns": "^4.1.0",
     "lru-cache": "^11.2.4",
     "purecloud-platform-client-v2": "^239.0.0",

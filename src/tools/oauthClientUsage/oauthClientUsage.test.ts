@@ -2,7 +2,11 @@ import { randomUUID } from "node:crypto";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { McpError } from "@modelcontextprotocol/sdk/types.js";
+import type {
+  CallToolResult,
+  TextContent,
+} from "@modelcontextprotocol/sdk/types.js";
+
 import type { MockedObjectDeep } from "@vitest/spy";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { oauthClientUsage, type ToolDependencies } from "./oauthClientUsage.js";
@@ -50,6 +54,7 @@ describe("OAuth Client Usage", () => {
       annotations: { title: "OAuth Client Usage" },
       description:
         "Retrieves the usage of an OAuth Client for a given period. It returns the total number of requests and a breakdown of Platform API endpoints used by the client.",
+      execution: { taskSupport: "forbidden" },
       inputSchema: {
         properties: {
           oauthClientId: {
@@ -87,11 +92,11 @@ describe("OAuth Client Usage", () => {
           endDate: "2024-01-02T00:00:00Z",
         },
       }),
-    ).rejects.toSatisfy(
-      (error: McpError) =>
-        error.name === "McpError" &&
-        error.message.includes("oauthClientId") &&
-        error.message.includes("Invalid uuid"),
+    ).resolves.toSatisfy(
+      (result: CallToolResult) =>
+        result.isError === true &&
+        (result.content[0] as TextContent).text.includes("oauthClientId") &&
+        (result.content[0] as TextContent).text.includes("Invalid uuid"),
     );
   });
 

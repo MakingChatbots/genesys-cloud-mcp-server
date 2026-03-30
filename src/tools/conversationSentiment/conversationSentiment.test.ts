@@ -2,7 +2,11 @@ import { randomUUID } from "node:crypto";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { McpError } from "@modelcontextprotocol/sdk/types.js";
+import type {
+  CallToolResult,
+  TextContent,
+} from "@modelcontextprotocol/sdk/types.js";
+
 import type { MockedObjectDeep } from "@vitest/spy";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import {
@@ -52,6 +56,7 @@ describe("Conversation Sentiment Tool", () => {
       annotations: { title: "Conversation Sentiment" },
       description:
         "Retrieves sentiment analysis scores for one or more conversations. Sentiment is evaluated based on customer phrases, categorized as positive, neutral, or negative. The result includes both a numeric sentiment score (-100 to 100) and an interpreted sentiment label.",
+      execution: { taskSupport: "forbidden" },
       inputSchema: {
         type: "object",
         properties: {
@@ -84,11 +89,13 @@ describe("Conversation Sentiment Tool", () => {
           conversationIds: [],
         },
       }),
-    ).rejects.toSatisfy(
-      (error: McpError) =>
-        error.name === "McpError" &&
-        error.message.includes("conversationId") &&
-        error.message.includes("Array must contain at least 1 element(s)"),
+    ).resolves.toSatisfy(
+      (result: CallToolResult) =>
+        result.isError === true &&
+        (result.content[0] as TextContent).text.includes("conversationId") &&
+        (result.content[0] as TextContent).text.includes(
+          "Array must contain at least 1 element(s)",
+        ),
     );
   });
 
@@ -100,11 +107,11 @@ describe("Conversation Sentiment Tool", () => {
           conversationIds: ["invalid-uuid"],
         },
       }),
-    ).rejects.toSatisfy(
-      (error: McpError) =>
-        error.name === "McpError" &&
-        error.message.includes("conversationIds") &&
-        error.message.includes("Invalid uuid"),
+    ).resolves.toSatisfy(
+      (result: CallToolResult) =>
+        result.isError === true &&
+        (result.content[0] as TextContent).text.includes("conversationIds") &&
+        (result.content[0] as TextContent).text.includes("Invalid uuid"),
     );
   });
 
