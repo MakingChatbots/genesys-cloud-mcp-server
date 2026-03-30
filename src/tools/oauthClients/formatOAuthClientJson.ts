@@ -8,7 +8,7 @@ type RoleId = string;
 type DivisionId = string;
 
 function combineRolesAndDivisions(
-  client: Models.OAuthClientListing,
+  client: Models.OAuthClient,
   availableDivisions: Models.AuthzDivision[],
   availableRoles: Models.DomainOrganizationRole[],
 ): RoleToDivisionsAssociation[] {
@@ -52,7 +52,7 @@ function combineRolesAndDivisions(
 }
 
 export function formatOAuthClientJson(
-  client: Models.OAuthClientListing,
+  client: Models.OAuthClient,
   availableDivisions: Models.AuthzDivision[],
   availableRoles: Models.DomainOrganizationRole[],
 ): OAuthClientResponse {

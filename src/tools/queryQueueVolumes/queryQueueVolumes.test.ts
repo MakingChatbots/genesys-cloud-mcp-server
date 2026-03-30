@@ -67,6 +67,8 @@ describe("Query Queue Volumes Tool", () => {
             items: {
               type: "string",
               format: "uuid",
+              pattern:
+                "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
               description:
                 "A UUID for a queue. (e.g., 00000000-0000-0000-0000-000000000000)",
             },
@@ -86,7 +88,6 @@ describe("Query Queue Volumes Tool", () => {
           },
         },
         required: ["queueIds", "startDate", "endDate"],
-        additionalProperties: false,
         $schema: "http://json-schema.org/draft-07/schema#",
       },
     });
@@ -107,7 +108,7 @@ describe("Query Queue Volumes Tool", () => {
         result.isError === true &&
         (result.content[0] as TextContent).text.includes("queueId") &&
         (result.content[0] as TextContent).text.includes(
-          "Array must contain at least 1 element(s)",
+          "Too small: expected array to have >=1 items",
         ),
     );
   });

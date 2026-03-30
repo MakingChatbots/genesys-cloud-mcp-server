@@ -66,6 +66,7 @@ describe("Search Queues Tool", () => {
             description:
               "The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets",
             exclusiveMinimum: 0,
+            maximum: 9007199254740991,
             type: "integer",
           },
           pageSize: {
@@ -78,7 +79,6 @@ describe("Search Queues Tool", () => {
         },
         required: ["name"],
         type: "object",
-        additionalProperties: false,
         $schema: "http://json-schema.org/draft-07/schema#",
       },
     });
@@ -97,7 +97,7 @@ describe("Search Queues Tool", () => {
         result.isError === true &&
         (result.content[0] as TextContent).text.includes("name") &&
         (result.content[0] as TextContent).text.includes(
-          "String must contain at least 1 character(s)",
+          "Too small: expected string to have >=1 characters",
         ),
     );
   });

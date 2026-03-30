@@ -64,6 +64,7 @@ describe("Search Voice Conversations Tool", () => {
             description:
               "The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets",
             exclusiveMinimum: 0,
+            maximum: 9007199254740991,
             type: "integer",
           },
           pageSize: {
@@ -85,7 +86,6 @@ describe("Search Voice Conversations Tool", () => {
           },
         },
         required: ["startDate", "endDate"],
-        additionalProperties: false,
 
         $schema: "http://json-schema.org/draft-07/schema#",
       },

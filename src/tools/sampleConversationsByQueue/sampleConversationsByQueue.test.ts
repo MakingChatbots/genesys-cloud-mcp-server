@@ -66,6 +66,8 @@ describe("Query Queue Volumes Tool", () => {
             description:
               "The UUID of the queue to filter conversations by. (e.g., 00000000-0000-0000-0000-000000000000)",
             format: "uuid",
+            pattern:
+              "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             type: "string",
           },
           startDate: {
@@ -80,7 +82,6 @@ describe("Query Queue Volumes Tool", () => {
           },
         },
         required: ["queueId", "startDate", "endDate"],
-        additionalProperties: false,
 
         $schema: "http://json-schema.org/draft-07/schema#",
       },
@@ -101,7 +102,7 @@ describe("Query Queue Volumes Tool", () => {
       (result: CallToolResult) =>
         result.isError === true &&
         (result.content[0] as TextContent).text.includes("queueId") &&
-        (result.content[0] as TextContent).text.includes("Invalid uuid"),
+        (result.content[0] as TextContent).text.includes("Invalid UUID"),
     );
   });
 
