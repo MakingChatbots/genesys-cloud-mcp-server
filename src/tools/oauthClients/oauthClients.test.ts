@@ -54,10 +54,10 @@ describe("List OAuth Clients", () => {
       },
       description:
         "Retrieves a list of all OAuth clients, including their associated roles and divisions. This tool is useful for auditing and managing OAuth clients in the Genesys Cloud organization.",
+      execution: { taskSupport: "forbidden" },
       inputSchema: {
         properties: {},
         type: "object",
-        additionalProperties: false,
         $schema: "http://json-schema.org/draft-07/schema#",
       },
     });

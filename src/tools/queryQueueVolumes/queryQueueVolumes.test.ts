@@ -2,7 +2,11 @@ import { randomUUID } from "node:crypto";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { McpError } from "@modelcontextprotocol/sdk/types.js";
+import type {
+  CallToolResult,
+  TextContent,
+} from "@modelcontextprotocol/sdk/types.js";
+
 import type { MockedObjectDeep } from "@vitest/spy";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import {
@@ -54,6 +58,7 @@ describe("Query Queue Volumes Tool", () => {
       annotations: { title: "Query Queue Volumes" },
       description:
         "Returns a breakdown of how many conversations occurred in each specified queue between two dates. Useful for comparing workload across queues. MAX 300 queue IDs.",
+      execution: { taskSupport: "forbidden" },
       inputSchema: {
         type: "object",
         properties: {
@@ -62,6 +67,8 @@ describe("Query Queue Volumes Tool", () => {
             items: {
               type: "string",
               format: "uuid",
+              pattern:
+                "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
               description:
                 "A UUID for a queue. (e.g., 00000000-0000-0000-0000-000000000000)",
             },
@@ -81,7 +88,6 @@ describe("Query Queue Volumes Tool", () => {
           },
         },
         required: ["queueIds", "startDate", "endDate"],
-        additionalProperties: false,
         $schema: "http://json-schema.org/draft-07/schema#",
       },
     });
@@ -97,11 +103,13 @@ describe("Query Queue Volumes Tool", () => {
           endDate: "2024-01-02T00:00:00Z",
         },
       }),
-    ).rejects.toSatisfy(
-      (error: McpError) =>
-        error.name === "McpError" &&
-        error.message.includes("queueId") &&
-        error.message.includes("Array must contain at least 1 element(s)"),
+    ).resolves.toSatisfy(
+      (result: CallToolResult) =>
+        result.isError === true &&
+        (result.content[0] as TextContent).text.includes("queueId") &&
+        (result.content[0] as TextContent).text.includes(
+          "Too small: expected array to have >=1 items",
+        ),
     );
   });
 

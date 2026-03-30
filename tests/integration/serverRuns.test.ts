@@ -4,6 +4,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { afterEach, beforeAll, describe, expect, test } from "vitest";
+// biome-ignore lint/correctness/useImportExtensions: .json import already has the correct extension
 import packageInfo from "../../package.json" with { type: "json" };
 
 describe("Server Runs", () => {
@@ -81,7 +82,7 @@ describe("Server Runs", () => {
 
     client = new Client({
       name: "test-client",
-      version: "1.0.3",
+      version: "1.0.4",
     });
 
     await client.connect(transport);

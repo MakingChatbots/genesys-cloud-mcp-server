@@ -57,6 +57,7 @@ describe("Conversation Transcription Tool", () => {
       annotations: { title: "Conversation Transcript" },
       description:
         "Retrieves a structured transcript of the conversation, including speaker labels, utterance timestamps, and sentiment annotations where available. The transcript is formatted as a time-aligned list of utterances attributed to each participant (e.g., customer or agent)",
+      execution: { taskSupport: "forbidden" },
       inputSchema: {
         type: "object",
         properties: {
@@ -64,11 +65,12 @@ describe("Conversation Transcription Tool", () => {
             description:
               "The UUID of the conversation to retrieve the transcript for (e.g., 00000000-0000-0000-0000-000000000000)",
             format: "uuid",
+            pattern:
+              "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             type: "string",
           },
         },
         required: ["conversationId"],
-        additionalProperties: false,
 
         $schema: "http://json-schema.org/draft-07/schema#",
       },

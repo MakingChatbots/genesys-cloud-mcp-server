@@ -2,7 +2,11 @@ import { randomUUID } from "node:crypto";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { McpError } from "@modelcontextprotocol/sdk/types.js";
+import type {
+  CallToolResult,
+  TextContent,
+} from "@modelcontextprotocol/sdk/types.js";
+
 import type { MockedObjectDeep } from "@vitest/spy";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { type ToolDependencies, voiceCallQuality } from "./voiceCallQuality.js";
@@ -52,6 +56,7 @@ describe("Voice Call Quality Tool", () => {
         "  • Poor:       MOS < 3.5\n" +
         "  • Acceptable: 3.5 ≤ MOS < 4.3\n" +
         "  • Excellent:  MOS ≥ 4.3",
+      execution: { taskSupport: "forbidden" },
       inputSchema: {
         properties: {
           conversationIds: {
@@ -61,6 +66,8 @@ describe("Voice Call Quality Tool", () => {
               description:
                 "A UUID for a conversation. (e.g., 00000000-0000-0000-0000-000000000000)",
               format: "uuid",
+              pattern:
+                "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
               type: "string",
             },
             maxItems: 100,
@@ -70,7 +77,6 @@ describe("Voice Call Quality Tool", () => {
         },
         required: ["conversationIds"],
         type: "object",
-        additionalProperties: false,
         $schema: "http://json-schema.org/draft-07/schema#",
       },
     });
@@ -84,11 +90,13 @@ describe("Voice Call Quality Tool", () => {
           conversationIds: [],
         },
       }),
-    ).rejects.toSatisfy(
-      (error: McpError) =>
-        error.name === "McpError" &&
-        error.message.includes("conversationIds") &&
-        error.message.includes("Array must contain at least 1 element(s)"),
+    ).resolves.toSatisfy(
+      (result: CallToolResult) =>
+        result.isError === true &&
+        (result.content[0] as TextContent).text.includes("conversationIds") &&
+        (result.content[0] as TextContent).text.includes(
+          "Too small: expected array to have >=1 items",
+        ),
     );
   });
 

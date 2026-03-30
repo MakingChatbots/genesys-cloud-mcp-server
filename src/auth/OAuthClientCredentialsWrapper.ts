@@ -42,10 +42,10 @@ export const OAuthClientCredentialsWrapper = (
   configRetriever: ConfigRetriever,
   apiClient: ApiClientClass,
 ) => {
-  return <Schema extends z.Schema = z.Schema>(
+  return <Schema extends z.ZodType = z.ZodType>(
     call: ToolCall<Schema>,
   ): ToolCall<Schema> =>
-    async (input: Schema) => {
+    async (input: z.output<Schema>) => {
       if (!isAuthenticated) {
         const authResult = await authenticate(apiClient, configRetriever);
         if (authResult.authenticated) {

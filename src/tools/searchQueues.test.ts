@@ -2,7 +2,11 @@ import { randomUUID } from "node:crypto";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { McpError } from "@modelcontextprotocol/sdk/types.js";
+import type {
+  CallToolResult,
+  TextContent,
+} from "@modelcontextprotocol/sdk/types.js";
+
 import type { MockedObjectDeep } from "@vitest/spy";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { searchQueues, type ToolDependencies } from "./searchQueues.js";
@@ -49,6 +53,7 @@ describe("Search Queues Tool", () => {
       annotations: { title: "Search Queues" },
       description:
         "Searches for routing queues based on their name, allowing for wildcard searches. Returns a paginated list of matching queues, including their Name, ID, Description (if available), and Member Count (if available). Also provides pagination details like current page, page size, total results found, and total pages available. Useful for finding specific queue IDs, checking queue configurations, or listing available queues.",
+      execution: { taskSupport: "forbidden" },
       inputSchema: {
         properties: {
           name: {
@@ -61,6 +66,7 @@ describe("Search Queues Tool", () => {
             description:
               "The page number of the results to retrieve, starting from 1. Defaults to 1 if not specified. Used with 'pageSize' for navigating large result sets",
             exclusiveMinimum: 0,
+            maximum: 9007199254740991,
             type: "integer",
           },
           pageSize: {
@@ -73,7 +79,6 @@ describe("Search Queues Tool", () => {
         },
         required: ["name"],
         type: "object",
-        additionalProperties: false,
         $schema: "http://json-schema.org/draft-07/schema#",
       },
     });
@@ -87,11 +92,13 @@ describe("Search Queues Tool", () => {
           name: "",
         },
       }),
-    ).rejects.toSatisfy(
-      (error: McpError) =>
-        error.name === "McpError" &&
-        error.message.includes("name") &&
-        error.message.includes("String must contain at least 1 character(s)"),
+    ).resolves.toSatisfy(
+      (result: CallToolResult) =>
+        result.isError === true &&
+        (result.content[0] as TextContent).text.includes("name") &&
+        (result.content[0] as TextContent).text.includes(
+          "Too small: expected string to have >=1 characters",
+        ),
     );
   });
 

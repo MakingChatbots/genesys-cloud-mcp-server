@@ -24,14 +24,13 @@ export type Result<T> = SuccessResult<T> | ErrorResult;
 
 const genesysAuthConfigSchema = z.object({
   GENESYSCLOUD_REGION: z.string({
-    required_error: "Missing environment variable: GENESYSCLOUD_REGION",
+    error: "Missing environment variable: GENESYSCLOUD_REGION",
   }),
   GENESYSCLOUD_OAUTHCLIENT_ID: z.string({
-    required_error: "Missing environment variable: GENESYSCLOUD_OAUTHCLIENT_ID",
+    error: "Missing environment variable: GENESYSCLOUD_OAUTHCLIENT_ID",
   }),
   GENESYSCLOUD_OAUTHCLIENT_SECRET: z.string({
-    required_error:
-      "Missing environment variable: GENESYSCLOUD_OAUTHCLIENT_SECRET",
+    error: "Missing environment variable: GENESYSCLOUD_OAUTHCLIENT_SECRET",
   }),
 });
 

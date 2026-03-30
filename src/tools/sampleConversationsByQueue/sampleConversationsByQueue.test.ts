@@ -2,7 +2,11 @@ import { randomUUID } from "node:crypto";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import type { McpError } from "@modelcontextprotocol/sdk/types.js";
+import type {
+  CallToolResult,
+  TextContent,
+} from "@modelcontextprotocol/sdk/types.js";
+
 import type { MockedObjectDeep } from "@vitest/spy";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import {
@@ -54,6 +58,7 @@ describe("Query Queue Volumes Tool", () => {
       annotations: { title: "Sample Conversations by Queue" },
       description:
         "Retrieves conversation analytics for a specific queue between two dates, returning a representative sample of conversation IDs. Useful for reporting, investigation, or summarisation.",
+      execution: { taskSupport: "forbidden" },
       inputSchema: {
         type: "object",
         properties: {
@@ -61,6 +66,8 @@ describe("Query Queue Volumes Tool", () => {
             description:
               "The UUID of the queue to filter conversations by. (e.g., 00000000-0000-0000-0000-000000000000)",
             format: "uuid",
+            pattern:
+              "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
             type: "string",
           },
           startDate: {
@@ -75,7 +82,6 @@ describe("Query Queue Volumes Tool", () => {
           },
         },
         required: ["queueId", "startDate", "endDate"],
-        additionalProperties: false,
 
         $schema: "http://json-schema.org/draft-07/schema#",
       },
@@ -92,11 +98,11 @@ describe("Query Queue Volumes Tool", () => {
           endDate: "2024-01-02T00:00:00Z",
         },
       }),
-    ).rejects.toSatisfy(
-      (error: McpError) =>
-        error.name === "McpError" &&
-        error.message.includes("queueId") &&
-        error.message.includes("Invalid uuid"),
+    ).resolves.toSatisfy(
+      (result: CallToolResult) =>
+        result.isError === true &&
+        (result.content[0] as TextContent).text.includes("queueId") &&
+        (result.content[0] as TextContent).text.includes("Invalid UUID"),
     );
   });
 
