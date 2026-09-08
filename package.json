@@ -39,22 +39,22 @@
     "test:pack": "npm run build && npm pack --pack-destination ./dist"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0",
-    "date-fns": "^4.1.0",
-    "lru-cache": "^11.2.7",
-    "purecloud-platform-client-v2": "^249.1.0",
-    "zod": "^4.3.6"
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "date-fns": "^4.4.0",
+    "lru-cache": "^11.5.2",
+    "purecloud-platform-client-v2": "^261.0.0",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@anthropic-ai/mcpb": "^2.1.2",
-    "@biomejs/biome": "2.4.10",
-    "@google/genai": "^1.47.0",
-    "@types/node": "^25.5.0",
-    "dotenv": "^17.3.1",
-    "lint-staged": "^16.4.0",
-    "tsx": "^4.21.0",
-    "typescript": "^6.0.2",
-    "vitest": "^4.1.2"
+    "@biomejs/biome": "2.5.12",
+    "@google/genai": "^2.21.0",
+    "@types/node": "^26.5.0",
+    "dotenv": "^17.4.2",
+    "lint-staged": "^17.5.0",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
   },
   "lint-staged": {
     "src/*.ts": [
@@ -62,7 +62,7 @@
     ]
   },
   "engines": {
-    "node": ">=18.20.0"
+    "node": ">=22.0.0"
   },
   "files": [
     "dist/**/*.js",
