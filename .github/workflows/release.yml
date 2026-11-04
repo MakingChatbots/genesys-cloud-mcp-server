@@ -18,6 +18,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -42,25 +44,25 @@ jobs:
           access: public
 
       - name: Post-publish
-        if: steps.publish.outputs.type != 'none'
+        if: steps.publish.outputs.type != ''
         run: |
           echo "Published ${{ steps.publish.outputs.type }} version: ${{ steps.publish.outputs.version }}"
 
       - name: Publish skipped
-        if: steps.publish.outputs.type == 'none'
+        if: steps.publish.outputs.type == ''
         run: |
           echo "Version in package.json has not changed. Skipping."
           exit 0
 
       - name: Configure changelog
-        if: steps.publish.outputs.type != 'none'
+        if: steps.publish.outputs.type != ''
         run: |
           echo '{"categories": [], "template": "## Commits:\n\n${{ '${{UNCATEGORIZED}}' }}", "pr_template": ${{ '"- ${{MERGE_SHA}} ${{TITLE}}"' }} }' > changelog_config.json
           echo "last_tag=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
           echo "curr_commit=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Generate changelog
-        if: steps.publish.outputs.type != 'none'
+        if: steps.publish.outputs.type != ''
         id: github_release
         uses: mikepenz/release-changelog-builder-action@v2.9.0
         env:
@@ -72,7 +74,7 @@ jobs:
           configuration: changelog_config.json
 
       - name: Create release
-        if: steps.publish.outputs.type != 'none'
+        if: steps.publish.outputs.type != ''
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -86,11 +88,11 @@ jobs:
           prerelease: false
 
       - name: Build .mcpb file
-        if: steps.publish.outputs.type != 'none'
+        if: steps.publish.outputs.type != ''
         run: npm run package:mcpb
 
       - name: Upload .mcpb to GitHub release
-        if: steps.publish.outputs.type != 'none'
+        if: steps.publish.outputs.type != ''
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.publish.outputs.version }}
