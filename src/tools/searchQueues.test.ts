@@ -19,7 +19,8 @@ describe("Search Queues Tool", () => {
   beforeEach(async () => {
     toolDeps = {
       routingApi: {
-        getRoutingQueues: vi.fn(),
+        getRoutingQueues:
+          vi.fn<ToolDependencies["routingApi"]["getRoutingQueues"]>(),
       },
     };
 

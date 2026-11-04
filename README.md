@@ -8,7 +8,7 @@ A Model Context Protocol (MCP) server for Genesys Cloud's Platform API.
 ## Features
 
 | Tool                                                                          | Description                                                              |
-|-------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | [Search Queues](/docs/tools.md#search-queues)                                 | Searches for queues by their name (supports wildcards)                   |
 | [Query Queue Volumes](/docs/tools.md#query-queue-volumes)                     | Retrieves conversation volumes and member count by Queue IDs             |
 | [Sample Conversations By Queue](/docs/tools.md#sample-conversations-by-queue) | Retrieves a representative sample of Conversation IDs for a Queue ID     |

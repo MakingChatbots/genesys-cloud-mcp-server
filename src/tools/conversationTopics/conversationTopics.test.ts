@@ -22,11 +22,20 @@ describe("Conversation Topics Tool", () => {
   beforeEach(async () => {
     toolDeps = {
       speechTextAnalyticsApi: {
-        getSpeechandtextanalyticsTopics: vi.fn(),
+        getSpeechandtextanalyticsTopics:
+          vi.fn<
+            ToolDependencies["speechTextAnalyticsApi"]["getSpeechandtextanalyticsTopics"]
+          >(),
       },
       analyticsApi: {
-        getAnalyticsConversationDetails: vi.fn(),
-        postAnalyticsTranscriptsAggregatesQuery: vi.fn(),
+        getAnalyticsConversationDetails:
+          vi.fn<
+            ToolDependencies["analyticsApi"]["getAnalyticsConversationDetails"]
+          >(),
+        postAnalyticsTranscriptsAggregatesQuery:
+          vi.fn<
+            ToolDependencies["analyticsApi"]["postAnalyticsTranscriptsAggregatesQuery"]
+          >(),
       },
     };
 
