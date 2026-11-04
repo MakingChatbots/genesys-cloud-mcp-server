@@ -17,7 +17,10 @@ describe("Search Voice Conversations Tool", () => {
   beforeEach(async () => {
     toolDeps = {
       analyticsApi: {
-        postAnalyticsConversationsDetailsQuery: vi.fn(),
+        postAnalyticsConversationsDetailsQuery:
+          vi.fn<
+            ToolDependencies["analyticsApi"]["postAnalyticsConversationsDetailsQuery"]
+          >(),
       },
     };
 

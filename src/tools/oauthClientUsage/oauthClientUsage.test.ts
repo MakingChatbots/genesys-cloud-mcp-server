@@ -19,8 +19,12 @@ describe("OAuth Client Usage", () => {
   beforeEach(async () => {
     toolDeps = {
       oauthApi: {
-        postOauthClientUsageQuery: vi.fn(),
-        getOauthClientUsageQueryResult: vi.fn(),
+        postOauthClientUsageQuery:
+          vi.fn<ToolDependencies["oauthApi"]["postOauthClientUsageQuery"]>(),
+        getOauthClientUsageQueryResult:
+          vi.fn<
+            ToolDependencies["oauthApi"]["getOauthClientUsageQueryResult"]
+          >(),
       },
       cache: undefined,
     };

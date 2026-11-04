@@ -249,11 +249,11 @@ Retrieves the usage of an OAuth Client for a given period. It returns the total 
 ### Input
 
 - `oauthClientId`
-    - The UUID of the OAuth Client to retrieve the usage for (e.g., 00000000-0000-0000-0000-000000000000)
+  - The UUID of the OAuth Client to retrieve the usage for (e.g., 00000000-0000-0000-0000-000000000000)
 - `startDate`
-    - The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z')
+  - The start date/time in ISO-8601 format (e.g., '2024-01-01T00:00:00Z')
 - `endDate`
-    - The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z')
+  - The end date/time in ISO-8601 format (e.g., '2024-01-07T23:59:59Z')
 
 ### Security
 

@@ -18,13 +18,18 @@ describe("Conversation Transcription Tool", () => {
   beforeEach(async () => {
     toolDeps = {
       recordingApi: {
-        getConversationRecordings: vi.fn(),
+        getConversationRecordings:
+          vi.fn<
+            ToolDependencies["recordingApi"]["getConversationRecordings"]
+          >(),
       },
       speechTextAnalyticsApi: {
         getSpeechandtextanalyticsConversationCommunicationTranscripturl:
-          vi.fn(),
+          vi.fn<
+            ToolDependencies["speechTextAnalyticsApi"]["getSpeechandtextanalyticsConversationCommunicationTranscripturl"]
+          >(),
       },
-      fetchUrl: vi.fn(),
+      fetchUrl: vi.fn<ToolDependencies["fetchUrl"]>(),
     };
 
     const toolDefinition = conversationTranscription(toolDeps);

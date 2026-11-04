@@ -22,9 +22,18 @@ describe("Query Queue Volumes Tool", () => {
   beforeEach(async () => {
     toolDeps = {
       analyticsApi: {
-        postAnalyticsConversationsDetailsJobs: vi.fn(),
-        getAnalyticsConversationsDetailsJob: vi.fn(),
-        getAnalyticsConversationsDetailsJobResults: vi.fn(),
+        postAnalyticsConversationsDetailsJobs:
+          vi.fn<
+            ToolDependencies["analyticsApi"]["postAnalyticsConversationsDetailsJobs"]
+          >(),
+        getAnalyticsConversationsDetailsJob:
+          vi.fn<
+            ToolDependencies["analyticsApi"]["getAnalyticsConversationsDetailsJob"]
+          >(),
+        getAnalyticsConversationsDetailsJobResults:
+          vi.fn<
+            ToolDependencies["analyticsApi"]["getAnalyticsConversationsDetailsJobResults"]
+          >(),
       },
     };
 

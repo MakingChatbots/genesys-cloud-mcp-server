@@ -19,7 +19,10 @@ describe("Voice Call Quality Tool", () => {
   beforeEach(async () => {
     toolDeps = {
       analyticsApi: {
-        getAnalyticsConversationsDetails: vi.fn(),
+        getAnalyticsConversationsDetails:
+          vi.fn<
+            ToolDependencies["analyticsApi"]["getAnalyticsConversationsDetails"]
+          >(),
       },
     };
 

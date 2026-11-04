@@ -22,7 +22,10 @@ describe("Conversation Sentiment Tool", () => {
   beforeEach(async () => {
     toolDeps = {
       speechTextAnalyticsApi: {
-        getSpeechandtextanalyticsConversation: vi.fn(),
+        getSpeechandtextanalyticsConversation:
+          vi.fn<
+            ToolDependencies["speechTextAnalyticsApi"]["getSpeechandtextanalyticsConversation"]
+          >(),
       },
     };
 

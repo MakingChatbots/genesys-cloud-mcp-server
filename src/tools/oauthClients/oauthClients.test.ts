@@ -14,11 +14,18 @@ describe("List OAuth Clients", () => {
   beforeEach(async () => {
     toolDeps = {
       oauthApi: {
-        getOauthClients: vi.fn(),
+        getOauthClients:
+          vi.fn<ToolDependencies["oauthApi"]["getOauthClients"]>(),
       },
       authorizationApi: {
-        getAuthorizationDivisions: vi.fn(),
-        getAuthorizationRoles: vi.fn(),
+        getAuthorizationDivisions:
+          vi.fn<
+            ToolDependencies["authorizationApi"]["getAuthorizationDivisions"]
+          >(),
+        getAuthorizationRoles:
+          vi.fn<
+            ToolDependencies["authorizationApi"]["getAuthorizationRoles"]
+          >(),
       },
     };
 
@@ -112,6 +119,7 @@ describe("List OAuth Clients", () => {
             },
           ],
           state: "active",
+          authorizedGrantType: "CLIENT_CREDENTIALS",
         },
       ],
     });
@@ -177,6 +185,7 @@ describe("List OAuth Clients", () => {
             },
           ],
           state: "active",
+          authorizedGrantType: "CLIENT_CREDENTIALS",
         },
       ],
     });
