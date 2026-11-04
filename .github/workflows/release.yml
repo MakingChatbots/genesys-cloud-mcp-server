@@ -17,12 +17,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: ".nvmrc"
 
@@ -36,7 +36,7 @@ jobs:
 
       - id: publish
         name: Publish to NPM
-        uses: JS-DevTools/npm-publish@v3
+        uses: JS-DevTools/npm-publish@v4
         with:
           token: ${{ secrets.NPM_TOKEN }}
           dry-run: false
@@ -64,38 +64,29 @@ jobs:
       - name: Generate changelog
         if: steps.publish.outputs.type != ''
         id: github_release
-        uses: mikepenz/release-changelog-builder-action@v2.9.0
+        uses: mikepenz/release-changelog-builder-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           fromTag: "${{ env.last_tag }}"
           toTag: ${{ github.ref }}
-          commitMode: true
+          mode: "COMMIT"
           configuration: changelog_config.json
-
-      - name: Create release
-        if: steps.publish.outputs.type != ''
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ steps.publish.outputs.version }}
-          release_name: v${{ steps.publish.outputs.version }}
-          commitish: ${{ github.ref }}
-          body: ${{ steps.github_release.outputs.changelog }}
-          draft: false
-          prerelease: false
 
       - name: Build .mcpb file
         if: steps.publish.outputs.type != ''
         run: npm run package:mcpb
 
-      - name: Upload .mcpb to GitHub release
+      - name: Create GitHub release with .mcpb
         if: steps.publish.outputs.type != ''
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: v${{ steps.publish.outputs.version }}
+          name: v${{ steps.publish.outputs.version }}
+          target_commitish: ${{ github.sha }}
+          body: ${{ steps.github_release.outputs.changelog }}
+          draft: false
+          prerelease: false
           files: |
             genesys-cloud-mcp-server.mcpb
         env:
