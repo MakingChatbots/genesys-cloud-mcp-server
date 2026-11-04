@@ -82,7 +82,7 @@ describe("Server Runs", () => {
 
     client = new Client({
       name: "test-client",
-      version: "1.0.4",
+      version: "1.0.5",
     });
 
     await client.connect(transport);
